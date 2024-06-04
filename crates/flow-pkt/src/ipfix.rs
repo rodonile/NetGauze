@@ -66,6 +66,7 @@ pub struct IpfixPacket {
     sets: Vec<Set>,
 }
 
+// TODO HERE FUNCTION TO MOVE POINTERS (INSTEAD OF NEEDING TO COPY STUFF...)
 impl IpfixPacket {
     pub const fn new(
         export_time: DateTime<Utc>,
@@ -145,6 +146,18 @@ impl Set {
             Self::Data { id, records: _ } => id.0,
         }
     }
+
+    // this is not correct for everything, to really determine this we need to know info about the template
+    // that was used to decode this record, but for now let's use this ...
+    pub fn contains_option_data_records(&self) -> bool {
+        match self {
+            Self::Data { id: _, records} => {
+                !records[0].scope_fields.is_empty()
+            },
+            _ => false
+        }
+    }
+
 }
 
 /// Template Records allow the Collecting Process to process

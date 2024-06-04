@@ -34,6 +34,30 @@ fn main() {
         "nokia".to_string(),
         "Nokia".to_string(),
     );
+    let netgauze_path = registry_path
+        .join("netgauze.xml")
+        .into_os_string()
+        .into_string()
+        .expect("Couldn't load NetGauze registry file");
+    let netgauze_source = SourceConfig::new(
+        RegistrySource::File(netgauze_path),
+        RegistryType::IanaXML,
+        3746,
+        "netgauze".to_string(),
+        "NetGauze".to_string(),
+    );
+    let cisco_path = registry_path
+        .join("cisco.xml")
+        .into_os_string()
+        .into_string()
+        .expect("Couldn't load Cisco registry file");
+    let cisco_source = SourceConfig::new(
+        RegistrySource::File(cisco_path),
+        RegistryType::IanaXML,
+        9,
+        "cisco".to_string(),
+        "Cisco".to_string(),
+    );
     let iana_source = SourceConfig::new(
         RegistrySource::Http(IPFIX_URL.to_string()),
         RegistryType::IanaXML,
@@ -41,7 +65,7 @@ fn main() {
         "iana".to_string(),
         "IANA".to_string(),
     );
-    let configs = Config::new(iana_source, vec![nokia_source]);
+    let configs = Config::new(iana_source, vec![nokia_source, netgauze_source, cisco_source]);
     generate(&out_dir, &configs).unwrap();
 
     println!("cargo:rerun-if-changed=build.rs");

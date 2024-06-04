@@ -20,6 +20,7 @@ pub mod ipfix;
 pub mod netflow;
 #[cfg(feature = "serde")]
 pub mod wire;
+pub mod pcap;
 
 use crate::ie::*;
 use serde::{Deserialize, Serialize};
