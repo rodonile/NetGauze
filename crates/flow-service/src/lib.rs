@@ -13,4 +13,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// TODO
+use chrono::{DateTime, Utc};
+use std::net::IpAddr;
+use netgauze_flow_pkt::FlowInfo;
+
+
+// Maybe better to already Flatten this (and not simply include FlowInfo struct inside??)
+// also needs to be configurable (all fields of flow_record, i.e. some we want in the aggregaate, some not...)
+pub struct FlowRecordAggr {
+  peer_ip_source: IpAddr,
+  timestamp_arrival: DateTime<Utc>,
+  flow_record: FlowInfo,
+  //external_map_enrichments: //--> platform_id, node_id stuff, even sampling for platform that do not support it...
+  //option_data_enrichments: OptionDataInfo, // --> vec, create it in new lib file... contains types of option data from an Enum (e.g. samplingOption, RdOption)
+}

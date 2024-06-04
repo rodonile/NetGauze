@@ -27,6 +27,7 @@ tracing = { workspace = true }
 futures = { workspace = true }
 futures-util = { workspace = true }
 futures-core = { workspace = true }
+chrono = { workspace = true, default-features = false, features = ["std", "serde"] }
 
 [dev-dependencies]
 tracing-subscriber = { workspace = true }
