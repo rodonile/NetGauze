@@ -66,6 +66,7 @@ pub struct IpfixPacket {
     sets: Vec<Set>,
 }
 
+// TODO HERE FUNCTION TO MOVE POINTERS (INSTEAD OF NEEDING TO COPY STUFF...)
 impl IpfixPacket {
     pub const fn new(
         export_time: DateTime<Utc>,
