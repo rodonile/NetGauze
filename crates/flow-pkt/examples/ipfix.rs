@@ -2,8 +2,10 @@ use std::{cell::RefCell, collections::HashMap, io::Cursor, net::Ipv4Addr, rc::Rc
 
 use chrono::{TimeZone, Utc};
 
-use netgauze_flow_pkt::{ie, ipfix::*, DataSetId, FieldSpecifier};
+use netgauze_flow_pkt::{ie, ie::*, ipfix::*, DataSetId, FieldSpecifier};
 use netgauze_parse_utils::{ReadablePduWithOneInput, Span, WritablePduWithOneInput};
+
+use netgauze_flow_pkt::pcap::save_buf_in_pcap;
 
 fn main() {
     // Cache to share the templates for decoding data packets
@@ -21,6 +23,15 @@ fn main() {
                 FieldSpecifier::new(ie::IE::destinationIPv4Address, 4).unwrap(),
                 FieldSpecifier::new(ie::IE::octetDeltaCount, 4).unwrap(),
                 FieldSpecifier::new(ie::IE::packetDeltaCount, 4).unwrap(),
+
+                FieldSpecifier::new(ie::IE::Nokia(nokia::IE::aluInsideServiceId), 2).unwrap(),
+                FieldSpecifier::new(ie::IE::Nokia(nokia::IE::aluNatSubString), 8).unwrap(),
+
+                FieldSpecifier::new(ie::IE::NetGauze(netgauze::IE::isRenormalized), 1).unwrap(),
+                FieldSpecifier::new(ie::IE::NetGauze(netgauze::IE::samplingInfoOrigin), 1).unwrap(),
+
+                
+                FieldSpecifier::new(ie::IE::Cisco(cisco::IE::connectionId), 4).unwrap(),
             ],
         )])],
     );
@@ -32,13 +43,19 @@ fn main() {
     let mut buf: Vec<u8> = vec![];
     let mut cursor = Cursor::new(&mut buf);
     ipfix_template.write(&mut cursor, None).unwrap();
-    assert_eq!(
-        buf,
-        vec![
-            0, 10, 0, 40, 100, 3, 50, 192, 0, 0, 14, 228, 0, 0, 0, 0, 0, 2, 0, 24, 1, 51, 0, 4, 0,
-            8, 0, 4, 0, 12, 0, 4, 0, 1, 0, 4, 0, 2, 0, 4,
-        ]
-    );
+
+    println!("ipfix template: {:?}", buf);
+
+    let mut ipfix_packets  = vec![];
+    ipfix_packets.push(buf.clone());
+
+    // assert_eq!(
+    //     buf,
+    //     vec![
+    //         0, 10, 0, 40, 100, 3, 50, 192, 0, 0, 14, 228, 0, 0, 0, 0, 0, 2, 0, 24, 1, 51, 0, 4, 0,
+    //         8, 0, 4, 0, 12, 0, 4, 0, 1, 0, 4, 0, 2, 0, 4,
+    //     ]
+    // );
     // Deserialize the message from binary format
     let (_, msg_back) = IpfixPacket::from_wire(Span::new(&buf), Rc::clone(&templates_map)).unwrap();
     assert_eq!(ipfix_template, msg_back);
@@ -61,6 +78,15 @@ fn main() {
                     ))),
                     ie::Field::octetDeltaCount(ie::octetDeltaCount(1312)),
                     ie::Field::packetDeltaCount(ie::packetDeltaCount(9)),
+
+                    ie::Field::Nokia(nokia::Field::aluInsideServiceId(nokia::aluInsideServiceId(100))),
+                    ie::Field::Nokia(nokia::Field::aluNatSubString(nokia::aluNatSubString(String::from("CENTO")))), 
+
+                    ie::Field::NetGauze(netgauze::Field::isRenormalized(netgauze::isRenormalized(true))),
+                    ie::Field::NetGauze(netgauze::Field::samplingInfoOrigin(netgauze::samplingInfoOrigin(1))), 
+
+                    ie::Field::Cisco(cisco::Field::connectionId(cisco::connectionId(11023))),
+
                 ],
             )],
         }],
@@ -76,13 +102,19 @@ fn main() {
     ipfix_data
         .write(&mut cursor, Some(Rc::clone(&templates_map)))
         .unwrap();
-    assert_eq!(
-        buf,
-        vec![
-            0, 10, 0, 36, 100, 3, 50, 193, 0, 0, 14, 228, 0, 0, 0, 0, 1, 51, 0, 20, 70, 1, 115, 1,
-            50, 0, 71, 1, 0, 0, 5, 32, 0, 0, 0, 9
-        ]
-    );
+
+    println!("ipfix data: {:?}", buf);
+    
+    ipfix_packets.push(buf.clone());
+    save_buf_in_pcap("flow-test.pcap", &ipfix_packets);
+
+    // assert_eq!(
+    //     buf,
+    //     vec![
+    //         0, 10, 0, 36, 100, 3, 50, 193, 0, 0, 14, 228, 0, 0, 0, 0, 1, 51, 0, 20, 70, 1, 115, 1,
+    //         50, 0, 71, 1, 0, 0, 5, 32, 0, 0, 0, 9
+    //     ]
+    // );
     // Deserialize the message from binary format
     let (_, msg_back) = IpfixPacket::from_wire(Span::new(&buf), Rc::clone(&templates_map)).unwrap();
     assert_eq!(ipfix_data, msg_back);

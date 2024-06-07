@@ -8,7 +8,7 @@
             <name>aluInsideServiceId</name>
             <dataType>unsigned16</dataType>
             <dataTypeSemantics>identifier</dataTypeSemantics>
-            <elementId>91</elementId>
+            <elementId>32859</elementId>
             <applicability>data</applicability>
             <status>current</status>
             <description>
@@ -27,7 +27,7 @@
             <name>aluOutsideServiceId</name>
             <dataType>unsigned16</dataType>
             <dataTypeSemantics>identifier</dataTypeSemantics>
-            <elementId>92</elementId>
+            <elementId>32860</elementId>
             <applicability>data</applicability>
             <status>current</status>
             <description>
@@ -44,7 +44,7 @@
             <name>aluNatSubString</name>
             <dataType>string</dataType>
             <dataTypeSemantics>identifier</dataTypeSemantics>
-            <elementId>93</elementId>
+            <elementId>32861</elementId>
             <applicability>data</applicability>
             <status>current</status>
             <description>
