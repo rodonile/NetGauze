@@ -29,7 +29,8 @@ criterion = { workspace = true, optional = true } # Dev dep for bench
 tracing = { workspace = true, optional = true }
 tokio-util = { workspace = true, features = ["codec"], optional = true }
 bytes = { workspace = true, optional = true }
-
+pnet = { version = "0.35" }
+pcap-file = { version = "2.0.0" }
 
 [features]
 default = ["serde"]

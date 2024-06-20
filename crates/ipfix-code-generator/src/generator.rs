@@ -230,6 +230,7 @@ fn generate_from_for_ie() -> String {
     ret.push_str("impl TryFrom<u16> for IE {\n");
     ret.push_str("    type Error = UndefinedIE;\n\n");
     ret.push_str("    fn try_from(value: u16) -> Result<Self, Self::Error> {\n");
+    ret.push_str("       let value = value & 0x7FFF;\n"); // remove PEN bit
     ret.push_str("       match Self::from_repr(value) {\n");
     ret.push_str("           Some(val) => Ok(val),\n");
     ret.push_str("           None => Err(UndefinedIE(value)),\n");
@@ -1150,10 +1151,22 @@ pub(crate) fn generate_pkg_ie_deserializers(
 ) -> String {
     let mut ret = String::new();
     // Not every vendor is using time based values
-    if ies.iter().any(|x| x.data_type.contains("String")) {
+    if ies.iter().any(|x| x.data_type.contains("string")) {
         ret.push_str("use nom::InputIter;\n");
     }
-    if ies.iter().any(|x| x.data_type.contains("chrono")) {
+    if ies.iter().any(|x| {
+        vec![
+            "unsigned32",
+            "unsigned64",
+            "signed16",
+            "signed32",
+            "signed64",
+        ]
+        .contains(&x.data_type.as_str())
+    }) {
+        ret.push_str("use nom::{InputLength, Slice};\n");
+    }
+    if ies.iter().any(|x| x.data_type.contains("Time")) {
         ret.push_str("use chrono::TimeZone;\n");
     }
     ret.push_str(format!("use crate::ie::{vendor_mod}::*;\n\n").as_str());
