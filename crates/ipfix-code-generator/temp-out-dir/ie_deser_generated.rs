@@ -1,0 +1,14043 @@
+use crate::ie::*;
+
+use netgauze_iana::tcp::*;
+
+pub mod nokia {include!(concat!(env!("OUT_DIR"), "/nokia_deser_generated.rs"));}
+
+pub mod netgauze {include!(concat!(env!("OUT_DIR"), "/netgauze_deser_generated.rs"));}
+
+pub mod cisco {include!(concat!(env!("OUT_DIR"), "/cisco_deser_generated.rs"));}
+
+pub mod vmware {include!(concat!(env!("OUT_DIR"), "/vmware_deser_generated.rs"));}
+
+use nom::{InputLength, InputIter, Slice};
+use chrono::TimeZone;
+
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum octetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoctetDeltaCountParsingError<'a>> for octetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedoctetDeltaCountParsingError::new(buf, octetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), octetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum packetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpacketDeltaCountParsingError<'a>> for packetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpacketDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpacketDeltaCountParsingError::new(buf, packetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), packetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum deltaFlowCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddeltaFlowCountParsingError<'a>> for deltaFlowCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddeltaFlowCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddeltaFlowCountParsingError::new(buf, deltaFlowCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), deltaFlowCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum protocolIdentifierParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedprotocolIdentifierParsingError<'a>> for protocolIdentifier {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedprotocolIdentifierParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedprotocolIdentifierParsingError::new(buf, protocolIdentifierParsingError::InvalidLength(length))))
+        };
+        let enum_val = protocolIdentifier::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipClassOfServiceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipClassOfServiceParsingError<'a>> for ipClassOfService {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipClassOfServiceParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedipClassOfServiceParsingError::new(buf, ipClassOfServiceParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ipClassOfService(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpControlBitsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpControlBitsParsingError<'a>> for TCPHeaderFlags {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpControlBitsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtcpControlBitsParsingError::new(buf, tcpControlBitsParsingError::InvalidLength(length))))
+        };
+        Ok((buf, TCPHeaderFlags::from(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceTransportPortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceTransportPortParsingError<'a>> for sourceTransportPort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceTransportPortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsourceTransportPortParsingError::new(buf, sourceTransportPortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, sourceTransportPort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceIPv4AddressParsingError<'a>> for sourceIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedsourceIPv4AddressParsingError::new(buf, sourceIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, sourceIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceIPv4PrefixLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceIPv4PrefixLengthParsingError<'a>> for sourceIPv4PrefixLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceIPv4PrefixLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsourceIPv4PrefixLengthParsingError::new(buf, sourceIPv4PrefixLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, sourceIPv4PrefixLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ingressInterfaceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedingressInterfaceParsingError<'a>> for ingressInterface {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedingressInterfaceParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedingressInterfaceParsingError::new(buf, ingressInterfaceParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), ingressInterface(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum destinationTransportPortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddestinationTransportPortParsingError<'a>> for destinationTransportPort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddestinationTransportPortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocateddestinationTransportPortParsingError::new(buf, destinationTransportPortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, destinationTransportPort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum destinationIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddestinationIPv4AddressParsingError<'a>> for destinationIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddestinationIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocateddestinationIPv4AddressParsingError::new(buf, destinationIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, destinationIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum destinationIPv4PrefixLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddestinationIPv4PrefixLengthParsingError<'a>> for destinationIPv4PrefixLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddestinationIPv4PrefixLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocateddestinationIPv4PrefixLengthParsingError::new(buf, destinationIPv4PrefixLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, destinationIPv4PrefixLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum egressInterfaceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedegressInterfaceParsingError<'a>> for egressInterface {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedegressInterfaceParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedegressInterfaceParsingError::new(buf, egressInterfaceParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), egressInterface(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipNextHopIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipNextHopIPv4AddressParsingError<'a>> for ipNextHopIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipNextHopIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedipNextHopIPv4AddressParsingError::new(buf, ipNextHopIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, ipNextHopIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpSourceAsNumberParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpSourceAsNumberParsingError<'a>> for bgpSourceAsNumber {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpSourceAsNumberParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedbgpSourceAsNumberParsingError::new(buf, bgpSourceAsNumberParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), bgpSourceAsNumber(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpDestinationAsNumberParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpDestinationAsNumberParsingError<'a>> for bgpDestinationAsNumber {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpDestinationAsNumberParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedbgpDestinationAsNumberParsingError::new(buf, bgpDestinationAsNumberParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), bgpDestinationAsNumber(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpNextHopIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpNextHopIPv4AddressParsingError<'a>> for bgpNextHopIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpNextHopIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedbgpNextHopIPv4AddressParsingError::new(buf, bgpNextHopIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, bgpNextHopIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postMCastPacketDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostMCastPacketDeltaCountParsingError<'a>> for postMCastPacketDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostMCastPacketDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostMCastPacketDeltaCountParsingError::new(buf, postMCastPacketDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postMCastPacketDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postMCastOctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostMCastOctetDeltaCountParsingError<'a>> for postMCastOctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostMCastOctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostMCastOctetDeltaCountParsingError::new(buf, postMCastOctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postMCastOctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowEndSysUpTimeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowEndSysUpTimeParsingError<'a>> for flowEndSysUpTime {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowEndSysUpTimeParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowEndSysUpTimeParsingError::new(buf, flowEndSysUpTimeParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), flowEndSysUpTime(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowStartSysUpTimeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowStartSysUpTimeParsingError<'a>> for flowStartSysUpTime {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowStartSysUpTimeParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowStartSysUpTimeParsingError::new(buf, flowStartSysUpTimeParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), flowStartSysUpTime(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postOctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostOctetDeltaCountParsingError<'a>> for postOctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostOctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostOctetDeltaCountParsingError::new(buf, postOctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postOctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postPacketDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostPacketDeltaCountParsingError<'a>> for postPacketDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostPacketDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostPacketDeltaCountParsingError::new(buf, postPacketDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postPacketDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum minimumIpTotalLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedminimumIpTotalLengthParsingError<'a>> for minimumIpTotalLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedminimumIpTotalLengthParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedminimumIpTotalLengthParsingError::new(buf, minimumIpTotalLengthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), minimumIpTotalLength(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maximumIpTotalLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaximumIpTotalLengthParsingError<'a>> for maximumIpTotalLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaximumIpTotalLengthParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmaximumIpTotalLengthParsingError::new(buf, maximumIpTotalLengthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), maximumIpTotalLength(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceIPv6AddressParsingError<'a>> for sourceIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedsourceIPv6AddressParsingError::new(buf, sourceIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, sourceIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum destinationIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddestinationIPv6AddressParsingError<'a>> for destinationIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddestinationIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocateddestinationIPv6AddressParsingError::new(buf, destinationIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, destinationIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceIPv6PrefixLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceIPv6PrefixLengthParsingError<'a>> for sourceIPv6PrefixLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceIPv6PrefixLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsourceIPv6PrefixLengthParsingError::new(buf, sourceIPv6PrefixLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, sourceIPv6PrefixLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum destinationIPv6PrefixLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddestinationIPv6PrefixLengthParsingError<'a>> for destinationIPv6PrefixLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddestinationIPv6PrefixLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocateddestinationIPv6PrefixLengthParsingError::new(buf, destinationIPv6PrefixLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, destinationIPv6PrefixLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowLabelIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowLabelIPv6ParsingError<'a>> for flowLabelIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowLabelIPv6ParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowLabelIPv6ParsingError::new(buf, flowLabelIPv6ParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), flowLabelIPv6(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum icmpTypeCodeIPv4ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedicmpTypeCodeIPv4ParsingError<'a>> for icmpTypeCodeIPv4 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedicmpTypeCodeIPv4ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedicmpTypeCodeIPv4ParsingError::new(buf, icmpTypeCodeIPv4ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, icmpTypeCodeIPv4(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum igmpTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedigmpTypeParsingError<'a>> for igmpType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedigmpTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedigmpTypeParsingError::new(buf, igmpTypeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, igmpType(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingIntervalParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingIntervalParsingError<'a>> for samplingInterval {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingIntervalParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingIntervalParsingError::new(buf, samplingIntervalParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplingInterval(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingAlgorithmParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingAlgorithmParsingError<'a>> for samplingAlgorithm {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingAlgorithmParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsamplingAlgorithmParsingError::new(buf, samplingAlgorithmParsingError::InvalidLength(length))))
+        };
+        Ok((buf, samplingAlgorithm(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowActiveTimeoutParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowActiveTimeoutParsingError<'a>> for flowActiveTimeout {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowActiveTimeoutParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedflowActiveTimeoutParsingError::new(buf, flowActiveTimeoutParsingError::InvalidLength(length))))
+        };
+        Ok((buf, flowActiveTimeout(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowIdleTimeoutParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowIdleTimeoutParsingError<'a>> for flowIdleTimeout {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowIdleTimeoutParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedflowIdleTimeoutParsingError::new(buf, flowIdleTimeoutParsingError::InvalidLength(length))))
+        };
+        Ok((buf, flowIdleTimeout(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum engineTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedengineTypeParsingError<'a>> for engineType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedengineTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedengineTypeParsingError::new(buf, engineTypeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, engineType(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum engineIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedengineIdParsingError<'a>> for engineId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedengineIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedengineIdParsingError::new(buf, engineIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, engineId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exportedOctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexportedOctetTotalCountParsingError<'a>> for exportedOctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexportedOctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedexportedOctetTotalCountParsingError::new(buf, exportedOctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), exportedOctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exportedMessageTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexportedMessageTotalCountParsingError<'a>> for exportedMessageTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexportedMessageTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedexportedMessageTotalCountParsingError::new(buf, exportedMessageTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), exportedMessageTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exportedFlowRecordTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexportedFlowRecordTotalCountParsingError<'a>> for exportedFlowRecordTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexportedFlowRecordTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedexportedFlowRecordTotalCountParsingError::new(buf, exportedFlowRecordTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), exportedFlowRecordTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipv4RouterScParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedipv4RouterScParsingError<'a>> for ipv4RouterSc {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedipv4RouterScParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(Locatedipv4RouterScParsingError::new(buf, ipv4RouterScParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, ipv4RouterSc(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceIPv4PrefixParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceIPv4PrefixParsingError<'a>> for sourceIPv4Prefix {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceIPv4PrefixParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedsourceIPv4PrefixParsingError::new(buf, sourceIPv4PrefixParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, sourceIPv4Prefix(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum destinationIPv4PrefixParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddestinationIPv4PrefixParsingError<'a>> for destinationIPv4Prefix {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddestinationIPv4PrefixParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocateddestinationIPv4PrefixParsingError::new(buf, destinationIPv4PrefixParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, destinationIPv4Prefix(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsTopLabelTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsTopLabelTypeParsingError<'a>> for mplsTopLabelType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsTopLabelTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedmplsTopLabelTypeParsingError::new(buf, mplsTopLabelTypeParsingError::InvalidLength(length))))
+        };
+        let enum_val = mplsTopLabelType::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsTopLabelIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsTopLabelIPv4AddressParsingError<'a>> for mplsTopLabelIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsTopLabelIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedmplsTopLabelIPv4AddressParsingError::new(buf, mplsTopLabelIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, mplsTopLabelIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplerIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplerIdParsingError<'a>> for samplerId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplerIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplerIdParsingError::new(buf, samplerIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplerId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplerModeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplerModeParsingError<'a>> for samplerMode {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplerModeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsamplerModeParsingError::new(buf, samplerModeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, samplerMode(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplerRandomIntervalParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplerRandomIntervalParsingError<'a>> for samplerRandomInterval {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplerRandomIntervalParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplerRandomIntervalParsingError::new(buf, samplerRandomIntervalParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplerRandomInterval(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum classIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedclassIdParsingError<'a>> for classId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedclassIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedclassIdParsingError::new(buf, classIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, classId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum minimumTTLParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedminimumTTLParsingError<'a>> for minimumTTL {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedminimumTTLParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedminimumTTLParsingError::new(buf, minimumTTLParsingError::InvalidLength(length))))
+        };
+        Ok((buf, minimumTTL(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maximumTTLParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaximumTTLParsingError<'a>> for maximumTTL {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaximumTTLParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedmaximumTTLParsingError::new(buf, maximumTTLParsingError::InvalidLength(length))))
+        };
+        Ok((buf, maximumTTL(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum fragmentIdentificationParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedfragmentIdentificationParsingError<'a>> for fragmentIdentification {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedfragmentIdentificationParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedfragmentIdentificationParsingError::new(buf, fragmentIdentificationParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), fragmentIdentification(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postIpClassOfServiceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostIpClassOfServiceParsingError<'a>> for postIpClassOfService {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostIpClassOfServiceParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostIpClassOfServiceParsingError::new(buf, postIpClassOfServiceParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postIpClassOfService(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceMacAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceMacAddressParsingError<'a>> for sourceMacAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceMacAddressParsingError<'a>> {
+        if length != 6 {
+            return Err(nom::Err::Error(LocatedsourceMacAddressParsingError::new(buf, sourceMacAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, b0) = nom::number::complete::be_u8(buf)?;
+        let (buf, b1) = nom::number::complete::be_u8(buf)?;
+        let (buf, b2) = nom::number::complete::be_u8(buf)?;
+        let (buf, b3) = nom::number::complete::be_u8(buf)?;
+        let (buf, b4) = nom::number::complete::be_u8(buf)?;
+        let (buf, b5) = nom::number::complete::be_u8(buf)?;
+        Ok((buf, sourceMacAddress([b0, b1, b2, b3, b4, b5])))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postDestinationMacAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostDestinationMacAddressParsingError<'a>> for postDestinationMacAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostDestinationMacAddressParsingError<'a>> {
+        if length != 6 {
+            return Err(nom::Err::Error(LocatedpostDestinationMacAddressParsingError::new(buf, postDestinationMacAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, b0) = nom::number::complete::be_u8(buf)?;
+        let (buf, b1) = nom::number::complete::be_u8(buf)?;
+        let (buf, b2) = nom::number::complete::be_u8(buf)?;
+        let (buf, b3) = nom::number::complete::be_u8(buf)?;
+        let (buf, b4) = nom::number::complete::be_u8(buf)?;
+        let (buf, b5) = nom::number::complete::be_u8(buf)?;
+        Ok((buf, postDestinationMacAddress([b0, b1, b2, b3, b4, b5])))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum vlanIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedvlanIdParsingError<'a>> for vlanId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedvlanIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedvlanIdParsingError::new(buf, vlanIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, vlanId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postVlanIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostVlanIdParsingError<'a>> for postVlanId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostVlanIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostVlanIdParsingError::new(buf, postVlanIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postVlanId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipVersionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipVersionParsingError<'a>> for ipVersion {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipVersionParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedipVersionParsingError::new(buf, ipVersionParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ipVersion(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowDirectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowDirectionParsingError<'a>> for flowDirection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowDirectionParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedflowDirectionParsingError::new(buf, flowDirectionParsingError::InvalidLength(length))))
+        };
+        let enum_val = flowDirection::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipNextHopIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipNextHopIPv6AddressParsingError<'a>> for ipNextHopIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipNextHopIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedipNextHopIPv6AddressParsingError::new(buf, ipNextHopIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, ipNextHopIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpNextHopIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpNextHopIPv6AddressParsingError<'a>> for bgpNextHopIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpNextHopIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedbgpNextHopIPv6AddressParsingError::new(buf, bgpNextHopIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, bgpNextHopIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipv6ExtensionHeadersParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedipv6ExtensionHeadersParsingError<'a>> for ipv6ExtensionHeaders {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedipv6ExtensionHeadersParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedipv6ExtensionHeadersParsingError::new(buf, ipv6ExtensionHeadersParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), ipv6ExtensionHeaders(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsTopLabelStackSectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsTopLabelStackSectionParsingError<'a>> for mplsTopLabelStackSection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsTopLabelStackSectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsTopLabelStackSection(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection2ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection2ParsingError<'a>> for mplsLabelStackSection2 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection2ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection2(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection3ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection3ParsingError<'a>> for mplsLabelStackSection3 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection3ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection3(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection4ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection4ParsingError<'a>> for mplsLabelStackSection4 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection4ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection4(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection5ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection5ParsingError<'a>> for mplsLabelStackSection5 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection5ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection5(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection6ParsingError<'a>> for mplsLabelStackSection6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection6ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection7ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection7ParsingError<'a>> for mplsLabelStackSection7 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection7ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection7(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection8ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection8ParsingError<'a>> for mplsLabelStackSection8 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection8ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection8(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection9ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection9ParsingError<'a>> for mplsLabelStackSection9 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection9ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection9(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSection10ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSection10ParsingError<'a>> for mplsLabelStackSection10 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSection10ParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection10(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum destinationMacAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddestinationMacAddressParsingError<'a>> for destinationMacAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddestinationMacAddressParsingError<'a>> {
+        if length != 6 {
+            return Err(nom::Err::Error(LocateddestinationMacAddressParsingError::new(buf, destinationMacAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, b0) = nom::number::complete::be_u8(buf)?;
+        let (buf, b1) = nom::number::complete::be_u8(buf)?;
+        let (buf, b2) = nom::number::complete::be_u8(buf)?;
+        let (buf, b3) = nom::number::complete::be_u8(buf)?;
+        let (buf, b4) = nom::number::complete::be_u8(buf)?;
+        let (buf, b5) = nom::number::complete::be_u8(buf)?;
+        Ok((buf, destinationMacAddress([b0, b1, b2, b3, b4, b5])))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postSourceMacAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostSourceMacAddressParsingError<'a>> for postSourceMacAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostSourceMacAddressParsingError<'a>> {
+        if length != 6 {
+            return Err(nom::Err::Error(LocatedpostSourceMacAddressParsingError::new(buf, postSourceMacAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, b0) = nom::number::complete::be_u8(buf)?;
+        let (buf, b1) = nom::number::complete::be_u8(buf)?;
+        let (buf, b2) = nom::number::complete::be_u8(buf)?;
+        let (buf, b3) = nom::number::complete::be_u8(buf)?;
+        let (buf, b4) = nom::number::complete::be_u8(buf)?;
+        let (buf, b5) = nom::number::complete::be_u8(buf)?;
+        Ok((buf, postSourceMacAddress([b0, b1, b2, b3, b4, b5])))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum interfaceNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedinterfaceNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedinterfaceNameParsingError::new(
+            input,
+            interfaceNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinterfaceNameParsingError<'a>> for interfaceName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinterfaceNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  interfaceName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  interfaceName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum interfaceDescriptionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedinterfaceDescriptionParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedinterfaceDescriptionParsingError::new(
+            input,
+            interfaceDescriptionParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinterfaceDescriptionParsingError<'a>> for interfaceDescription {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinterfaceDescriptionParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  interfaceDescription(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  interfaceDescription(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplerNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedsamplerNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedsamplerNameParsingError::new(
+            input,
+            samplerNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplerNameParsingError<'a>> for samplerName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplerNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  samplerName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  samplerName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum octetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoctetTotalCountParsingError<'a>> for octetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedoctetTotalCountParsingError::new(buf, octetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), octetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum packetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpacketTotalCountParsingError<'a>> for packetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpacketTotalCountParsingError::new(buf, packetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), packetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flagsAndSamplerIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflagsAndSamplerIdParsingError<'a>> for flagsAndSamplerId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflagsAndSamplerIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflagsAndSamplerIdParsingError::new(buf, flagsAndSamplerIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), flagsAndSamplerId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum fragmentOffsetParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedfragmentOffsetParsingError<'a>> for fragmentOffset {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedfragmentOffsetParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedfragmentOffsetParsingError::new(buf, fragmentOffsetParsingError::InvalidLength(length))))
+        };
+        Ok((buf, fragmentOffset(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum forwardingStatusParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedforwardingStatusParsingError<'a>> for forwardingStatus {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedforwardingStatusParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedforwardingStatusParsingError::new(buf, forwardingStatusParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        let enum_val = forwardingStatus::from(res);
+        Ok((buf.slice(len..), enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsVpnRouteDistinguisherParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsVpnRouteDistinguisherParsingError<'a>> for mplsVpnRouteDistinguisher {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsVpnRouteDistinguisherParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsVpnRouteDistinguisher(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsTopLabelPrefixLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsTopLabelPrefixLengthParsingError<'a>> for mplsTopLabelPrefixLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsTopLabelPrefixLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedmplsTopLabelPrefixLengthParsingError::new(buf, mplsTopLabelPrefixLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, mplsTopLabelPrefixLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srcTrafficIndexParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrcTrafficIndexParsingError<'a>> for srcTrafficIndex {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrcTrafficIndexParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsrcTrafficIndexParsingError::new(buf, srcTrafficIndexParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), srcTrafficIndex(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dstTrafficIndexParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddstTrafficIndexParsingError<'a>> for dstTrafficIndex {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddstTrafficIndexParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddstTrafficIndexParsingError::new(buf, dstTrafficIndexParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), dstTrafficIndex(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum applicationDescriptionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedapplicationDescriptionParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedapplicationDescriptionParsingError::new(
+            input,
+            applicationDescriptionParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedapplicationDescriptionParsingError<'a>> for applicationDescription {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedapplicationDescriptionParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  applicationDescription(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  applicationDescription(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum applicationIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedapplicationIdParsingError<'a>> for applicationId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedapplicationIdParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, applicationId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum applicationNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedapplicationNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedapplicationNameParsingError::new(
+            input,
+            applicationNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedapplicationNameParsingError<'a>> for applicationName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedapplicationNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  applicationName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  applicationName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postIpDiffServCodePointParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostIpDiffServCodePointParsingError<'a>> for postIpDiffServCodePoint {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostIpDiffServCodePointParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostIpDiffServCodePointParsingError::new(buf, postIpDiffServCodePointParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postIpDiffServCodePoint(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum multicastReplicationFactorParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmulticastReplicationFactorParsingError<'a>> for multicastReplicationFactor {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmulticastReplicationFactorParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmulticastReplicationFactorParsingError::new(buf, multicastReplicationFactorParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), multicastReplicationFactor(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum classNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedclassNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedclassNameParsingError::new(
+            input,
+            classNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedclassNameParsingError<'a>> for className {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedclassNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  className(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  className(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum classificationEngineIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedclassificationEngineIdParsingError<'a>> for classificationEngineId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedclassificationEngineIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedclassificationEngineIdParsingError::new(buf, classificationEngineIdParsingError::InvalidLength(length))))
+        };
+        let enum_val = classificationEngineId::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2packetSectionOffsetParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2packetSectionOffsetParsingError<'a>> for layer2packetSectionOffset {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2packetSectionOffsetParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(Locatedlayer2packetSectionOffsetParsingError::new(buf, layer2packetSectionOffsetParsingError::InvalidLength(length))))
+        };
+        Ok((buf, layer2packetSectionOffset(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2packetSectionSizeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2packetSectionSizeParsingError<'a>> for layer2packetSectionSize {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2packetSectionSizeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(Locatedlayer2packetSectionSizeParsingError::new(buf, layer2packetSectionSizeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, layer2packetSectionSize(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2packetSectionDataParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2packetSectionDataParsingError<'a>> for layer2packetSectionData {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2packetSectionDataParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, layer2packetSectionData(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpNextAdjacentAsNumberParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpNextAdjacentAsNumberParsingError<'a>> for bgpNextAdjacentAsNumber {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpNextAdjacentAsNumberParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedbgpNextAdjacentAsNumberParsingError::new(buf, bgpNextAdjacentAsNumberParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), bgpNextAdjacentAsNumber(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpPrevAdjacentAsNumberParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpPrevAdjacentAsNumberParsingError<'a>> for bgpPrevAdjacentAsNumber {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpPrevAdjacentAsNumberParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedbgpPrevAdjacentAsNumberParsingError::new(buf, bgpPrevAdjacentAsNumberParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), bgpPrevAdjacentAsNumber(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exporterIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexporterIPv4AddressParsingError<'a>> for exporterIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexporterIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedexporterIPv4AddressParsingError::new(buf, exporterIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, exporterIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exporterIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexporterIPv6AddressParsingError<'a>> for exporterIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexporterIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedexporterIPv6AddressParsingError::new(buf, exporterIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, exporterIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum droppedOctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddroppedOctetDeltaCountParsingError<'a>> for droppedOctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddroppedOctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddroppedOctetDeltaCountParsingError::new(buf, droppedOctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), droppedOctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum droppedPacketDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddroppedPacketDeltaCountParsingError<'a>> for droppedPacketDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddroppedPacketDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddroppedPacketDeltaCountParsingError::new(buf, droppedPacketDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), droppedPacketDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum droppedOctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddroppedOctetTotalCountParsingError<'a>> for droppedOctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddroppedOctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddroppedOctetTotalCountParsingError::new(buf, droppedOctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), droppedOctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum droppedPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddroppedPacketTotalCountParsingError<'a>> for droppedPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddroppedPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddroppedPacketTotalCountParsingError::new(buf, droppedPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), droppedPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowEndReasonParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowEndReasonParsingError<'a>> for flowEndReason {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowEndReasonParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedflowEndReasonParsingError::new(buf, flowEndReasonParsingError::InvalidLength(length))))
+        };
+        let enum_val = flowEndReason::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum commonPropertiesIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedcommonPropertiesIdParsingError<'a>> for commonPropertiesId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedcommonPropertiesIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedcommonPropertiesIdParsingError::new(buf, commonPropertiesIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), commonPropertiesId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observationPointIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservationPointIdParsingError<'a>> for observationPointId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservationPointIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedobservationPointIdParsingError::new(buf, observationPointIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), observationPointId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum icmpTypeCodeIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedicmpTypeCodeIPv6ParsingError<'a>> for icmpTypeCodeIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedicmpTypeCodeIPv6ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedicmpTypeCodeIPv6ParsingError::new(buf, icmpTypeCodeIPv6ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, icmpTypeCodeIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsTopLabelIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsTopLabelIPv6AddressParsingError<'a>> for mplsTopLabelIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsTopLabelIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedmplsTopLabelIPv6AddressParsingError::new(buf, mplsTopLabelIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, mplsTopLabelIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum lineCardIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedlineCardIdParsingError<'a>> for lineCardId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedlineCardIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedlineCardIdParsingError::new(buf, lineCardIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), lineCardId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum portIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedportIdParsingError<'a>> for portId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedportIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedportIdParsingError::new(buf, portIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), portId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum meteringProcessIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmeteringProcessIdParsingError<'a>> for meteringProcessId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmeteringProcessIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmeteringProcessIdParsingError::new(buf, meteringProcessIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), meteringProcessId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exportingProcessIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexportingProcessIdParsingError<'a>> for exportingProcessId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexportingProcessIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedexportingProcessIdParsingError::new(buf, exportingProcessIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), exportingProcessId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum templateIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtemplateIdParsingError<'a>> for templateId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtemplateIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtemplateIdParsingError::new(buf, templateIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, templateId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum wlanChannelIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedwlanChannelIdParsingError<'a>> for wlanChannelId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedwlanChannelIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedwlanChannelIdParsingError::new(buf, wlanChannelIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, wlanChannelId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum wlanSSIDParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedwlanSSIDParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedwlanSSIDParsingError::new(
+            input,
+            wlanSSIDParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedwlanSSIDParsingError<'a>> for wlanSSID {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedwlanSSIDParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  wlanSSID(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  wlanSSID(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowIdParsingError<'a>> for flowId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowIdParsingError::new(buf, flowIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), flowId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observationDomainIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservationDomainIdParsingError<'a>> for observationDomainId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservationDomainIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedobservationDomainIdParsingError::new(buf, observationDomainIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), observationDomainId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowStartSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowStartSecondsParsingError<'a>> for flowStartSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowStartSecondsParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedflowStartSecondsParsingError::new(buf, flowStartSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, secs) = nom::number::complete::be_u32(buf)?;
+        let value = match chrono::Utc.timestamp_opt(secs as i64, 0) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedflowStartSecondsParsingError::new(buf, flowStartSecondsParsingError::InvalidTimestamp(secs))));
+            }
+        };
+        Ok((buf, flowStartSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowEndSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowEndSecondsParsingError<'a>> for flowEndSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowEndSecondsParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedflowEndSecondsParsingError::new(buf, flowEndSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, secs) = nom::number::complete::be_u32(buf)?;
+        let value = match chrono::Utc.timestamp_opt(secs as i64, 0) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedflowEndSecondsParsingError::new(buf, flowEndSecondsParsingError::InvalidTimestamp(secs))));
+            }
+        };
+        Ok((buf, flowEndSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowStartMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowStartMillisecondsParsingError<'a>> for flowStartMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowStartMillisecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedflowStartMillisecondsParsingError::new(buf, flowStartMillisecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedflowStartMillisecondsParsingError::new(buf, flowStartMillisecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, flowStartMilliseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowEndMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowEndMillisecondsParsingError<'a>> for flowEndMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowEndMillisecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedflowEndMillisecondsParsingError::new(buf, flowEndMillisecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedflowEndMillisecondsParsingError::new(buf, flowEndMillisecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, flowEndMilliseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowStartMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowStartMicrosecondsParsingError<'a>> for flowStartMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowStartMicrosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedflowStartMicrosecondsParsingError::new(buf, flowStartMicrosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedflowStartMicrosecondsParsingError::new(buf, flowStartMicrosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, flowStartMicroseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowEndMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowEndMicrosecondsParsingError<'a>> for flowEndMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowEndMicrosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedflowEndMicrosecondsParsingError::new(buf, flowEndMicrosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedflowEndMicrosecondsParsingError::new(buf, flowEndMicrosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, flowEndMicroseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowStartNanosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowStartNanosecondsParsingError<'a>> for flowStartNanoseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowStartNanosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedflowStartNanosecondsParsingError::new(buf, flowStartNanosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedflowStartNanosecondsParsingError::new(buf, flowStartNanosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, flowStartNanoseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowEndNanosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowEndNanosecondsParsingError<'a>> for flowEndNanoseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowEndNanosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedflowEndNanosecondsParsingError::new(buf, flowEndNanosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedflowEndNanosecondsParsingError::new(buf, flowEndNanosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, flowEndNanoseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowStartDeltaMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowStartDeltaMicrosecondsParsingError<'a>> for flowStartDeltaMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowStartDeltaMicrosecondsParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowStartDeltaMicrosecondsParsingError::new(buf, flowStartDeltaMicrosecondsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), flowStartDeltaMicroseconds(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowEndDeltaMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowEndDeltaMicrosecondsParsingError<'a>> for flowEndDeltaMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowEndDeltaMicrosecondsParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowEndDeltaMicrosecondsParsingError::new(buf, flowEndDeltaMicrosecondsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), flowEndDeltaMicroseconds(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum systemInitTimeMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsystemInitTimeMillisecondsParsingError<'a>> for systemInitTimeMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsystemInitTimeMillisecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedsystemInitTimeMillisecondsParsingError::new(buf, systemInitTimeMillisecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedsystemInitTimeMillisecondsParsingError::new(buf, systemInitTimeMillisecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, systemInitTimeMilliseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowDurationMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowDurationMillisecondsParsingError<'a>> for flowDurationMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowDurationMillisecondsParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowDurationMillisecondsParsingError::new(buf, flowDurationMillisecondsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), flowDurationMilliseconds(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowDurationMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowDurationMicrosecondsParsingError<'a>> for flowDurationMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowDurationMicrosecondsParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowDurationMicrosecondsParsingError::new(buf, flowDurationMicrosecondsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), flowDurationMicroseconds(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observedFlowTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservedFlowTotalCountParsingError<'a>> for observedFlowTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservedFlowTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedobservedFlowTotalCountParsingError::new(buf, observedFlowTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), observedFlowTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ignoredPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedignoredPacketTotalCountParsingError<'a>> for ignoredPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedignoredPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedignoredPacketTotalCountParsingError::new(buf, ignoredPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ignoredPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ignoredOctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedignoredOctetTotalCountParsingError<'a>> for ignoredOctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedignoredOctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedignoredOctetTotalCountParsingError::new(buf, ignoredOctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ignoredOctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum notSentFlowTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednotSentFlowTotalCountParsingError<'a>> for notSentFlowTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednotSentFlowTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednotSentFlowTotalCountParsingError::new(buf, notSentFlowTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), notSentFlowTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum notSentPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednotSentPacketTotalCountParsingError<'a>> for notSentPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednotSentPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednotSentPacketTotalCountParsingError::new(buf, notSentPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), notSentPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum notSentOctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednotSentOctetTotalCountParsingError<'a>> for notSentOctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednotSentOctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednotSentOctetTotalCountParsingError::new(buf, notSentOctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), notSentOctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum destinationIPv6PrefixParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddestinationIPv6PrefixParsingError<'a>> for destinationIPv6Prefix {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddestinationIPv6PrefixParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocateddestinationIPv6PrefixParsingError::new(buf, destinationIPv6PrefixParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, destinationIPv6Prefix(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceIPv6PrefixParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceIPv6PrefixParsingError<'a>> for sourceIPv6Prefix {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceIPv6PrefixParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedsourceIPv6PrefixParsingError::new(buf, sourceIPv6PrefixParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, sourceIPv6Prefix(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postOctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostOctetTotalCountParsingError<'a>> for postOctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostOctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostOctetTotalCountParsingError::new(buf, postOctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postOctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostPacketTotalCountParsingError<'a>> for postPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostPacketTotalCountParsingError::new(buf, postPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowKeyIndicatorParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowKeyIndicatorParsingError<'a>> for flowKeyIndicator {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowKeyIndicatorParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowKeyIndicatorParsingError::new(buf, flowKeyIndicatorParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), flowKeyIndicator(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postMCastPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostMCastPacketTotalCountParsingError<'a>> for postMCastPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostMCastPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostMCastPacketTotalCountParsingError::new(buf, postMCastPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postMCastPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postMCastOctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostMCastOctetTotalCountParsingError<'a>> for postMCastOctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostMCastOctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostMCastOctetTotalCountParsingError::new(buf, postMCastOctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postMCastOctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum icmpTypeIPv4ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedicmpTypeIPv4ParsingError<'a>> for icmpTypeIPv4 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedicmpTypeIPv4ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedicmpTypeIPv4ParsingError::new(buf, icmpTypeIPv4ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, icmpTypeIPv4(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum icmpCodeIPv4ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedicmpCodeIPv4ParsingError<'a>> for icmpCodeIPv4 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedicmpCodeIPv4ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedicmpCodeIPv4ParsingError::new(buf, icmpCodeIPv4ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, icmpCodeIPv4(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum icmpTypeIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedicmpTypeIPv6ParsingError<'a>> for icmpTypeIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedicmpTypeIPv6ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedicmpTypeIPv6ParsingError::new(buf, icmpTypeIPv6ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, icmpTypeIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum icmpCodeIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedicmpCodeIPv6ParsingError<'a>> for icmpCodeIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedicmpCodeIPv6ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedicmpCodeIPv6ParsingError::new(buf, icmpCodeIPv6ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, icmpCodeIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum udpSourcePortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedudpSourcePortParsingError<'a>> for udpSourcePort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedudpSourcePortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedudpSourcePortParsingError::new(buf, udpSourcePortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, udpSourcePort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum udpDestinationPortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedudpDestinationPortParsingError<'a>> for udpDestinationPort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedudpDestinationPortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedudpDestinationPortParsingError::new(buf, udpDestinationPortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, udpDestinationPort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpSourcePortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpSourcePortParsingError<'a>> for tcpSourcePort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpSourcePortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtcpSourcePortParsingError::new(buf, tcpSourcePortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, tcpSourcePort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpDestinationPortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpDestinationPortParsingError<'a>> for tcpDestinationPort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpDestinationPortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtcpDestinationPortParsingError::new(buf, tcpDestinationPortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, tcpDestinationPort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpSequenceNumberParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpSequenceNumberParsingError<'a>> for tcpSequenceNumber {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpSequenceNumberParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpSequenceNumberParsingError::new(buf, tcpSequenceNumberParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), tcpSequenceNumber(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpAcknowledgementNumberParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpAcknowledgementNumberParsingError<'a>> for tcpAcknowledgementNumber {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpAcknowledgementNumberParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpAcknowledgementNumberParsingError::new(buf, tcpAcknowledgementNumberParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), tcpAcknowledgementNumber(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpWindowSizeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpWindowSizeParsingError<'a>> for tcpWindowSize {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpWindowSizeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtcpWindowSizeParsingError::new(buf, tcpWindowSizeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, tcpWindowSize(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpUrgentPointerParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpUrgentPointerParsingError<'a>> for tcpUrgentPointer {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpUrgentPointerParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtcpUrgentPointerParsingError::new(buf, tcpUrgentPointerParsingError::InvalidLength(length))))
+        };
+        Ok((buf, tcpUrgentPointer(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpHeaderLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpHeaderLengthParsingError<'a>> for tcpHeaderLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpHeaderLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtcpHeaderLengthParsingError::new(buf, tcpHeaderLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, tcpHeaderLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipHeaderLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipHeaderLengthParsingError<'a>> for ipHeaderLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipHeaderLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedipHeaderLengthParsingError::new(buf, ipHeaderLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ipHeaderLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum totalLengthIPv4ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtotalLengthIPv4ParsingError<'a>> for totalLengthIPv4 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtotalLengthIPv4ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtotalLengthIPv4ParsingError::new(buf, totalLengthIPv4ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, totalLengthIPv4(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum payloadLengthIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpayloadLengthIPv6ParsingError<'a>> for payloadLengthIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpayloadLengthIPv6ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpayloadLengthIPv6ParsingError::new(buf, payloadLengthIPv6ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, payloadLengthIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipTTLParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipTTLParsingError<'a>> for ipTTL {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipTTLParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedipTTLParsingError::new(buf, ipTTLParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ipTTL(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum nextHeaderIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednextHeaderIPv6ParsingError<'a>> for nextHeaderIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednextHeaderIPv6ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatednextHeaderIPv6ParsingError::new(buf, nextHeaderIPv6ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, nextHeaderIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsPayloadLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsPayloadLengthParsingError<'a>> for mplsPayloadLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsPayloadLengthParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmplsPayloadLengthParsingError::new(buf, mplsPayloadLengthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), mplsPayloadLength(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipDiffServCodePointParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipDiffServCodePointParsingError<'a>> for ipDiffServCodePoint {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipDiffServCodePointParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedipDiffServCodePointParsingError::new(buf, ipDiffServCodePointParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ipDiffServCodePoint(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipPrecedenceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipPrecedenceParsingError<'a>> for ipPrecedence {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipPrecedenceParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedipPrecedenceParsingError::new(buf, ipPrecedenceParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ipPrecedence(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum fragmentFlagsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedfragmentFlagsParsingError<'a>> for fragmentFlags {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedfragmentFlagsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedfragmentFlagsParsingError::new(buf, fragmentFlagsParsingError::InvalidLength(length))))
+        };
+        Ok((buf, fragmentFlags(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum octetDeltaSumOfSquaresParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoctetDeltaSumOfSquaresParsingError<'a>> for octetDeltaSumOfSquares {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoctetDeltaSumOfSquaresParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedoctetDeltaSumOfSquaresParsingError::new(buf, octetDeltaSumOfSquaresParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), octetDeltaSumOfSquares(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum octetTotalSumOfSquaresParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoctetTotalSumOfSquaresParsingError<'a>> for octetTotalSumOfSquares {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoctetTotalSumOfSquaresParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedoctetTotalSumOfSquaresParsingError::new(buf, octetTotalSumOfSquaresParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), octetTotalSumOfSquares(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsTopLabelTTLParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsTopLabelTTLParsingError<'a>> for mplsTopLabelTTL {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsTopLabelTTLParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedmplsTopLabelTTLParsingError::new(buf, mplsTopLabelTTLParsingError::InvalidLength(length))))
+        };
+        Ok((buf, mplsTopLabelTTL(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackLengthParsingError<'a>> for mplsLabelStackLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackLengthParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmplsLabelStackLengthParsingError::new(buf, mplsLabelStackLengthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), mplsLabelStackLength(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackDepthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackDepthParsingError<'a>> for mplsLabelStackDepth {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackDepthParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmplsLabelStackDepthParsingError::new(buf, mplsLabelStackDepthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), mplsLabelStackDepth(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsTopLabelExpParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsTopLabelExpParsingError<'a>> for mplsTopLabelExp {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsTopLabelExpParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedmplsTopLabelExpParsingError::new(buf, mplsTopLabelExpParsingError::InvalidLength(length))))
+        };
+        Ok((buf, mplsTopLabelExp(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipPayloadLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipPayloadLengthParsingError<'a>> for ipPayloadLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipPayloadLengthParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedipPayloadLengthParsingError::new(buf, ipPayloadLengthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), ipPayloadLength(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum udpMessageLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedudpMessageLengthParsingError<'a>> for udpMessageLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedudpMessageLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedudpMessageLengthParsingError::new(buf, udpMessageLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, udpMessageLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum isMulticastParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedisMulticastParsingError<'a>> for isMulticast {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedisMulticastParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedisMulticastParsingError::new(buf, isMulticastParsingError::InvalidLength(length))))
+        };
+        Ok((buf, isMulticast(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipv4IHLParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedipv4IHLParsingError<'a>> for ipv4IHL {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedipv4IHLParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(Locatedipv4IHLParsingError::new(buf, ipv4IHLParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ipv4IHL(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipv4OptionsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedipv4OptionsParsingError<'a>> for ipv4Options {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedipv4OptionsParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedipv4OptionsParsingError::new(buf, ipv4OptionsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), ipv4Options(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpOptionsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpOptionsParsingError<'a>> for tcpOptions {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpOptionsParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpOptionsParsingError::new(buf, tcpOptionsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), tcpOptions(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum paddingOctetsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpaddingOctetsParsingError<'a>> for paddingOctets {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpaddingOctetsParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, paddingOctets(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum collectorIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedcollectorIPv4AddressParsingError<'a>> for collectorIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedcollectorIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedcollectorIPv4AddressParsingError::new(buf, collectorIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, collectorIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum collectorIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedcollectorIPv6AddressParsingError<'a>> for collectorIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedcollectorIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedcollectorIPv6AddressParsingError::new(buf, collectorIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, collectorIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exportInterfaceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexportInterfaceParsingError<'a>> for exportInterface {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexportInterfaceParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedexportInterfaceParsingError::new(buf, exportInterfaceParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), exportInterface(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exportProtocolVersionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexportProtocolVersionParsingError<'a>> for exportProtocolVersion {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexportProtocolVersionParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedexportProtocolVersionParsingError::new(buf, exportProtocolVersionParsingError::InvalidLength(length))))
+        };
+        Ok((buf, exportProtocolVersion(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exportTransportProtocolParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexportTransportProtocolParsingError<'a>> for exportTransportProtocol {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexportTransportProtocolParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedexportTransportProtocolParsingError::new(buf, exportTransportProtocolParsingError::InvalidLength(length))))
+        };
+        Ok((buf, exportTransportProtocol(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum collectorTransportPortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedcollectorTransportPortParsingError<'a>> for collectorTransportPort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedcollectorTransportPortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedcollectorTransportPortParsingError::new(buf, collectorTransportPortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, collectorTransportPort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exporterTransportPortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexporterTransportPortParsingError<'a>> for exporterTransportPort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexporterTransportPortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedexporterTransportPortParsingError::new(buf, exporterTransportPortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, exporterTransportPort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpSynTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpSynTotalCountParsingError<'a>> for tcpSynTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpSynTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpSynTotalCountParsingError::new(buf, tcpSynTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), tcpSynTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpFinTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpFinTotalCountParsingError<'a>> for tcpFinTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpFinTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpFinTotalCountParsingError::new(buf, tcpFinTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), tcpFinTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpRstTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpRstTotalCountParsingError<'a>> for tcpRstTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpRstTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpRstTotalCountParsingError::new(buf, tcpRstTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), tcpRstTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpPshTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpPshTotalCountParsingError<'a>> for tcpPshTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpPshTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpPshTotalCountParsingError::new(buf, tcpPshTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), tcpPshTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpAckTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpAckTotalCountParsingError<'a>> for tcpAckTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpAckTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpAckTotalCountParsingError::new(buf, tcpAckTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), tcpAckTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpUrgTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpUrgTotalCountParsingError<'a>> for tcpUrgTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpUrgTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtcpUrgTotalCountParsingError::new(buf, tcpUrgTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), tcpUrgTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipTotalLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipTotalLengthParsingError<'a>> for ipTotalLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipTotalLengthParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedipTotalLengthParsingError::new(buf, ipTotalLengthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ipTotalLength(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postNATSourceIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostNATSourceIPv4AddressParsingError<'a>> for postNATSourceIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostNATSourceIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedpostNATSourceIPv4AddressParsingError::new(buf, postNATSourceIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, postNATSourceIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postNATDestinationIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostNATDestinationIPv4AddressParsingError<'a>> for postNATDestinationIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostNATDestinationIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedpostNATDestinationIPv4AddressParsingError::new(buf, postNATDestinationIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, postNATDestinationIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postNAPTSourceTransportPortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostNAPTSourceTransportPortParsingError<'a>> for postNAPTSourceTransportPort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostNAPTSourceTransportPortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostNAPTSourceTransportPortParsingError::new(buf, postNAPTSourceTransportPortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postNAPTSourceTransportPort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postNAPTDestinationTransportPortParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostNAPTDestinationTransportPortParsingError<'a>> for postNAPTDestinationTransportPort {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostNAPTDestinationTransportPortParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostNAPTDestinationTransportPortParsingError::new(buf, postNAPTDestinationTransportPortParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postNAPTDestinationTransportPort(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum natOriginatingAddressRealmParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednatOriginatingAddressRealmParsingError<'a>> for natOriginatingAddressRealm {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednatOriginatingAddressRealmParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatednatOriginatingAddressRealmParsingError::new(buf, natOriginatingAddressRealmParsingError::InvalidLength(length))))
+        };
+        let enum_val = natOriginatingAddressRealm::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum natEventParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednatEventParsingError<'a>> for natEvent {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednatEventParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatednatEventParsingError::new(buf, natEventParsingError::InvalidLength(length))))
+        };
+        let enum_val = natEvent::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum initiatorOctetsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinitiatorOctetsParsingError<'a>> for initiatorOctets {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinitiatorOctetsParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedinitiatorOctetsParsingError::new(buf, initiatorOctetsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), initiatorOctets(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum responderOctetsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedresponderOctetsParsingError<'a>> for responderOctets {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedresponderOctetsParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedresponderOctetsParsingError::new(buf, responderOctetsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), responderOctets(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum firewallEventParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedfirewallEventParsingError<'a>> for firewallEvent {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedfirewallEventParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedfirewallEventParsingError::new(buf, firewallEventParsingError::InvalidLength(length))))
+        };
+        let enum_val = firewallEvent::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ingressVRFIDParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedingressVRFIDParsingError<'a>> for ingressVRFID {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedingressVRFIDParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedingressVRFIDParsingError::new(buf, ingressVRFIDParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), ingressVRFID(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum egressVRFIDParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedegressVRFIDParsingError<'a>> for egressVRFID {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedegressVRFIDParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedegressVRFIDParsingError::new(buf, egressVRFIDParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), egressVRFID(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum VRFnameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedVRFnameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedVRFnameParsingError::new(
+            input,
+            VRFnameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedVRFnameParsingError<'a>> for VRFname {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedVRFnameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  VRFname(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  VRFname(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postMplsTopLabelExpParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostMplsTopLabelExpParsingError<'a>> for postMplsTopLabelExp {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostMplsTopLabelExpParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostMplsTopLabelExpParsingError::new(buf, postMplsTopLabelExpParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postMplsTopLabelExp(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tcpWindowScaleParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtcpWindowScaleParsingError<'a>> for tcpWindowScale {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtcpWindowScaleParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtcpWindowScaleParsingError::new(buf, tcpWindowScaleParsingError::InvalidLength(length))))
+        };
+        Ok((buf, tcpWindowScale(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum biflowDirectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbiflowDirectionParsingError<'a>> for biflowDirection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbiflowDirectionParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedbiflowDirectionParsingError::new(buf, biflowDirectionParsingError::InvalidLength(length))))
+        };
+        let enum_val = biflowDirection::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ethernetHeaderLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedethernetHeaderLengthParsingError<'a>> for ethernetHeaderLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedethernetHeaderLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedethernetHeaderLengthParsingError::new(buf, ethernetHeaderLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ethernetHeaderLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ethernetPayloadLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedethernetPayloadLengthParsingError<'a>> for ethernetPayloadLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedethernetPayloadLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedethernetPayloadLengthParsingError::new(buf, ethernetPayloadLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ethernetPayloadLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ethernetTotalLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedethernetTotalLengthParsingError<'a>> for ethernetTotalLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedethernetTotalLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedethernetTotalLengthParsingError::new(buf, ethernetTotalLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ethernetTotalLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qVlanIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qVlanIdParsingError<'a>> for dot1qVlanId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qVlanIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(Locateddot1qVlanIdParsingError::new(buf, dot1qVlanIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dot1qVlanId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qPriorityParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qPriorityParsingError<'a>> for dot1qPriority {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qPriorityParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(Locateddot1qPriorityParsingError::new(buf, dot1qPriorityParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dot1qPriority(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qCustomerVlanIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qCustomerVlanIdParsingError<'a>> for dot1qCustomerVlanId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qCustomerVlanIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(Locateddot1qCustomerVlanIdParsingError::new(buf, dot1qCustomerVlanIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dot1qCustomerVlanId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qCustomerPriorityParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qCustomerPriorityParsingError<'a>> for dot1qCustomerPriority {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qCustomerPriorityParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(Locateddot1qCustomerPriorityParsingError::new(buf, dot1qCustomerPriorityParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dot1qCustomerPriority(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum metroEvcIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedmetroEvcIdParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedmetroEvcIdParsingError::new(
+            input,
+            metroEvcIdParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmetroEvcIdParsingError<'a>> for metroEvcId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmetroEvcIdParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  metroEvcId(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  metroEvcId(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum metroEvcTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmetroEvcTypeParsingError<'a>> for metroEvcType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmetroEvcTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedmetroEvcTypeParsingError::new(buf, metroEvcTypeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, metroEvcType(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum pseudoWireIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpseudoWireIdParsingError<'a>> for pseudoWireId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpseudoWireIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpseudoWireIdParsingError::new(buf, pseudoWireIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), pseudoWireId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum pseudoWireTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpseudoWireTypeParsingError<'a>> for pseudoWireType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpseudoWireTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpseudoWireTypeParsingError::new(buf, pseudoWireTypeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, pseudoWireType(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum pseudoWireControlWordParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpseudoWireControlWordParsingError<'a>> for pseudoWireControlWord {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpseudoWireControlWordParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpseudoWireControlWordParsingError::new(buf, pseudoWireControlWordParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), pseudoWireControlWord(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ingressPhysicalInterfaceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedingressPhysicalInterfaceParsingError<'a>> for ingressPhysicalInterface {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedingressPhysicalInterfaceParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedingressPhysicalInterfaceParsingError::new(buf, ingressPhysicalInterfaceParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), ingressPhysicalInterface(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum egressPhysicalInterfaceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedegressPhysicalInterfaceParsingError<'a>> for egressPhysicalInterface {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedegressPhysicalInterfaceParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedegressPhysicalInterfaceParsingError::new(buf, egressPhysicalInterfaceParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), egressPhysicalInterface(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postDot1qVlanIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostDot1qVlanIdParsingError<'a>> for postDot1qVlanId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostDot1qVlanIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostDot1qVlanIdParsingError::new(buf, postDot1qVlanIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postDot1qVlanId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postDot1qCustomerVlanIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostDot1qCustomerVlanIdParsingError<'a>> for postDot1qCustomerVlanId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostDot1qCustomerVlanIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostDot1qCustomerVlanIdParsingError::new(buf, postDot1qCustomerVlanIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postDot1qCustomerVlanId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ethernetTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedethernetTypeParsingError<'a>> for ethernetType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedethernetTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedethernetTypeParsingError::new(buf, ethernetTypeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, ethernetType(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postIpPrecedenceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostIpPrecedenceParsingError<'a>> for postIpPrecedence {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostIpPrecedenceParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedpostIpPrecedenceParsingError::new(buf, postIpPrecedenceParsingError::InvalidLength(length))))
+        };
+        Ok((buf, postIpPrecedence(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum collectionTimeMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedcollectionTimeMillisecondsParsingError<'a>> for collectionTimeMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedcollectionTimeMillisecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedcollectionTimeMillisecondsParsingError::new(buf, collectionTimeMillisecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedcollectionTimeMillisecondsParsingError::new(buf, collectionTimeMillisecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, collectionTimeMilliseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exportSctpStreamIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexportSctpStreamIdParsingError<'a>> for exportSctpStreamId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexportSctpStreamIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedexportSctpStreamIdParsingError::new(buf, exportSctpStreamIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, exportSctpStreamId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxExportSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxExportSecondsParsingError<'a>> for maxExportSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxExportSecondsParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedmaxExportSecondsParsingError::new(buf, maxExportSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, secs) = nom::number::complete::be_u32(buf)?;
+        let value = match chrono::Utc.timestamp_opt(secs as i64, 0) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedmaxExportSecondsParsingError::new(buf, maxExportSecondsParsingError::InvalidTimestamp(secs))));
+            }
+        };
+        Ok((buf, maxExportSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxFlowEndSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxFlowEndSecondsParsingError<'a>> for maxFlowEndSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxFlowEndSecondsParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedmaxFlowEndSecondsParsingError::new(buf, maxFlowEndSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, secs) = nom::number::complete::be_u32(buf)?;
+        let value = match chrono::Utc.timestamp_opt(secs as i64, 0) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedmaxFlowEndSecondsParsingError::new(buf, maxFlowEndSecondsParsingError::InvalidTimestamp(secs))));
+            }
+        };
+        Ok((buf, maxFlowEndSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum messageMD5ChecksumParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmessageMD5ChecksumParsingError<'a>> for messageMD5Checksum {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmessageMD5ChecksumParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, messageMD5Checksum(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum messageScopeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmessageScopeParsingError<'a>> for messageScope {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmessageScopeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedmessageScopeParsingError::new(buf, messageScopeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, messageScope(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum minExportSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedminExportSecondsParsingError<'a>> for minExportSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedminExportSecondsParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedminExportSecondsParsingError::new(buf, minExportSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, secs) = nom::number::complete::be_u32(buf)?;
+        let value = match chrono::Utc.timestamp_opt(secs as i64, 0) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedminExportSecondsParsingError::new(buf, minExportSecondsParsingError::InvalidTimestamp(secs))));
+            }
+        };
+        Ok((buf, minExportSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum minFlowStartSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedminFlowStartSecondsParsingError<'a>> for minFlowStartSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedminFlowStartSecondsParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedminFlowStartSecondsParsingError::new(buf, minFlowStartSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, secs) = nom::number::complete::be_u32(buf)?;
+        let value = match chrono::Utc.timestamp_opt(secs as i64, 0) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedminFlowStartSecondsParsingError::new(buf, minFlowStartSecondsParsingError::InvalidTimestamp(secs))));
+            }
+        };
+        Ok((buf, minFlowStartSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum opaqueOctetsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedopaqueOctetsParsingError<'a>> for opaqueOctets {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedopaqueOctetsParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, opaqueOctets(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sessionScopeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsessionScopeParsingError<'a>> for sessionScope {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsessionScopeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsessionScopeParsingError::new(buf, sessionScopeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, sessionScope(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxFlowEndMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxFlowEndMicrosecondsParsingError<'a>> for maxFlowEndMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxFlowEndMicrosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedmaxFlowEndMicrosecondsParsingError::new(buf, maxFlowEndMicrosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedmaxFlowEndMicrosecondsParsingError::new(buf, maxFlowEndMicrosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, maxFlowEndMicroseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxFlowEndMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxFlowEndMillisecondsParsingError<'a>> for maxFlowEndMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxFlowEndMillisecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedmaxFlowEndMillisecondsParsingError::new(buf, maxFlowEndMillisecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedmaxFlowEndMillisecondsParsingError::new(buf, maxFlowEndMillisecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, maxFlowEndMilliseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxFlowEndNanosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxFlowEndNanosecondsParsingError<'a>> for maxFlowEndNanoseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxFlowEndNanosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedmaxFlowEndNanosecondsParsingError::new(buf, maxFlowEndNanosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedmaxFlowEndNanosecondsParsingError::new(buf, maxFlowEndNanosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, maxFlowEndNanoseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum minFlowStartMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedminFlowStartMicrosecondsParsingError<'a>> for minFlowStartMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedminFlowStartMicrosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedminFlowStartMicrosecondsParsingError::new(buf, minFlowStartMicrosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedminFlowStartMicrosecondsParsingError::new(buf, minFlowStartMicrosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, minFlowStartMicroseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum minFlowStartMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedminFlowStartMillisecondsParsingError<'a>> for minFlowStartMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedminFlowStartMillisecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedminFlowStartMillisecondsParsingError::new(buf, minFlowStartMillisecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedminFlowStartMillisecondsParsingError::new(buf, minFlowStartMillisecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, minFlowStartMilliseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum minFlowStartNanosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedminFlowStartNanosecondsParsingError<'a>> for minFlowStartNanoseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedminFlowStartNanosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedminFlowStartNanosecondsParsingError::new(buf, minFlowStartNanosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedminFlowStartNanosecondsParsingError::new(buf, minFlowStartNanosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, minFlowStartNanoseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum collectorCertificateParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedcollectorCertificateParsingError<'a>> for collectorCertificate {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedcollectorCertificateParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, collectorCertificate(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum exporterCertificateParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexporterCertificateParsingError<'a>> for exporterCertificate {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexporterCertificateParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, exporterCertificate(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dataRecordsReliabilityParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddataRecordsReliabilityParsingError<'a>> for dataRecordsReliability {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddataRecordsReliabilityParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocateddataRecordsReliabilityParsingError::new(buf, dataRecordsReliabilityParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dataRecordsReliability(value != 0)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observationPointTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservationPointTypeParsingError<'a>> for observationPointType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservationPointTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedobservationPointTypeParsingError::new(buf, observationPointTypeParsingError::InvalidLength(length))))
+        };
+        let enum_val = observationPointType::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum newConnectionDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednewConnectionDeltaCountParsingError<'a>> for newConnectionDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednewConnectionDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednewConnectionDeltaCountParsingError::new(buf, newConnectionDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), newConnectionDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum connectionSumDurationSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedconnectionSumDurationSecondsParsingError<'a>> for connectionSumDurationSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedconnectionSumDurationSecondsParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedconnectionSumDurationSecondsParsingError::new(buf, connectionSumDurationSecondsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), connectionSumDurationSeconds(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum connectionTransactionIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedconnectionTransactionIdParsingError<'a>> for connectionTransactionId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedconnectionTransactionIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedconnectionTransactionIdParsingError::new(buf, connectionTransactionIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), connectionTransactionId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postNATSourceIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostNATSourceIPv6AddressParsingError<'a>> for postNATSourceIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostNATSourceIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedpostNATSourceIPv6AddressParsingError::new(buf, postNATSourceIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, postNATSourceIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postNATDestinationIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostNATDestinationIPv6AddressParsingError<'a>> for postNATDestinationIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostNATDestinationIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedpostNATDestinationIPv6AddressParsingError::new(buf, postNATDestinationIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, postNATDestinationIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum natPoolIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednatPoolIdParsingError<'a>> for natPoolId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednatPoolIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednatPoolIdParsingError::new(buf, natPoolIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), natPoolId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum natPoolNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatednatPoolNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatednatPoolNameParsingError::new(
+            input,
+            natPoolNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednatPoolNameParsingError<'a>> for natPoolName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednatPoolNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  natPoolName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  natPoolName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum anonymizationFlagsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedanonymizationFlagsParsingError<'a>> for anonymizationFlags {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedanonymizationFlagsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedanonymizationFlagsParsingError::new(buf, anonymizationFlagsParsingError::InvalidLength(length))))
+        };
+        Ok((buf, anonymizationFlags(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum anonymizationTechniqueParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedanonymizationTechniqueParsingError<'a>> for anonymizationTechnique {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedanonymizationTechniqueParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedanonymizationTechniqueParsingError::new(buf, anonymizationTechniqueParsingError::InvalidLength(length))))
+        };
+        let enum_val = anonymizationTechnique::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementIndexParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementIndexParsingError<'a>> for informationElementIndex {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementIndexParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedinformationElementIndexParsingError::new(buf, informationElementIndexParsingError::InvalidLength(length))))
+        };
+        Ok((buf, informationElementIndex(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum p2pTechnologyParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for Locatedp2pTechnologyParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        Locatedp2pTechnologyParsingError::new(
+            input,
+            p2pTechnologyParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedp2pTechnologyParsingError<'a>> for p2pTechnology {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedp2pTechnologyParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  p2pTechnology(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  p2pTechnology(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum tunnelTechnologyParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedtunnelTechnologyParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedtunnelTechnologyParsingError::new(
+            input,
+            tunnelTechnologyParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtunnelTechnologyParsingError<'a>> for tunnelTechnology {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtunnelTechnologyParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  tunnelTechnology(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  tunnelTechnology(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum encryptedTechnologyParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedencryptedTechnologyParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedencryptedTechnologyParsingError::new(
+            input,
+            encryptedTechnologyParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedencryptedTechnologyParsingError<'a>> for encryptedTechnology {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedencryptedTechnologyParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  encryptedTechnology(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  encryptedTechnology(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum basicListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbasicListParsingError<'a>> for basicList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbasicListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, basicList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum subTemplateListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsubTemplateListParsingError<'a>> for subTemplateList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsubTemplateListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, subTemplateList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum subTemplateMultiListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsubTemplateMultiListParsingError<'a>> for subTemplateMultiList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsubTemplateMultiListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, subTemplateMultiList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpValidityStateParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpValidityStateParsingError<'a>> for bgpValidityState {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpValidityStateParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedbgpValidityStateParsingError::new(buf, bgpValidityStateParsingError::InvalidLength(length))))
+        };
+        Ok((buf, bgpValidityState(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum IPSecSPIParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedIPSecSPIParsingError<'a>> for IPSecSPI {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedIPSecSPIParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedIPSecSPIParsingError::new(buf, IPSecSPIParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), IPSecSPI(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum greKeyParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedgreKeyParsingError<'a>> for greKey {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedgreKeyParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedgreKeyParsingError::new(buf, greKeyParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), greKey(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum natTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednatTypeParsingError<'a>> for natType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednatTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatednatTypeParsingError::new(buf, natTypeParsingError::InvalidLength(length))))
+        };
+        let enum_val = natType::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum initiatorPacketsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinitiatorPacketsParsingError<'a>> for initiatorPackets {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinitiatorPacketsParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedinitiatorPacketsParsingError::new(buf, initiatorPacketsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), initiatorPackets(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum responderPacketsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedresponderPacketsParsingError<'a>> for responderPackets {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedresponderPacketsParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedresponderPacketsParsingError::new(buf, responderPacketsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), responderPackets(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observationDomainNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedobservationDomainNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedobservationDomainNameParsingError::new(
+            input,
+            observationDomainNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservationDomainNameParsingError<'a>> for observationDomainName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservationDomainNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  observationDomainName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  observationDomainName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum selectionSequenceIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedselectionSequenceIdParsingError<'a>> for selectionSequenceId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedselectionSequenceIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedselectionSequenceIdParsingError::new(buf, selectionSequenceIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), selectionSequenceId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum selectorIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedselectorIdParsingError<'a>> for selectorId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedselectorIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedselectorIdParsingError::new(buf, selectorIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), selectorId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementIdParsingError<'a>> for informationElementId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementIdParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedinformationElementIdParsingError::new(buf, informationElementIdParsingError::InvalidLength(length))))
+        };
+        Ok((buf, informationElementId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum selectorAlgorithmParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedselectorAlgorithmParsingError<'a>> for selectorAlgorithm {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedselectorAlgorithmParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedselectorAlgorithmParsingError::new(buf, selectorAlgorithmParsingError::InvalidLength(length))))
+        };
+        Ok((buf, selectorAlgorithm(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingPacketIntervalParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingPacketIntervalParsingError<'a>> for samplingPacketInterval {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingPacketIntervalParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingPacketIntervalParsingError::new(buf, samplingPacketIntervalParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplingPacketInterval(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingPacketSpaceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingPacketSpaceParsingError<'a>> for samplingPacketSpace {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingPacketSpaceParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingPacketSpaceParsingError::new(buf, samplingPacketSpaceParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplingPacketSpace(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingTimeIntervalParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingTimeIntervalParsingError<'a>> for samplingTimeInterval {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingTimeIntervalParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingTimeIntervalParsingError::new(buf, samplingTimeIntervalParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplingTimeInterval(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingTimeSpaceParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingTimeSpaceParsingError<'a>> for samplingTimeSpace {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingTimeSpaceParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingTimeSpaceParsingError::new(buf, samplingTimeSpaceParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplingTimeSpace(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingSizeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingSizeParsingError<'a>> for samplingSize {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingSizeParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingSizeParsingError::new(buf, samplingSizeParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplingSize(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingPopulationParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingPopulationParsingError<'a>> for samplingPopulation {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingPopulationParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingPopulationParsingError::new(buf, samplingPopulationParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), samplingPopulation(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingProbabilityParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingProbabilityParsingError<'a>> for samplingProbability {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingProbabilityParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_f64(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsamplingProbabilityParsingError::new(buf, samplingProbabilityParsingError::InvalidLength(length))))
+        };
+        Ok((buf, samplingProbability(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dataLinkFrameSizeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddataLinkFrameSizeParsingError<'a>> for dataLinkFrameSize {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddataLinkFrameSizeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocateddataLinkFrameSizeParsingError::new(buf, dataLinkFrameSizeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dataLinkFrameSize(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipHeaderPacketSectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipHeaderPacketSectionParsingError<'a>> for ipHeaderPacketSection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipHeaderPacketSectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, ipHeaderPacketSection(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ipPayloadPacketSectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedipPayloadPacketSectionParsingError<'a>> for ipPayloadPacketSection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedipPayloadPacketSectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, ipPayloadPacketSection(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dataLinkFrameSectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddataLinkFrameSectionParsingError<'a>> for dataLinkFrameSection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddataLinkFrameSectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, dataLinkFrameSection(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsLabelStackSectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsLabelStackSectionParsingError<'a>> for mplsLabelStackSection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsLabelStackSectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsLabelStackSection(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mplsPayloadPacketSectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmplsPayloadPacketSectionParsingError<'a>> for mplsPayloadPacketSection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmplsPayloadPacketSectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mplsPayloadPacketSection(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum selectorIdTotalPktsObservedParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedselectorIdTotalPktsObservedParsingError<'a>> for selectorIdTotalPktsObserved {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedselectorIdTotalPktsObservedParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedselectorIdTotalPktsObservedParsingError::new(buf, selectorIdTotalPktsObservedParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), selectorIdTotalPktsObserved(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum selectorIdTotalPktsSelectedParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedselectorIdTotalPktsSelectedParsingError<'a>> for selectorIdTotalPktsSelected {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedselectorIdTotalPktsSelectedParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedselectorIdTotalPktsSelectedParsingError::new(buf, selectorIdTotalPktsSelectedParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), selectorIdTotalPktsSelected(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum absoluteErrorParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedabsoluteErrorParsingError<'a>> for absoluteError {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedabsoluteErrorParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_f64(buf)?,
+            _ => return Err(nom::Err::Error(LocatedabsoluteErrorParsingError::new(buf, absoluteErrorParsingError::InvalidLength(length))))
+        };
+        Ok((buf, absoluteError(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum relativeErrorParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedrelativeErrorParsingError<'a>> for relativeError {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedrelativeErrorParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_f64(buf)?,
+            _ => return Err(nom::Err::Error(LocatedrelativeErrorParsingError::new(buf, relativeErrorParsingError::InvalidLength(length))))
+        };
+        Ok((buf, relativeError(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observationTimeSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservationTimeSecondsParsingError<'a>> for observationTimeSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservationTimeSecondsParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedobservationTimeSecondsParsingError::new(buf, observationTimeSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, secs) = nom::number::complete::be_u32(buf)?;
+        let value = match chrono::Utc.timestamp_opt(secs as i64, 0) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedobservationTimeSecondsParsingError::new(buf, observationTimeSecondsParsingError::InvalidTimestamp(secs))));
+            }
+        };
+        Ok((buf, observationTimeSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observationTimeMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservationTimeMillisecondsParsingError<'a>> for observationTimeMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservationTimeMillisecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedobservationTimeMillisecondsParsingError::new(buf, observationTimeMillisecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedobservationTimeMillisecondsParsingError::new(buf, observationTimeMillisecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, observationTimeMilliseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observationTimeMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservationTimeMicrosecondsParsingError<'a>> for observationTimeMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservationTimeMicrosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedobservationTimeMicrosecondsParsingError::new(buf, observationTimeMicrosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedobservationTimeMicrosecondsParsingError::new(buf, observationTimeMicrosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, observationTimeMicroseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum observationTimeNanosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestamp(u32, u32),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedobservationTimeNanosecondsParsingError<'a>> for observationTimeNanoseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedobservationTimeNanosecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedobservationTimeNanosecondsParsingError::new(buf, observationTimeNanosecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, seconds) = nom::number::complete::be_u32(buf)?;
+        let (buf, fraction) = nom::number::complete::be_u32(buf)?;
+        // Convert 1/2^32 of a second to nanoseconds
+        let f: u32 = (1_000_000_000f64 * (fraction as f64 / u32::MAX as f64)) as u32;
+        let value = match chrono::Utc.timestamp_opt(seconds as i64, f) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedobservationTimeNanosecondsParsingError::new(buf, observationTimeNanosecondsParsingError::InvalidTimestamp(seconds, fraction))));
+            }
+        };
+        Ok((buf, observationTimeNanoseconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum digestHashValueParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddigestHashValueParsingError<'a>> for digestHashValue {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddigestHashValueParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddigestHashValueParsingError::new(buf, digestHashValueParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), digestHashValue(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashIPPayloadOffsetParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashIPPayloadOffsetParsingError<'a>> for hashIPPayloadOffset {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashIPPayloadOffsetParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedhashIPPayloadOffsetParsingError::new(buf, hashIPPayloadOffsetParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), hashIPPayloadOffset(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashIPPayloadSizeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashIPPayloadSizeParsingError<'a>> for hashIPPayloadSize {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashIPPayloadSizeParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedhashIPPayloadSizeParsingError::new(buf, hashIPPayloadSizeParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), hashIPPayloadSize(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashOutputRangeMinParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashOutputRangeMinParsingError<'a>> for hashOutputRangeMin {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashOutputRangeMinParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedhashOutputRangeMinParsingError::new(buf, hashOutputRangeMinParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), hashOutputRangeMin(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashOutputRangeMaxParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashOutputRangeMaxParsingError<'a>> for hashOutputRangeMax {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashOutputRangeMaxParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedhashOutputRangeMaxParsingError::new(buf, hashOutputRangeMaxParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), hashOutputRangeMax(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashSelectedRangeMinParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashSelectedRangeMinParsingError<'a>> for hashSelectedRangeMin {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashSelectedRangeMinParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedhashSelectedRangeMinParsingError::new(buf, hashSelectedRangeMinParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), hashSelectedRangeMin(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashSelectedRangeMaxParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashSelectedRangeMaxParsingError<'a>> for hashSelectedRangeMax {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashSelectedRangeMaxParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedhashSelectedRangeMaxParsingError::new(buf, hashSelectedRangeMaxParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), hashSelectedRangeMax(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashDigestOutputParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashDigestOutputParsingError<'a>> for hashDigestOutput {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashDigestOutputParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedhashDigestOutputParsingError::new(buf, hashDigestOutputParsingError::InvalidLength(length))))
+        };
+        Ok((buf, hashDigestOutput(value != 0)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashInitialiserValueParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashInitialiserValueParsingError<'a>> for hashInitialiserValue {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashInitialiserValueParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedhashInitialiserValueParsingError::new(buf, hashInitialiserValueParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), hashInitialiserValue(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum selectorNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedselectorNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedselectorNameParsingError::new(
+            input,
+            selectorNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedselectorNameParsingError<'a>> for selectorName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedselectorNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  selectorName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  selectorName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum upperCILimitParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedupperCILimitParsingError<'a>> for upperCILimit {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedupperCILimitParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_f64(buf)?,
+            _ => return Err(nom::Err::Error(LocatedupperCILimitParsingError::new(buf, upperCILimitParsingError::InvalidLength(length))))
+        };
+        Ok((buf, upperCILimit(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum lowerCILimitParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedlowerCILimitParsingError<'a>> for lowerCILimit {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedlowerCILimitParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_f64(buf)?,
+            _ => return Err(nom::Err::Error(LocatedlowerCILimitParsingError::new(buf, lowerCILimitParsingError::InvalidLength(length))))
+        };
+        Ok((buf, lowerCILimit(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum confidenceLevelParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedconfidenceLevelParsingError<'a>> for confidenceLevel {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedconfidenceLevelParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_f64(buf)?,
+            _ => return Err(nom::Err::Error(LocatedconfidenceLevelParsingError::new(buf, confidenceLevelParsingError::InvalidLength(length))))
+        };
+        Ok((buf, confidenceLevel(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementDataTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementDataTypeParsingError<'a>> for informationElementDataType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementDataTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedinformationElementDataTypeParsingError::new(buf, informationElementDataTypeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, informationElementDataType(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementDescriptionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedinformationElementDescriptionParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedinformationElementDescriptionParsingError::new(
+            input,
+            informationElementDescriptionParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementDescriptionParsingError<'a>> for informationElementDescription {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementDescriptionParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  informationElementDescription(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  informationElementDescription(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedinformationElementNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedinformationElementNameParsingError::new(
+            input,
+            informationElementNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementNameParsingError<'a>> for informationElementName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  informationElementName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  informationElementName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementRangeBeginParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementRangeBeginParsingError<'a>> for informationElementRangeBegin {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementRangeBeginParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedinformationElementRangeBeginParsingError::new(buf, informationElementRangeBeginParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), informationElementRangeBegin(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementRangeEndParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementRangeEndParsingError<'a>> for informationElementRangeEnd {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementRangeEndParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedinformationElementRangeEndParsingError::new(buf, informationElementRangeEndParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), informationElementRangeEnd(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementSemanticsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementSemanticsParsingError<'a>> for informationElementSemantics {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementSemanticsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedinformationElementSemanticsParsingError::new(buf, informationElementSemanticsParsingError::InvalidLength(length))))
+        };
+        Ok((buf, informationElementSemantics(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum informationElementUnitsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinformationElementUnitsParsingError<'a>> for informationElementUnits {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinformationElementUnitsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedinformationElementUnitsParsingError::new(buf, informationElementUnitsParsingError::InvalidLength(length))))
+        };
+        Ok((buf, informationElementUnits(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum privateEnterpriseNumberParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedprivateEnterpriseNumberParsingError<'a>> for privateEnterpriseNumber {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedprivateEnterpriseNumberParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedprivateEnterpriseNumberParsingError::new(buf, privateEnterpriseNumberParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), privateEnterpriseNumber(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum virtualStationInterfaceIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedvirtualStationInterfaceIdParsingError<'a>> for virtualStationInterfaceId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedvirtualStationInterfaceIdParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, virtualStationInterfaceId(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum virtualStationInterfaceNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedvirtualStationInterfaceNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedvirtualStationInterfaceNameParsingError::new(
+            input,
+            virtualStationInterfaceNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedvirtualStationInterfaceNameParsingError<'a>> for virtualStationInterfaceName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedvirtualStationInterfaceNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  virtualStationInterfaceName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  virtualStationInterfaceName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum virtualStationUUIDParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedvirtualStationUUIDParsingError<'a>> for virtualStationUUID {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedvirtualStationUUIDParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, virtualStationUUID(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum virtualStationNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedvirtualStationNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedvirtualStationNameParsingError::new(
+            input,
+            virtualStationNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedvirtualStationNameParsingError<'a>> for virtualStationName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedvirtualStationNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  virtualStationName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  virtualStationName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2SegmentIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2SegmentIdParsingError<'a>> for layer2SegmentId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2SegmentIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedlayer2SegmentIdParsingError::new(buf, layer2SegmentIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), layer2SegmentId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2OctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2OctetDeltaCountParsingError<'a>> for layer2OctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2OctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedlayer2OctetDeltaCountParsingError::new(buf, layer2OctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), layer2OctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2OctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2OctetTotalCountParsingError<'a>> for layer2OctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2OctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedlayer2OctetTotalCountParsingError::new(buf, layer2OctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), layer2OctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ingressUnicastPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedingressUnicastPacketTotalCountParsingError<'a>> for ingressUnicastPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedingressUnicastPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedingressUnicastPacketTotalCountParsingError::new(buf, ingressUnicastPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ingressUnicastPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ingressMulticastPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedingressMulticastPacketTotalCountParsingError<'a>> for ingressMulticastPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedingressMulticastPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedingressMulticastPacketTotalCountParsingError::new(buf, ingressMulticastPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ingressMulticastPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ingressBroadcastPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedingressBroadcastPacketTotalCountParsingError<'a>> for ingressBroadcastPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedingressBroadcastPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedingressBroadcastPacketTotalCountParsingError::new(buf, ingressBroadcastPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ingressBroadcastPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum egressUnicastPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedegressUnicastPacketTotalCountParsingError<'a>> for egressUnicastPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedegressUnicastPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedegressUnicastPacketTotalCountParsingError::new(buf, egressUnicastPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), egressUnicastPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum egressBroadcastPacketTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedegressBroadcastPacketTotalCountParsingError<'a>> for egressBroadcastPacketTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedegressBroadcastPacketTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedegressBroadcastPacketTotalCountParsingError::new(buf, egressBroadcastPacketTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), egressBroadcastPacketTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum monitoringIntervalStartMilliSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmonitoringIntervalStartMilliSecondsParsingError<'a>> for monitoringIntervalStartMilliSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmonitoringIntervalStartMilliSecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedmonitoringIntervalStartMilliSecondsParsingError::new(buf, monitoringIntervalStartMilliSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedmonitoringIntervalStartMilliSecondsParsingError::new(buf, monitoringIntervalStartMilliSecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, monitoringIntervalStartMilliSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum monitoringIntervalEndMilliSecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+    InvalidTimestampMillis(u64),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmonitoringIntervalEndMilliSecondsParsingError<'a>> for monitoringIntervalEndMilliSeconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmonitoringIntervalEndMilliSecondsParsingError<'a>> {
+        if length != 8 {
+            return Err(nom::Err::Error(LocatedmonitoringIntervalEndMilliSecondsParsingError::new(buf, monitoringIntervalEndMilliSecondsParsingError::InvalidLength(length))));
+        };
+        let (buf, millis) = nom::number::complete::be_u64(buf)?;
+        let value = match chrono::Utc.timestamp_millis_opt(millis as i64) {
+            chrono::LocalResult::Single(val) => val,
+            _ => {
+                  return Err(nom::Err::Error(LocatedmonitoringIntervalEndMilliSecondsParsingError::new(buf, monitoringIntervalEndMilliSecondsParsingError::InvalidTimestampMillis(millis))));
+            }
+        };
+        Ok((buf, monitoringIntervalEndMilliSeconds(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum portRangeStartParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedportRangeStartParsingError<'a>> for portRangeStart {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedportRangeStartParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedportRangeStartParsingError::new(buf, portRangeStartParsingError::InvalidLength(length))))
+        };
+        Ok((buf, portRangeStart(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum portRangeEndParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedportRangeEndParsingError<'a>> for portRangeEnd {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedportRangeEndParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedportRangeEndParsingError::new(buf, portRangeEndParsingError::InvalidLength(length))))
+        };
+        Ok((buf, portRangeEnd(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum portRangeStepSizeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedportRangeStepSizeParsingError<'a>> for portRangeStepSize {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedportRangeStepSizeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedportRangeStepSizeParsingError::new(buf, portRangeStepSizeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, portRangeStepSize(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum portRangeNumPortsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedportRangeNumPortsParsingError<'a>> for portRangeNumPorts {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedportRangeNumPortsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedportRangeNumPortsParsingError::new(buf, portRangeNumPortsParsingError::InvalidLength(length))))
+        };
+        Ok((buf, portRangeNumPorts(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum staMacAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedstaMacAddressParsingError<'a>> for staMacAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedstaMacAddressParsingError<'a>> {
+        if length != 6 {
+            return Err(nom::Err::Error(LocatedstaMacAddressParsingError::new(buf, staMacAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, b0) = nom::number::complete::be_u8(buf)?;
+        let (buf, b1) = nom::number::complete::be_u8(buf)?;
+        let (buf, b2) = nom::number::complete::be_u8(buf)?;
+        let (buf, b3) = nom::number::complete::be_u8(buf)?;
+        let (buf, b4) = nom::number::complete::be_u8(buf)?;
+        let (buf, b5) = nom::number::complete::be_u8(buf)?;
+        Ok((buf, staMacAddress([b0, b1, b2, b3, b4, b5])))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum staIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedstaIPv4AddressParsingError<'a>> for staIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedstaIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedstaIPv4AddressParsingError::new(buf, staIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, staIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum wtpMacAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedwtpMacAddressParsingError<'a>> for wtpMacAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedwtpMacAddressParsingError<'a>> {
+        if length != 6 {
+            return Err(nom::Err::Error(LocatedwtpMacAddressParsingError::new(buf, wtpMacAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, b0) = nom::number::complete::be_u8(buf)?;
+        let (buf, b1) = nom::number::complete::be_u8(buf)?;
+        let (buf, b2) = nom::number::complete::be_u8(buf)?;
+        let (buf, b3) = nom::number::complete::be_u8(buf)?;
+        let (buf, b4) = nom::number::complete::be_u8(buf)?;
+        let (buf, b5) = nom::number::complete::be_u8(buf)?;
+        Ok((buf, wtpMacAddress([b0, b1, b2, b3, b4, b5])))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ingressInterfaceTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedingressInterfaceTypeParsingError<'a>> for ingressInterfaceType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedingressInterfaceTypeParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedingressInterfaceTypeParsingError::new(buf, ingressInterfaceTypeParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), ingressInterfaceType(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum egressInterfaceTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedegressInterfaceTypeParsingError<'a>> for egressInterfaceType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedegressInterfaceTypeParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedegressInterfaceTypeParsingError::new(buf, egressInterfaceTypeParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), egressInterfaceType(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum rtpSequenceNumberParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedrtpSequenceNumberParsingError<'a>> for rtpSequenceNumber {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedrtpSequenceNumberParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedrtpSequenceNumberParsingError::new(buf, rtpSequenceNumberParsingError::InvalidLength(length))))
+        };
+        Ok((buf, rtpSequenceNumber(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum userNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocateduserNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocateduserNameParsingError::new(
+            input,
+            userNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateduserNameParsingError<'a>> for userName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateduserNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  userName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  userName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum applicationCategoryNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedapplicationCategoryNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedapplicationCategoryNameParsingError::new(
+            input,
+            applicationCategoryNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedapplicationCategoryNameParsingError<'a>> for applicationCategoryName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedapplicationCategoryNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  applicationCategoryName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  applicationCategoryName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum applicationSubCategoryNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedapplicationSubCategoryNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedapplicationSubCategoryNameParsingError::new(
+            input,
+            applicationSubCategoryNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedapplicationSubCategoryNameParsingError<'a>> for applicationSubCategoryName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedapplicationSubCategoryNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  applicationSubCategoryName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  applicationSubCategoryName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum applicationGroupNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedapplicationGroupNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedapplicationGroupNameParsingError::new(
+            input,
+            applicationGroupNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedapplicationGroupNameParsingError<'a>> for applicationGroupName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedapplicationGroupNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  applicationGroupName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  applicationGroupName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum originalFlowsPresentParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoriginalFlowsPresentParsingError<'a>> for originalFlowsPresent {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoriginalFlowsPresentParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedoriginalFlowsPresentParsingError::new(buf, originalFlowsPresentParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), originalFlowsPresent(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum originalFlowsInitiatedParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoriginalFlowsInitiatedParsingError<'a>> for originalFlowsInitiated {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoriginalFlowsInitiatedParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedoriginalFlowsInitiatedParsingError::new(buf, originalFlowsInitiatedParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), originalFlowsInitiated(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum originalFlowsCompletedParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoriginalFlowsCompletedParsingError<'a>> for originalFlowsCompleted {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoriginalFlowsCompletedParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedoriginalFlowsCompletedParsingError::new(buf, originalFlowsCompletedParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), originalFlowsCompleted(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum distinctCountOfSourceIPAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddistinctCountOfSourceIPAddressParsingError<'a>> for distinctCountOfSourceIPAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddistinctCountOfSourceIPAddressParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddistinctCountOfSourceIPAddressParsingError::new(buf, distinctCountOfSourceIPAddressParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), distinctCountOfSourceIPAddress(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum distinctCountOfDestinationIPAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddistinctCountOfDestinationIPAddressParsingError<'a>> for distinctCountOfDestinationIPAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddistinctCountOfDestinationIPAddressParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddistinctCountOfDestinationIPAddressParsingError::new(buf, distinctCountOfDestinationIPAddressParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), distinctCountOfDestinationIPAddress(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum distinctCountOfSourceIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddistinctCountOfSourceIPv4AddressParsingError<'a>> for distinctCountOfSourceIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddistinctCountOfSourceIPv4AddressParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddistinctCountOfSourceIPv4AddressParsingError::new(buf, distinctCountOfSourceIPv4AddressParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), distinctCountOfSourceIPv4Address(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum distinctCountOfDestinationIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddistinctCountOfDestinationIPv4AddressParsingError<'a>> for distinctCountOfDestinationIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddistinctCountOfDestinationIPv4AddressParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddistinctCountOfDestinationIPv4AddressParsingError::new(buf, distinctCountOfDestinationIPv4AddressParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), distinctCountOfDestinationIPv4Address(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum distinctCountOfSourceIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddistinctCountOfSourceIPv6AddressParsingError<'a>> for distinctCountOfSourceIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddistinctCountOfSourceIPv6AddressParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddistinctCountOfSourceIPv6AddressParsingError::new(buf, distinctCountOfSourceIPv6AddressParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), distinctCountOfSourceIPv6Address(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum distinctCountOfDestinationIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddistinctCountOfDestinationIPv6AddressParsingError<'a>> for distinctCountOfDestinationIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddistinctCountOfDestinationIPv6AddressParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddistinctCountOfDestinationIPv6AddressParsingError::new(buf, distinctCountOfDestinationIPv6AddressParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), distinctCountOfDestinationIPv6Address(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum valueDistributionMethodParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedvalueDistributionMethodParsingError<'a>> for valueDistributionMethod {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedvalueDistributionMethodParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedvalueDistributionMethodParsingError::new(buf, valueDistributionMethodParsingError::InvalidLength(length))))
+        };
+        let enum_val = valueDistributionMethod::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum rfc3550JitterMillisecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedrfc3550JitterMillisecondsParsingError<'a>> for rfc3550JitterMilliseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedrfc3550JitterMillisecondsParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedrfc3550JitterMillisecondsParsingError::new(buf, rfc3550JitterMillisecondsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), rfc3550JitterMilliseconds(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum rfc3550JitterMicrosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedrfc3550JitterMicrosecondsParsingError<'a>> for rfc3550JitterMicroseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedrfc3550JitterMicrosecondsParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedrfc3550JitterMicrosecondsParsingError::new(buf, rfc3550JitterMicrosecondsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), rfc3550JitterMicroseconds(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum rfc3550JitterNanosecondsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedrfc3550JitterNanosecondsParsingError<'a>> for rfc3550JitterNanoseconds {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedrfc3550JitterNanosecondsParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedrfc3550JitterNanosecondsParsingError::new(buf, rfc3550JitterNanosecondsParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), rfc3550JitterNanoseconds(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qDEIParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qDEIParsingError<'a>> for dot1qDEI {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qDEIParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(Locateddot1qDEIParsingError::new(buf, dot1qDEIParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dot1qDEI(value != 0)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qCustomerDEIParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qCustomerDEIParsingError<'a>> for dot1qCustomerDEI {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qCustomerDEIParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(Locateddot1qCustomerDEIParsingError::new(buf, dot1qCustomerDEIParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dot1qCustomerDEI(value != 0)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowSelectorAlgorithmParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowSelectorAlgorithmParsingError<'a>> for flowSelectorAlgorithm {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowSelectorAlgorithmParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedflowSelectorAlgorithmParsingError::new(buf, flowSelectorAlgorithmParsingError::InvalidLength(length))))
+        };
+        let enum_val = flowSelectorAlgorithm::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowSelectedOctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowSelectedOctetDeltaCountParsingError<'a>> for flowSelectedOctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowSelectedOctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowSelectedOctetDeltaCountParsingError::new(buf, flowSelectedOctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), flowSelectedOctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowSelectedPacketDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowSelectedPacketDeltaCountParsingError<'a>> for flowSelectedPacketDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowSelectedPacketDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowSelectedPacketDeltaCountParsingError::new(buf, flowSelectedPacketDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), flowSelectedPacketDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowSelectedFlowDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowSelectedFlowDeltaCountParsingError<'a>> for flowSelectedFlowDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowSelectedFlowDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowSelectedFlowDeltaCountParsingError::new(buf, flowSelectedFlowDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), flowSelectedFlowDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum selectorIDTotalFlowsObservedParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedselectorIDTotalFlowsObservedParsingError<'a>> for selectorIDTotalFlowsObserved {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedselectorIDTotalFlowsObservedParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedselectorIDTotalFlowsObservedParsingError::new(buf, selectorIDTotalFlowsObservedParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), selectorIDTotalFlowsObserved(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum selectorIDTotalFlowsSelectedParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedselectorIDTotalFlowsSelectedParsingError<'a>> for selectorIDTotalFlowsSelected {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedselectorIDTotalFlowsSelectedParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedselectorIDTotalFlowsSelectedParsingError::new(buf, selectorIDTotalFlowsSelectedParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), selectorIDTotalFlowsSelected(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingFlowIntervalParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingFlowIntervalParsingError<'a>> for samplingFlowInterval {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingFlowIntervalParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingFlowIntervalParsingError::new(buf, samplingFlowIntervalParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), samplingFlowInterval(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum samplingFlowSpacingParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsamplingFlowSpacingParsingError<'a>> for samplingFlowSpacing {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsamplingFlowSpacingParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedsamplingFlowSpacingParsingError::new(buf, samplingFlowSpacingParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), samplingFlowSpacing(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowSamplingTimeIntervalParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowSamplingTimeIntervalParsingError<'a>> for flowSamplingTimeInterval {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowSamplingTimeIntervalParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowSamplingTimeIntervalParsingError::new(buf, flowSamplingTimeIntervalParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), flowSamplingTimeInterval(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum flowSamplingTimeSpacingParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedflowSamplingTimeSpacingParsingError<'a>> for flowSamplingTimeSpacing {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedflowSamplingTimeSpacingParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedflowSamplingTimeSpacingParsingError::new(buf, flowSamplingTimeSpacingParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), flowSamplingTimeSpacing(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum hashFlowDomainParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhashFlowDomainParsingError<'a>> for hashFlowDomain {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhashFlowDomainParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedhashFlowDomainParsingError::new(buf, hashFlowDomainParsingError::InvalidLength(length))))
+        };
+        Ok((buf, hashFlowDomain(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum transportOctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtransportOctetDeltaCountParsingError<'a>> for transportOctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtransportOctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtransportOctetDeltaCountParsingError::new(buf, transportOctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), transportOctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum transportPacketDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtransportPacketDeltaCountParsingError<'a>> for transportPacketDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtransportPacketDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedtransportPacketDeltaCountParsingError::new(buf, transportPacketDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), transportPacketDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum originalExporterIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoriginalExporterIPv4AddressParsingError<'a>> for originalExporterIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoriginalExporterIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedoriginalExporterIPv4AddressParsingError::new(buf, originalExporterIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, originalExporterIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum originalExporterIPv6AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoriginalExporterIPv6AddressParsingError<'a>> for originalExporterIPv6Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoriginalExporterIPv6AddressParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedoriginalExporterIPv6AddressParsingError::new(buf, originalExporterIPv6AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, originalExporterIPv6Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum originalObservationDomainIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedoriginalObservationDomainIdParsingError<'a>> for originalObservationDomainId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedoriginalObservationDomainIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedoriginalObservationDomainIdParsingError::new(buf, originalObservationDomainIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), originalObservationDomainId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum intermediateProcessIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedintermediateProcessIdParsingError<'a>> for intermediateProcessId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedintermediateProcessIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedintermediateProcessIdParsingError::new(buf, intermediateProcessIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), intermediateProcessId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ignoredDataRecordTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedignoredDataRecordTotalCountParsingError<'a>> for ignoredDataRecordTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedignoredDataRecordTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedignoredDataRecordTotalCountParsingError::new(buf, ignoredDataRecordTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ignoredDataRecordTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dataLinkFrameTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddataLinkFrameTypeParsingError<'a>> for dataLinkFrameType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddataLinkFrameTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocateddataLinkFrameTypeParsingError::new(buf, dataLinkFrameTypeParsingError::InvalidLength(length))))
+        };
+        let enum_val = dataLinkFrameType::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sectionOffsetParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsectionOffsetParsingError<'a>> for sectionOffset {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsectionOffsetParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsectionOffsetParsingError::new(buf, sectionOffsetParsingError::InvalidLength(length))))
+        };
+        Ok((buf, sectionOffset(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sectionExportedOctetsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsectionExportedOctetsParsingError<'a>> for sectionExportedOctets {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsectionExportedOctetsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsectionExportedOctetsParsingError::new(buf, sectionExportedOctetsParsingError::InvalidLength(length))))
+        };
+        Ok((buf, sectionExportedOctets(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qServiceInstanceTagParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qServiceInstanceTagParsingError<'a>> for dot1qServiceInstanceTag {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qServiceInstanceTagParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, dot1qServiceInstanceTag(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qServiceInstanceIdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qServiceInstanceIdParsingError<'a>> for dot1qServiceInstanceId {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qServiceInstanceIdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locateddot1qServiceInstanceIdParsingError::new(buf, dot1qServiceInstanceIdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), dot1qServiceInstanceId(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qServiceInstancePriorityParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qServiceInstancePriorityParsingError<'a>> for dot1qServiceInstancePriority {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qServiceInstancePriorityParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(Locateddot1qServiceInstancePriorityParsingError::new(buf, dot1qServiceInstancePriorityParsingError::InvalidLength(length))))
+        };
+        Ok((buf, dot1qServiceInstancePriority(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qCustomerSourceMacAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qCustomerSourceMacAddressParsingError<'a>> for dot1qCustomerSourceMacAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qCustomerSourceMacAddressParsingError<'a>> {
+        if length != 6 {
+            return Err(nom::Err::Error(Locateddot1qCustomerSourceMacAddressParsingError::new(buf, dot1qCustomerSourceMacAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, b0) = nom::number::complete::be_u8(buf)?;
+        let (buf, b1) = nom::number::complete::be_u8(buf)?;
+        let (buf, b2) = nom::number::complete::be_u8(buf)?;
+        let (buf, b3) = nom::number::complete::be_u8(buf)?;
+        let (buf, b4) = nom::number::complete::be_u8(buf)?;
+        let (buf, b5) = nom::number::complete::be_u8(buf)?;
+        Ok((buf, dot1qCustomerSourceMacAddress([b0, b1, b2, b3, b4, b5])))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum dot1qCustomerDestinationMacAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locateddot1qCustomerDestinationMacAddressParsingError<'a>> for dot1qCustomerDestinationMacAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locateddot1qCustomerDestinationMacAddressParsingError<'a>> {
+        if length != 6 {
+            return Err(nom::Err::Error(Locateddot1qCustomerDestinationMacAddressParsingError::new(buf, dot1qCustomerDestinationMacAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, b0) = nom::number::complete::be_u8(buf)?;
+        let (buf, b1) = nom::number::complete::be_u8(buf)?;
+        let (buf, b2) = nom::number::complete::be_u8(buf)?;
+        let (buf, b3) = nom::number::complete::be_u8(buf)?;
+        let (buf, b4) = nom::number::complete::be_u8(buf)?;
+        let (buf, b5) = nom::number::complete::be_u8(buf)?;
+        Ok((buf, dot1qCustomerDestinationMacAddress([b0, b1, b2, b3, b4, b5])))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postLayer2OctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostLayer2OctetDeltaCountParsingError<'a>> for postLayer2OctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostLayer2OctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostLayer2OctetDeltaCountParsingError::new(buf, postLayer2OctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postLayer2OctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postMCastLayer2OctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostMCastLayer2OctetDeltaCountParsingError<'a>> for postMCastLayer2OctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostMCastLayer2OctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostMCastLayer2OctetDeltaCountParsingError::new(buf, postMCastLayer2OctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postMCastLayer2OctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postLayer2OctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostLayer2OctetTotalCountParsingError<'a>> for postLayer2OctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostLayer2OctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostLayer2OctetTotalCountParsingError::new(buf, postLayer2OctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postLayer2OctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum postMCastLayer2OctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpostMCastLayer2OctetTotalCountParsingError<'a>> for postMCastLayer2OctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpostMCastLayer2OctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedpostMCastLayer2OctetTotalCountParsingError::new(buf, postMCastLayer2OctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), postMCastLayer2OctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum minimumLayer2TotalLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedminimumLayer2TotalLengthParsingError<'a>> for minimumLayer2TotalLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedminimumLayer2TotalLengthParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedminimumLayer2TotalLengthParsingError::new(buf, minimumLayer2TotalLengthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), minimumLayer2TotalLength(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maximumLayer2TotalLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaximumLayer2TotalLengthParsingError<'a>> for maximumLayer2TotalLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaximumLayer2TotalLengthParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmaximumLayer2TotalLengthParsingError::new(buf, maximumLayer2TotalLengthParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), maximumLayer2TotalLength(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum droppedLayer2OctetDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddroppedLayer2OctetDeltaCountParsingError<'a>> for droppedLayer2OctetDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddroppedLayer2OctetDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddroppedLayer2OctetDeltaCountParsingError::new(buf, droppedLayer2OctetDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), droppedLayer2OctetDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum droppedLayer2OctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocateddroppedLayer2OctetTotalCountParsingError<'a>> for droppedLayer2OctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocateddroppedLayer2OctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocateddroppedLayer2OctetTotalCountParsingError::new(buf, droppedLayer2OctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), droppedLayer2OctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ignoredLayer2OctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedignoredLayer2OctetTotalCountParsingError<'a>> for ignoredLayer2OctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedignoredLayer2OctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedignoredLayer2OctetTotalCountParsingError::new(buf, ignoredLayer2OctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ignoredLayer2OctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum notSentLayer2OctetTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednotSentLayer2OctetTotalCountParsingError<'a>> for notSentLayer2OctetTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednotSentLayer2OctetTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednotSentLayer2OctetTotalCountParsingError::new(buf, notSentLayer2OctetTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), notSentLayer2OctetTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2OctetDeltaSumOfSquaresParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2OctetDeltaSumOfSquaresParsingError<'a>> for layer2OctetDeltaSumOfSquares {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2OctetDeltaSumOfSquaresParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedlayer2OctetDeltaSumOfSquaresParsingError::new(buf, layer2OctetDeltaSumOfSquaresParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), layer2OctetDeltaSumOfSquares(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2OctetTotalSumOfSquaresParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2OctetTotalSumOfSquaresParsingError<'a>> for layer2OctetTotalSumOfSquares {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2OctetTotalSumOfSquaresParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedlayer2OctetTotalSumOfSquaresParsingError::new(buf, layer2OctetTotalSumOfSquaresParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), layer2OctetTotalSumOfSquares(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2FrameDeltaCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2FrameDeltaCountParsingError<'a>> for layer2FrameDeltaCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2FrameDeltaCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedlayer2FrameDeltaCountParsingError::new(buf, layer2FrameDeltaCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), layer2FrameDeltaCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum layer2FrameTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, Locatedlayer2FrameTotalCountParsingError<'a>> for layer2FrameTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, Locatedlayer2FrameTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(Locatedlayer2FrameTotalCountParsingError::new(buf, layer2FrameTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), layer2FrameTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum pseudoWireDestinationIPv4AddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedpseudoWireDestinationIPv4AddressParsingError<'a>> for pseudoWireDestinationIPv4Address {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedpseudoWireDestinationIPv4AddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedpseudoWireDestinationIPv4AddressParsingError::new(buf, pseudoWireDestinationIPv4AddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, pseudoWireDestinationIPv4Address(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum ignoredLayer2FrameTotalCountParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedignoredLayer2FrameTotalCountParsingError<'a>> for ignoredLayer2FrameTotalCount {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedignoredLayer2FrameTotalCountParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedignoredLayer2FrameTotalCountParsingError::new(buf, ignoredLayer2FrameTotalCountParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), ignoredLayer2FrameTotalCount(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueIntegerParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueIntegerParsingError<'a>> for mibObjectValueInteger {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueIntegerParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmibObjectValueIntegerParsingError::new(buf, mibObjectValueIntegerParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        let mut first = true;
+        for byte in buf.iter_elements().take(len) {
+            if first {
+                if byte & 0x80 != 0 {
+                    res = u32::MAX;
+                }
+                first = false;
+            }
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), mibObjectValueInteger(res as i32)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueOctetStringParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueOctetStringParsingError<'a>> for mibObjectValueOctetString {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueOctetStringParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mibObjectValueOctetString(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueOIDParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueOIDParsingError<'a>> for mibObjectValueOID {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueOIDParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mibObjectValueOID(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueBitsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueBitsParsingError<'a>> for mibObjectValueBits {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueBitsParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mibObjectValueBits(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueIPAddressParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueIPAddressParsingError<'a>> for mibObjectValueIPAddress {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueIPAddressParsingError<'a>> {
+        if length != 4 {
+            return Err(nom::Err::Error(LocatedmibObjectValueIPAddressParsingError::new(buf, mibObjectValueIPAddressParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u32(buf)?;
+        let value = std::net::Ipv4Addr::from(ip);
+        Ok((buf, mibObjectValueIPAddress(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueCounterParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueCounterParsingError<'a>> for mibObjectValueCounter {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueCounterParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmibObjectValueCounterParsingError::new(buf, mibObjectValueCounterParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), mibObjectValueCounter(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueGaugeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueGaugeParsingError<'a>> for mibObjectValueGauge {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueGaugeParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmibObjectValueGaugeParsingError::new(buf, mibObjectValueGaugeParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), mibObjectValueGauge(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueTimeTicksParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueTimeTicksParsingError<'a>> for mibObjectValueTimeTicks {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueTimeTicksParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmibObjectValueTimeTicksParsingError::new(buf, mibObjectValueTimeTicksParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), mibObjectValueTimeTicks(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueUnsignedParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueUnsignedParsingError<'a>> for mibObjectValueUnsigned {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueUnsignedParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmibObjectValueUnsignedParsingError::new(buf, mibObjectValueUnsignedParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), mibObjectValueUnsigned(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueTableParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueTableParsingError<'a>> for mibObjectValueTable {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueTableParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mibObjectValueTable(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectValueRowParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectValueRowParsingError<'a>> for mibObjectValueRow {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectValueRowParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mibObjectValueRow(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectIdentifierParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectIdentifierParsingError<'a>> for mibObjectIdentifier {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectIdentifierParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mibObjectIdentifier(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibSubIdentifierParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibSubIdentifierParsingError<'a>> for mibSubIdentifier {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibSubIdentifierParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmibSubIdentifierParsingError::new(buf, mibSubIdentifierParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), mibSubIdentifier(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibIndexIndicatorParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibIndexIndicatorParsingError<'a>> for mibIndexIndicator {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibIndexIndicatorParsingError<'a>> {
+        let len = length as usize;
+        if length > 8 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmibIndexIndicatorParsingError::new(buf, mibIndexIndicatorParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u64;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u64;
+        }
+        Ok((buf.slice(len..), mibIndexIndicator(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibCaptureTimeSemanticsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibCaptureTimeSemanticsParsingError<'a>> for mibCaptureTimeSemantics {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibCaptureTimeSemanticsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedmibCaptureTimeSemanticsParsingError::new(buf, mibCaptureTimeSemanticsParsingError::InvalidLength(length))))
+        };
+        let enum_val = mibCaptureTimeSemantics::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibContextEngineIDParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibContextEngineIDParsingError<'a>> for mibContextEngineID {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibContextEngineIDParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, mibContextEngineID(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibContextNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedmibContextNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedmibContextNameParsingError::new(
+            input,
+            mibContextNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibContextNameParsingError<'a>> for mibContextName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibContextNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  mibContextName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  mibContextName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedmibObjectNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedmibObjectNameParsingError::new(
+            input,
+            mibObjectNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectNameParsingError<'a>> for mibObjectName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  mibObjectName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  mibObjectName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectDescriptionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedmibObjectDescriptionParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedmibObjectDescriptionParsingError::new(
+            input,
+            mibObjectDescriptionParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectDescriptionParsingError<'a>> for mibObjectDescription {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectDescriptionParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  mibObjectDescription(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  mibObjectDescription(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibObjectSyntaxParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedmibObjectSyntaxParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedmibObjectSyntaxParsingError::new(
+            input,
+            mibObjectSyntaxParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibObjectSyntaxParsingError<'a>> for mibObjectSyntax {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibObjectSyntaxParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  mibObjectSyntax(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  mibObjectSyntax(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mibModuleNameParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedmibModuleNameParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedmibModuleNameParsingError::new(
+            input,
+            mibModuleNameParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmibModuleNameParsingError<'a>> for mibModuleName {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmibModuleNameParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  mibModuleName(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  mibModuleName(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mobileIMSIParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedmobileIMSIParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedmobileIMSIParsingError::new(
+            input,
+            mobileIMSIParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmobileIMSIParsingError<'a>> for mobileIMSI {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmobileIMSIParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  mobileIMSI(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  mobileIMSI(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum mobileMSISDNParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedmobileMSISDNParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedmobileMSISDNParsingError::new(
+            input,
+            mobileMSISDNParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmobileMSISDNParsingError<'a>> for mobileMSISDN {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmobileMSISDNParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  mobileMSISDN(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  mobileMSISDN(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum httpStatusCodeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhttpStatusCodeParsingError<'a>> for httpStatusCode {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhttpStatusCodeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedhttpStatusCodeParsingError::new(buf, httpStatusCodeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, httpStatusCode(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum sourceTransportPortsLimitParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsourceTransportPortsLimitParsingError<'a>> for sourceTransportPortsLimit {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsourceTransportPortsLimitParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsourceTransportPortsLimitParsingError::new(buf, sourceTransportPortsLimitParsingError::InvalidLength(length))))
+        };
+        Ok((buf, sourceTransportPortsLimit(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum httpRequestMethodParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedhttpRequestMethodParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedhttpRequestMethodParsingError::new(
+            input,
+            httpRequestMethodParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhttpRequestMethodParsingError<'a>> for httpRequestMethod {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhttpRequestMethodParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  httpRequestMethod(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  httpRequestMethod(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum httpRequestHostParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedhttpRequestHostParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedhttpRequestHostParsingError::new(
+            input,
+            httpRequestHostParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhttpRequestHostParsingError<'a>> for httpRequestHost {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhttpRequestHostParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  httpRequestHost(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  httpRequestHost(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum httpRequestTargetParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedhttpRequestTargetParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedhttpRequestTargetParsingError::new(
+            input,
+            httpRequestTargetParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhttpRequestTargetParsingError<'a>> for httpRequestTarget {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhttpRequestTargetParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  httpRequestTarget(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  httpRequestTarget(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum httpMessageVersionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedhttpMessageVersionParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedhttpMessageVersionParsingError::new(
+            input,
+            httpMessageVersionParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhttpMessageVersionParsingError<'a>> for httpMessageVersion {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhttpMessageVersionParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  httpMessageVersion(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  httpMessageVersion(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum natInstanceIDParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednatInstanceIDParsingError<'a>> for natInstanceID {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednatInstanceIDParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednatInstanceIDParsingError::new(buf, natInstanceIDParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), natInstanceID(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum internalAddressRealmParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedinternalAddressRealmParsingError<'a>> for internalAddressRealm {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedinternalAddressRealmParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, internalAddressRealm(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum externalAddressRealmParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedexternalAddressRealmParsingError<'a>> for externalAddressRealm {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedexternalAddressRealmParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, externalAddressRealm(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum natQuotaExceededEventParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednatQuotaExceededEventParsingError<'a>> for natQuotaExceededEvent {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednatQuotaExceededEventParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednatQuotaExceededEventParsingError::new(buf, natQuotaExceededEventParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        let enum_val = natQuotaExceededEvent::from(res);
+        Ok((buf.slice(len..), enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum natThresholdEventParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatednatThresholdEventParsingError<'a>> for natThresholdEvent {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatednatThresholdEventParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatednatThresholdEventParsingError::new(buf, natThresholdEventParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        let enum_val = natThresholdEvent::from(res);
+        Ok((buf.slice(len..), enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum httpUserAgentParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedhttpUserAgentParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedhttpUserAgentParsingError::new(
+            input,
+            httpUserAgentParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhttpUserAgentParsingError<'a>> for httpUserAgent {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhttpUserAgentParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  httpUserAgent(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  httpUserAgent(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum httpContentTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedhttpContentTypeParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedhttpContentTypeParsingError::new(
+            input,
+            httpContentTypeParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhttpContentTypeParsingError<'a>> for httpContentType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhttpContentTypeParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  httpContentType(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  httpContentType(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum httpReasonPhraseParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    Utf8Error(String),
+}
+
+impl<'a> nom::error::FromExternalError<netgauze_parse_utils::Span<'a>, std::str::Utf8Error>
+for LocatedhttpReasonPhraseParsingError<'a>
+{
+    fn from_external_error(input: netgauze_parse_utils::Span<'a>, _kind: nom::error::ErrorKind, error: std::str::Utf8Error) -> Self {
+        LocatedhttpReasonPhraseParsingError::new(
+            input,
+            httpReasonPhraseParsingError::Utf8Error(error.to_string()),
+        )
+    }
+}
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedhttpReasonPhraseParsingError<'a>> for httpReasonPhrase {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedhttpReasonPhraseParsingError<'a>> {
+        if length == u16::MAX {
+            let (buf, short_length) = nom::number::complete::be_u8(buf)?;
+            let (buf, variable_length) = if short_length == u8::MAX {
+                let mut variable_length: u32= 0;
+                let (buf, part1) = nom::number::complete::be_u8(buf)?;
+                let (buf, part2) = nom::number::complete::be_u8(buf)?;
+                let (buf, part3) = nom::number::complete::be_u8(buf)?;
+                variable_length = (variable_length << 8) + part1  as u32;
+                variable_length = (variable_length << 8) + part2  as u32;
+                variable_length = (variable_length << 8) + part3  as u32;
+                (buf, variable_length)
+            } else {
+                (buf, short_length as u32)
+            };
+            let (buf, value) = nom::combinator::map_res(nom::bytes::complete::take(variable_length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                let result = ::std::str::from_utf8(&str_buf);
+                result.map(|x| x.to_string())
+            })(buf)?;
+            Ok((buf,  httpReasonPhrase(value.to_string())))
+        } else {
+            let (buf, value) =
+                nom::combinator::map_res(nom::bytes::complete::take(length), |str_buf: netgauze_parse_utils::Span<'_>| {
+                    let nul_range_end = str_buf
+                        .iter()
+                        .position(|&c| c == b' ')
+                        .unwrap_or(str_buf.len());
+                    let result = ::std::str::from_utf8(&str_buf[..nul_range_end]);
+                    result.map(|x| x.to_string())
+                })(buf)?;
+            Ok((buf,  httpReasonPhrase(value)))
+        }
+    }
+}
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxSessionEntriesParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxSessionEntriesParsingError<'a>> for maxSessionEntries {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxSessionEntriesParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmaxSessionEntriesParsingError::new(buf, maxSessionEntriesParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), maxSessionEntries(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxBIBEntriesParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxBIBEntriesParsingError<'a>> for maxBIBEntries {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxBIBEntriesParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmaxBIBEntriesParsingError::new(buf, maxBIBEntriesParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), maxBIBEntries(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxEntriesPerUserParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxEntriesPerUserParsingError<'a>> for maxEntriesPerUser {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxEntriesPerUserParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmaxEntriesPerUserParsingError::new(buf, maxEntriesPerUserParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), maxEntriesPerUser(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxSubscribersParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxSubscribersParsingError<'a>> for maxSubscribers {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxSubscribersParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmaxSubscribersParsingError::new(buf, maxSubscribersParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), maxSubscribers(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum maxFragmentsPendingReassemblyParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedmaxFragmentsPendingReassemblyParsingError<'a>> for maxFragmentsPendingReassembly {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedmaxFragmentsPendingReassemblyParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedmaxFragmentsPendingReassemblyParsingError::new(buf, maxFragmentsPendingReassemblyParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), maxFragmentsPendingReassembly(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum addressPoolHighThresholdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedaddressPoolHighThresholdParsingError<'a>> for addressPoolHighThreshold {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedaddressPoolHighThresholdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedaddressPoolHighThresholdParsingError::new(buf, addressPoolHighThresholdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), addressPoolHighThreshold(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum addressPoolLowThresholdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedaddressPoolLowThresholdParsingError<'a>> for addressPoolLowThreshold {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedaddressPoolLowThresholdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedaddressPoolLowThresholdParsingError::new(buf, addressPoolLowThresholdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), addressPoolLowThreshold(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum addressPortMappingHighThresholdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedaddressPortMappingHighThresholdParsingError<'a>> for addressPortMappingHighThreshold {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedaddressPortMappingHighThresholdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedaddressPortMappingHighThresholdParsingError::new(buf, addressPortMappingHighThresholdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), addressPortMappingHighThreshold(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum addressPortMappingLowThresholdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedaddressPortMappingLowThresholdParsingError<'a>> for addressPortMappingLowThreshold {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedaddressPortMappingLowThresholdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedaddressPortMappingLowThresholdParsingError::new(buf, addressPortMappingLowThresholdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), addressPortMappingLowThreshold(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum addressPortMappingPerUserHighThresholdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedaddressPortMappingPerUserHighThresholdParsingError<'a>> for addressPortMappingPerUserHighThreshold {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedaddressPortMappingPerUserHighThresholdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedaddressPortMappingPerUserHighThresholdParsingError::new(buf, addressPortMappingPerUserHighThresholdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), addressPortMappingPerUserHighThreshold(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum globalAddressMappingHighThresholdParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedglobalAddressMappingHighThresholdParsingError<'a>> for globalAddressMappingHighThreshold {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedglobalAddressMappingHighThresholdParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedglobalAddressMappingHighThresholdParsingError::new(buf, globalAddressMappingHighThresholdParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), globalAddressMappingHighThreshold(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum vpnIdentifierParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedvpnIdentifierParsingError<'a>> for vpnIdentifier {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedvpnIdentifierParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, vpnIdentifier(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpCommunityParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpCommunityParsingError<'a>> for bgpCommunity {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpCommunityParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedbgpCommunityParsingError::new(buf, bgpCommunityParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), bgpCommunity(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpSourceCommunityListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpSourceCommunityListParsingError<'a>> for bgpSourceCommunityList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpSourceCommunityListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpSourceCommunityList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpDestinationCommunityListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpDestinationCommunityListParsingError<'a>> for bgpDestinationCommunityList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpDestinationCommunityListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpDestinationCommunityList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpExtendedCommunityParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpExtendedCommunityParsingError<'a>> for bgpExtendedCommunity {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpExtendedCommunityParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpExtendedCommunity(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpSourceExtendedCommunityListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpSourceExtendedCommunityListParsingError<'a>> for bgpSourceExtendedCommunityList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpSourceExtendedCommunityListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpSourceExtendedCommunityList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpDestinationExtendedCommunityListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpDestinationExtendedCommunityListParsingError<'a>> for bgpDestinationExtendedCommunityList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpDestinationExtendedCommunityListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpDestinationExtendedCommunityList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpLargeCommunityParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpLargeCommunityParsingError<'a>> for bgpLargeCommunity {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpLargeCommunityParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpLargeCommunity(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpSourceLargeCommunityListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpSourceLargeCommunityListParsingError<'a>> for bgpSourceLargeCommunityList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpSourceLargeCommunityListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpSourceLargeCommunityList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpDestinationLargeCommunityListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpDestinationLargeCommunityListParsingError<'a>> for bgpDestinationLargeCommunityList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpDestinationLargeCommunityListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpDestinationLargeCommunityList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhFlagsIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhFlagsIPv6ParsingError<'a>> for srhFlagsIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhFlagsIPv6ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsrhFlagsIPv6ParsingError::new(buf, srhFlagsIPv6ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, srhFlagsIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhTagIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhTagIPv6ParsingError<'a>> for srhTagIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhTagIPv6ParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsrhTagIPv6ParsingError::new(buf, srhTagIPv6ParsingError::InvalidLength(length))))
+        };
+        Ok((buf, srhTagIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhSegmentIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhSegmentIPv6ParsingError<'a>> for srhSegmentIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhSegmentIPv6ParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedsrhSegmentIPv6ParsingError::new(buf, srhSegmentIPv6ParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, srhSegmentIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhActiveSegmentIPv6ParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhActiveSegmentIPv6ParsingError<'a>> for srhActiveSegmentIPv6 {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhActiveSegmentIPv6ParsingError<'a>> {
+        if length != 16 {
+            return Err(nom::Err::Error(LocatedsrhActiveSegmentIPv6ParsingError::new(buf, srhActiveSegmentIPv6ParsingError::InvalidLength(length))));
+        };
+        let (buf, ip) = nom::number::complete::be_u128(buf)?;
+        let value = std::net::Ipv6Addr::from(ip);
+        Ok((buf, srhActiveSegmentIPv6(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhSegmentIPv6BasicListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhSegmentIPv6BasicListParsingError<'a>> for srhSegmentIPv6BasicList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhSegmentIPv6BasicListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, srhSegmentIPv6BasicList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhSegmentIPv6ListSectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhSegmentIPv6ListSectionParsingError<'a>> for srhSegmentIPv6ListSection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhSegmentIPv6ListSectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, srhSegmentIPv6ListSection(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhSegmentsIPv6LeftParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhSegmentsIPv6LeftParsingError<'a>> for srhSegmentsIPv6Left {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhSegmentsIPv6LeftParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsrhSegmentsIPv6LeftParsingError::new(buf, srhSegmentsIPv6LeftParsingError::InvalidLength(length))))
+        };
+        Ok((buf, srhSegmentsIPv6Left(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhIPv6SectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhIPv6SectionParsingError<'a>> for srhIPv6Section {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhIPv6SectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, srhIPv6Section(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhIPv6ActiveSegmentTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhIPv6ActiveSegmentTypeParsingError<'a>> for srhIPv6ActiveSegmentType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhIPv6ActiveSegmentTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsrhIPv6ActiveSegmentTypeParsingError::new(buf, srhIPv6ActiveSegmentTypeParsingError::InvalidLength(length))))
+        };
+        let enum_val = srhIPv6ActiveSegmentType::from(value);
+        Ok((buf, enum_val))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhSegmentIPv6LocatorLengthParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhSegmentIPv6LocatorLengthParsingError<'a>> for srhSegmentIPv6LocatorLength {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhSegmentIPv6LocatorLengthParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsrhSegmentIPv6LocatorLengthParsingError::new(buf, srhSegmentIPv6LocatorLengthParsingError::InvalidLength(length))))
+        };
+        Ok((buf, srhSegmentIPv6LocatorLength(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum srhSegmentIPv6EndpointBehaviorParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedsrhSegmentIPv6EndpointBehaviorParsingError<'a>> for srhSegmentIPv6EndpointBehavior {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedsrhSegmentIPv6EndpointBehaviorParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedsrhSegmentIPv6EndpointBehaviorParsingError::new(buf, srhSegmentIPv6EndpointBehaviorParsingError::InvalidLength(length))))
+        };
+        Ok((buf, srhSegmentIPv6EndpointBehavior(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum transportChecksumParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedtransportChecksumParsingError<'a>> for transportChecksum {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedtransportChecksumParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedtransportChecksumParsingError::new(buf, transportChecksumParsingError::InvalidLength(length))))
+        };
+        Ok((buf, transportChecksum(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum icmpHeaderPacketSectionParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedicmpHeaderPacketSectionParsingError<'a>> for icmpHeaderPacketSection {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedicmpHeaderPacketSectionParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, icmpHeaderPacketSection(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum gtpuFlagsParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedgtpuFlagsParsingError<'a>> for gtpuFlags {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedgtpuFlagsParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedgtpuFlagsParsingError::new(buf, gtpuFlagsParsingError::InvalidLength(length))))
+        };
+        Ok((buf, gtpuFlags(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum gtpuMsgTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedgtpuMsgTypeParsingError<'a>> for gtpuMsgType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedgtpuMsgTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedgtpuMsgTypeParsingError::new(buf, gtpuMsgTypeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, gtpuMsgType(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum gtpuTEidParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedgtpuTEidParsingError<'a>> for gtpuTEid {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedgtpuTEidParsingError<'a>> {
+        let len = length as usize;
+        if length > 4 || buf.input_len() < len {
+            return Err(nom::Err::Error(LocatedgtpuTEidParsingError::new(buf, gtpuTEidParsingError::InvalidLength(length))))
+        }
+        let mut res = 0u32;
+        for byte in buf.iter_elements().take(len) {
+            res = (res << 8) + byte as u32;
+        }
+        Ok((buf.slice(len..), gtpuTEid(res)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum gtpuSequenceNumParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedgtpuSequenceNumParsingError<'a>> for gtpuSequenceNum {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedgtpuSequenceNumParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => {
+                let (buf, value) = nom::number::complete::be_u8(buf)?;
+                (buf, value as u16)
+            }
+            2 => nom::number::complete::be_u16(buf)?,
+            _ => return Err(nom::Err::Error(LocatedgtpuSequenceNumParsingError::new(buf, gtpuSequenceNumParsingError::InvalidLength(length))))
+        };
+        Ok((buf, gtpuSequenceNum(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum gtpuQFIParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedgtpuQFIParsingError<'a>> for gtpuQFI {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedgtpuQFIParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedgtpuQFIParsingError::new(buf, gtpuQFIParsingError::InvalidLength(length))))
+        };
+        Ok((buf, gtpuQFI(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum gtpuPduTypeParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedgtpuPduTypeParsingError<'a>> for gtpuPduType {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedgtpuPduTypeParsingError<'a>> {
+        let (buf, value) = match length {
+            1 => nom::number::complete::be_u8(buf)?,
+            _ => return Err(nom::Err::Error(LocatedgtpuPduTypeParsingError::new(buf, gtpuPduTypeParsingError::InvalidLength(length))))
+        };
+        Ok((buf, gtpuPduType(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpSourceAsPathListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpSourceAsPathListParsingError<'a>> for bgpSourceAsPathList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpSourceAsPathListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpSourceAsPathList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum bgpDestinationAsPathListParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    InvalidLength(u16),
+}
+
+impl<'a> netgauze_parse_utils::ReadablePduWithOneInput<'a, u16, LocatedbgpDestinationAsPathListParsingError<'a>> for bgpDestinationAsPathList {
+    #[inline]
+    fn from_wire(buf: netgauze_parse_utils::Span<'a>, length: u16) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedbgpDestinationAsPathListParsingError<'a>> {
+        let (buf, value) = nom::multi::count(nom::number::complete::be_u8, length as usize)(buf)?;
+        Ok((buf, bgpDestinationAsPathList(value)))
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(netgauze_serde_macros::LocatedError, Eq, PartialEq, Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum FieldParsingError {
+    #[serde(with = "netgauze_parse_utils::ErrorKindSerdeDeref")]
+    NomError(#[from_nom] nom::error::ErrorKind),
+    NokiaError(#[from_located(module = "")] nokia::FieldParsingError),
+    NetGauzeError(#[from_located(module = "")] netgauze::FieldParsingError),
+    CiscoError(#[from_located(module = "")] cisco::FieldParsingError),
+    VMWareError(#[from_located(module = "")] vmware::FieldParsingError),
+    octetDeltaCountError(#[from_located(module = "self")] octetDeltaCountParsingError),
+    packetDeltaCountError(#[from_located(module = "self")] packetDeltaCountParsingError),
+    deltaFlowCountError(#[from_located(module = "self")] deltaFlowCountParsingError),
+    protocolIdentifierError(#[from_located(module = "self")] protocolIdentifierParsingError),
+    ipClassOfServiceError(#[from_located(module = "self")] ipClassOfServiceParsingError),
+    tcpControlBitsError(#[from_located(module = "self")] tcpControlBitsParsingError),
+    sourceTransportPortError(#[from_located(module = "self")] sourceTransportPortParsingError),
+    sourceIPv4AddressError(#[from_located(module = "self")] sourceIPv4AddressParsingError),
+    sourceIPv4PrefixLengthError(#[from_located(module = "self")] sourceIPv4PrefixLengthParsingError),
+    ingressInterfaceError(#[from_located(module = "self")] ingressInterfaceParsingError),
+    destinationTransportPortError(#[from_located(module = "self")] destinationTransportPortParsingError),
+    destinationIPv4AddressError(#[from_located(module = "self")] destinationIPv4AddressParsingError),
+    destinationIPv4PrefixLengthError(#[from_located(module = "self")] destinationIPv4PrefixLengthParsingError),
+    egressInterfaceError(#[from_located(module = "self")] egressInterfaceParsingError),
+    ipNextHopIPv4AddressError(#[from_located(module = "self")] ipNextHopIPv4AddressParsingError),
+    bgpSourceAsNumberError(#[from_located(module = "self")] bgpSourceAsNumberParsingError),
+    bgpDestinationAsNumberError(#[from_located(module = "self")] bgpDestinationAsNumberParsingError),
+    bgpNextHopIPv4AddressError(#[from_located(module = "self")] bgpNextHopIPv4AddressParsingError),
+    postMCastPacketDeltaCountError(#[from_located(module = "self")] postMCastPacketDeltaCountParsingError),
+    postMCastOctetDeltaCountError(#[from_located(module = "self")] postMCastOctetDeltaCountParsingError),
+    flowEndSysUpTimeError(#[from_located(module = "self")] flowEndSysUpTimeParsingError),
+    flowStartSysUpTimeError(#[from_located(module = "self")] flowStartSysUpTimeParsingError),
+    postOctetDeltaCountError(#[from_located(module = "self")] postOctetDeltaCountParsingError),
+    postPacketDeltaCountError(#[from_located(module = "self")] postPacketDeltaCountParsingError),
+    minimumIpTotalLengthError(#[from_located(module = "self")] minimumIpTotalLengthParsingError),
+    maximumIpTotalLengthError(#[from_located(module = "self")] maximumIpTotalLengthParsingError),
+    sourceIPv6AddressError(#[from_located(module = "self")] sourceIPv6AddressParsingError),
+    destinationIPv6AddressError(#[from_located(module = "self")] destinationIPv6AddressParsingError),
+    sourceIPv6PrefixLengthError(#[from_located(module = "self")] sourceIPv6PrefixLengthParsingError),
+    destinationIPv6PrefixLengthError(#[from_located(module = "self")] destinationIPv6PrefixLengthParsingError),
+    flowLabelIPv6Error(#[from_located(module = "self")] flowLabelIPv6ParsingError),
+    icmpTypeCodeIPv4Error(#[from_located(module = "self")] icmpTypeCodeIPv4ParsingError),
+    igmpTypeError(#[from_located(module = "self")] igmpTypeParsingError),
+    samplingIntervalError(#[from_located(module = "self")] samplingIntervalParsingError),
+    samplingAlgorithmError(#[from_located(module = "self")] samplingAlgorithmParsingError),
+    flowActiveTimeoutError(#[from_located(module = "self")] flowActiveTimeoutParsingError),
+    flowIdleTimeoutError(#[from_located(module = "self")] flowIdleTimeoutParsingError),
+    engineTypeError(#[from_located(module = "self")] engineTypeParsingError),
+    engineIdError(#[from_located(module = "self")] engineIdParsingError),
+    exportedOctetTotalCountError(#[from_located(module = "self")] exportedOctetTotalCountParsingError),
+    exportedMessageTotalCountError(#[from_located(module = "self")] exportedMessageTotalCountParsingError),
+    exportedFlowRecordTotalCountError(#[from_located(module = "self")] exportedFlowRecordTotalCountParsingError),
+    ipv4RouterScError(#[from_located(module = "self")] ipv4RouterScParsingError),
+    sourceIPv4PrefixError(#[from_located(module = "self")] sourceIPv4PrefixParsingError),
+    destinationIPv4PrefixError(#[from_located(module = "self")] destinationIPv4PrefixParsingError),
+    mplsTopLabelTypeError(#[from_located(module = "self")] mplsTopLabelTypeParsingError),
+    mplsTopLabelIPv4AddressError(#[from_located(module = "self")] mplsTopLabelIPv4AddressParsingError),
+    samplerIdError(#[from_located(module = "self")] samplerIdParsingError),
+    samplerModeError(#[from_located(module = "self")] samplerModeParsingError),
+    samplerRandomIntervalError(#[from_located(module = "self")] samplerRandomIntervalParsingError),
+    classIdError(#[from_located(module = "self")] classIdParsingError),
+    minimumTTLError(#[from_located(module = "self")] minimumTTLParsingError),
+    maximumTTLError(#[from_located(module = "self")] maximumTTLParsingError),
+    fragmentIdentificationError(#[from_located(module = "self")] fragmentIdentificationParsingError),
+    postIpClassOfServiceError(#[from_located(module = "self")] postIpClassOfServiceParsingError),
+    sourceMacAddressError(#[from_located(module = "self")] sourceMacAddressParsingError),
+    postDestinationMacAddressError(#[from_located(module = "self")] postDestinationMacAddressParsingError),
+    vlanIdError(#[from_located(module = "self")] vlanIdParsingError),
+    postVlanIdError(#[from_located(module = "self")] postVlanIdParsingError),
+    ipVersionError(#[from_located(module = "self")] ipVersionParsingError),
+    flowDirectionError(#[from_located(module = "self")] flowDirectionParsingError),
+    ipNextHopIPv6AddressError(#[from_located(module = "self")] ipNextHopIPv6AddressParsingError),
+    bgpNextHopIPv6AddressError(#[from_located(module = "self")] bgpNextHopIPv6AddressParsingError),
+    ipv6ExtensionHeadersError(#[from_located(module = "self")] ipv6ExtensionHeadersParsingError),
+    mplsTopLabelStackSectionError(#[from_located(module = "self")] mplsTopLabelStackSectionParsingError),
+    mplsLabelStackSection2Error(#[from_located(module = "self")] mplsLabelStackSection2ParsingError),
+    mplsLabelStackSection3Error(#[from_located(module = "self")] mplsLabelStackSection3ParsingError),
+    mplsLabelStackSection4Error(#[from_located(module = "self")] mplsLabelStackSection4ParsingError),
+    mplsLabelStackSection5Error(#[from_located(module = "self")] mplsLabelStackSection5ParsingError),
+    mplsLabelStackSection6Error(#[from_located(module = "self")] mplsLabelStackSection6ParsingError),
+    mplsLabelStackSection7Error(#[from_located(module = "self")] mplsLabelStackSection7ParsingError),
+    mplsLabelStackSection8Error(#[from_located(module = "self")] mplsLabelStackSection8ParsingError),
+    mplsLabelStackSection9Error(#[from_located(module = "self")] mplsLabelStackSection9ParsingError),
+    mplsLabelStackSection10Error(#[from_located(module = "self")] mplsLabelStackSection10ParsingError),
+    destinationMacAddressError(#[from_located(module = "self")] destinationMacAddressParsingError),
+    postSourceMacAddressError(#[from_located(module = "self")] postSourceMacAddressParsingError),
+    interfaceNameError(#[from_located(module = "self")] interfaceNameParsingError),
+    interfaceDescriptionError(#[from_located(module = "self")] interfaceDescriptionParsingError),
+    samplerNameError(#[from_located(module = "self")] samplerNameParsingError),
+    octetTotalCountError(#[from_located(module = "self")] octetTotalCountParsingError),
+    packetTotalCountError(#[from_located(module = "self")] packetTotalCountParsingError),
+    flagsAndSamplerIdError(#[from_located(module = "self")] flagsAndSamplerIdParsingError),
+    fragmentOffsetError(#[from_located(module = "self")] fragmentOffsetParsingError),
+    forwardingStatusError(#[from_located(module = "self")] forwardingStatusParsingError),
+    mplsVpnRouteDistinguisherError(#[from_located(module = "self")] mplsVpnRouteDistinguisherParsingError),
+    mplsTopLabelPrefixLengthError(#[from_located(module = "self")] mplsTopLabelPrefixLengthParsingError),
+    srcTrafficIndexError(#[from_located(module = "self")] srcTrafficIndexParsingError),
+    dstTrafficIndexError(#[from_located(module = "self")] dstTrafficIndexParsingError),
+    applicationDescriptionError(#[from_located(module = "self")] applicationDescriptionParsingError),
+    applicationIdError(#[from_located(module = "self")] applicationIdParsingError),
+    applicationNameError(#[from_located(module = "self")] applicationNameParsingError),
+    postIpDiffServCodePointError(#[from_located(module = "self")] postIpDiffServCodePointParsingError),
+    multicastReplicationFactorError(#[from_located(module = "self")] multicastReplicationFactorParsingError),
+    classNameError(#[from_located(module = "self")] classNameParsingError),
+    classificationEngineIdError(#[from_located(module = "self")] classificationEngineIdParsingError),
+    layer2packetSectionOffsetError(#[from_located(module = "self")] layer2packetSectionOffsetParsingError),
+    layer2packetSectionSizeError(#[from_located(module = "self")] layer2packetSectionSizeParsingError),
+    layer2packetSectionDataError(#[from_located(module = "self")] layer2packetSectionDataParsingError),
+    bgpNextAdjacentAsNumberError(#[from_located(module = "self")] bgpNextAdjacentAsNumberParsingError),
+    bgpPrevAdjacentAsNumberError(#[from_located(module = "self")] bgpPrevAdjacentAsNumberParsingError),
+    exporterIPv4AddressError(#[from_located(module = "self")] exporterIPv4AddressParsingError),
+    exporterIPv6AddressError(#[from_located(module = "self")] exporterIPv6AddressParsingError),
+    droppedOctetDeltaCountError(#[from_located(module = "self")] droppedOctetDeltaCountParsingError),
+    droppedPacketDeltaCountError(#[from_located(module = "self")] droppedPacketDeltaCountParsingError),
+    droppedOctetTotalCountError(#[from_located(module = "self")] droppedOctetTotalCountParsingError),
+    droppedPacketTotalCountError(#[from_located(module = "self")] droppedPacketTotalCountParsingError),
+    flowEndReasonError(#[from_located(module = "self")] flowEndReasonParsingError),
+    commonPropertiesIdError(#[from_located(module = "self")] commonPropertiesIdParsingError),
+    observationPointIdError(#[from_located(module = "self")] observationPointIdParsingError),
+    icmpTypeCodeIPv6Error(#[from_located(module = "self")] icmpTypeCodeIPv6ParsingError),
+    mplsTopLabelIPv6AddressError(#[from_located(module = "self")] mplsTopLabelIPv6AddressParsingError),
+    lineCardIdError(#[from_located(module = "self")] lineCardIdParsingError),
+    portIdError(#[from_located(module = "self")] portIdParsingError),
+    meteringProcessIdError(#[from_located(module = "self")] meteringProcessIdParsingError),
+    exportingProcessIdError(#[from_located(module = "self")] exportingProcessIdParsingError),
+    templateIdError(#[from_located(module = "self")] templateIdParsingError),
+    wlanChannelIdError(#[from_located(module = "self")] wlanChannelIdParsingError),
+    wlanSSIDError(#[from_located(module = "self")] wlanSSIDParsingError),
+    flowIdError(#[from_located(module = "self")] flowIdParsingError),
+    observationDomainIdError(#[from_located(module = "self")] observationDomainIdParsingError),
+    flowStartSecondsError(#[from_located(module = "self")] flowStartSecondsParsingError),
+    flowEndSecondsError(#[from_located(module = "self")] flowEndSecondsParsingError),
+    flowStartMillisecondsError(#[from_located(module = "self")] flowStartMillisecondsParsingError),
+    flowEndMillisecondsError(#[from_located(module = "self")] flowEndMillisecondsParsingError),
+    flowStartMicrosecondsError(#[from_located(module = "self")] flowStartMicrosecondsParsingError),
+    flowEndMicrosecondsError(#[from_located(module = "self")] flowEndMicrosecondsParsingError),
+    flowStartNanosecondsError(#[from_located(module = "self")] flowStartNanosecondsParsingError),
+    flowEndNanosecondsError(#[from_located(module = "self")] flowEndNanosecondsParsingError),
+    flowStartDeltaMicrosecondsError(#[from_located(module = "self")] flowStartDeltaMicrosecondsParsingError),
+    flowEndDeltaMicrosecondsError(#[from_located(module = "self")] flowEndDeltaMicrosecondsParsingError),
+    systemInitTimeMillisecondsError(#[from_located(module = "self")] systemInitTimeMillisecondsParsingError),
+    flowDurationMillisecondsError(#[from_located(module = "self")] flowDurationMillisecondsParsingError),
+    flowDurationMicrosecondsError(#[from_located(module = "self")] flowDurationMicrosecondsParsingError),
+    observedFlowTotalCountError(#[from_located(module = "self")] observedFlowTotalCountParsingError),
+    ignoredPacketTotalCountError(#[from_located(module = "self")] ignoredPacketTotalCountParsingError),
+    ignoredOctetTotalCountError(#[from_located(module = "self")] ignoredOctetTotalCountParsingError),
+    notSentFlowTotalCountError(#[from_located(module = "self")] notSentFlowTotalCountParsingError),
+    notSentPacketTotalCountError(#[from_located(module = "self")] notSentPacketTotalCountParsingError),
+    notSentOctetTotalCountError(#[from_located(module = "self")] notSentOctetTotalCountParsingError),
+    destinationIPv6PrefixError(#[from_located(module = "self")] destinationIPv6PrefixParsingError),
+    sourceIPv6PrefixError(#[from_located(module = "self")] sourceIPv6PrefixParsingError),
+    postOctetTotalCountError(#[from_located(module = "self")] postOctetTotalCountParsingError),
+    postPacketTotalCountError(#[from_located(module = "self")] postPacketTotalCountParsingError),
+    flowKeyIndicatorError(#[from_located(module = "self")] flowKeyIndicatorParsingError),
+    postMCastPacketTotalCountError(#[from_located(module = "self")] postMCastPacketTotalCountParsingError),
+    postMCastOctetTotalCountError(#[from_located(module = "self")] postMCastOctetTotalCountParsingError),
+    icmpTypeIPv4Error(#[from_located(module = "self")] icmpTypeIPv4ParsingError),
+    icmpCodeIPv4Error(#[from_located(module = "self")] icmpCodeIPv4ParsingError),
+    icmpTypeIPv6Error(#[from_located(module = "self")] icmpTypeIPv6ParsingError),
+    icmpCodeIPv6Error(#[from_located(module = "self")] icmpCodeIPv6ParsingError),
+    udpSourcePortError(#[from_located(module = "self")] udpSourcePortParsingError),
+    udpDestinationPortError(#[from_located(module = "self")] udpDestinationPortParsingError),
+    tcpSourcePortError(#[from_located(module = "self")] tcpSourcePortParsingError),
+    tcpDestinationPortError(#[from_located(module = "self")] tcpDestinationPortParsingError),
+    tcpSequenceNumberError(#[from_located(module = "self")] tcpSequenceNumberParsingError),
+    tcpAcknowledgementNumberError(#[from_located(module = "self")] tcpAcknowledgementNumberParsingError),
+    tcpWindowSizeError(#[from_located(module = "self")] tcpWindowSizeParsingError),
+    tcpUrgentPointerError(#[from_located(module = "self")] tcpUrgentPointerParsingError),
+    tcpHeaderLengthError(#[from_located(module = "self")] tcpHeaderLengthParsingError),
+    ipHeaderLengthError(#[from_located(module = "self")] ipHeaderLengthParsingError),
+    totalLengthIPv4Error(#[from_located(module = "self")] totalLengthIPv4ParsingError),
+    payloadLengthIPv6Error(#[from_located(module = "self")] payloadLengthIPv6ParsingError),
+    ipTTLError(#[from_located(module = "self")] ipTTLParsingError),
+    nextHeaderIPv6Error(#[from_located(module = "self")] nextHeaderIPv6ParsingError),
+    mplsPayloadLengthError(#[from_located(module = "self")] mplsPayloadLengthParsingError),
+    ipDiffServCodePointError(#[from_located(module = "self")] ipDiffServCodePointParsingError),
+    ipPrecedenceError(#[from_located(module = "self")] ipPrecedenceParsingError),
+    fragmentFlagsError(#[from_located(module = "self")] fragmentFlagsParsingError),
+    octetDeltaSumOfSquaresError(#[from_located(module = "self")] octetDeltaSumOfSquaresParsingError),
+    octetTotalSumOfSquaresError(#[from_located(module = "self")] octetTotalSumOfSquaresParsingError),
+    mplsTopLabelTTLError(#[from_located(module = "self")] mplsTopLabelTTLParsingError),
+    mplsLabelStackLengthError(#[from_located(module = "self")] mplsLabelStackLengthParsingError),
+    mplsLabelStackDepthError(#[from_located(module = "self")] mplsLabelStackDepthParsingError),
+    mplsTopLabelExpError(#[from_located(module = "self")] mplsTopLabelExpParsingError),
+    ipPayloadLengthError(#[from_located(module = "self")] ipPayloadLengthParsingError),
+    udpMessageLengthError(#[from_located(module = "self")] udpMessageLengthParsingError),
+    isMulticastError(#[from_located(module = "self")] isMulticastParsingError),
+    ipv4IHLError(#[from_located(module = "self")] ipv4IHLParsingError),
+    ipv4OptionsError(#[from_located(module = "self")] ipv4OptionsParsingError),
+    tcpOptionsError(#[from_located(module = "self")] tcpOptionsParsingError),
+    paddingOctetsError(#[from_located(module = "self")] paddingOctetsParsingError),
+    collectorIPv4AddressError(#[from_located(module = "self")] collectorIPv4AddressParsingError),
+    collectorIPv6AddressError(#[from_located(module = "self")] collectorIPv6AddressParsingError),
+    exportInterfaceError(#[from_located(module = "self")] exportInterfaceParsingError),
+    exportProtocolVersionError(#[from_located(module = "self")] exportProtocolVersionParsingError),
+    exportTransportProtocolError(#[from_located(module = "self")] exportTransportProtocolParsingError),
+    collectorTransportPortError(#[from_located(module = "self")] collectorTransportPortParsingError),
+    exporterTransportPortError(#[from_located(module = "self")] exporterTransportPortParsingError),
+    tcpSynTotalCountError(#[from_located(module = "self")] tcpSynTotalCountParsingError),
+    tcpFinTotalCountError(#[from_located(module = "self")] tcpFinTotalCountParsingError),
+    tcpRstTotalCountError(#[from_located(module = "self")] tcpRstTotalCountParsingError),
+    tcpPshTotalCountError(#[from_located(module = "self")] tcpPshTotalCountParsingError),
+    tcpAckTotalCountError(#[from_located(module = "self")] tcpAckTotalCountParsingError),
+    tcpUrgTotalCountError(#[from_located(module = "self")] tcpUrgTotalCountParsingError),
+    ipTotalLengthError(#[from_located(module = "self")] ipTotalLengthParsingError),
+    postNATSourceIPv4AddressError(#[from_located(module = "self")] postNATSourceIPv4AddressParsingError),
+    postNATDestinationIPv4AddressError(#[from_located(module = "self")] postNATDestinationIPv4AddressParsingError),
+    postNAPTSourceTransportPortError(#[from_located(module = "self")] postNAPTSourceTransportPortParsingError),
+    postNAPTDestinationTransportPortError(#[from_located(module = "self")] postNAPTDestinationTransportPortParsingError),
+    natOriginatingAddressRealmError(#[from_located(module = "self")] natOriginatingAddressRealmParsingError),
+    natEventError(#[from_located(module = "self")] natEventParsingError),
+    initiatorOctetsError(#[from_located(module = "self")] initiatorOctetsParsingError),
+    responderOctetsError(#[from_located(module = "self")] responderOctetsParsingError),
+    firewallEventError(#[from_located(module = "self")] firewallEventParsingError),
+    ingressVRFIDError(#[from_located(module = "self")] ingressVRFIDParsingError),
+    egressVRFIDError(#[from_located(module = "self")] egressVRFIDParsingError),
+    VRFnameError(#[from_located(module = "self")] VRFnameParsingError),
+    postMplsTopLabelExpError(#[from_located(module = "self")] postMplsTopLabelExpParsingError),
+    tcpWindowScaleError(#[from_located(module = "self")] tcpWindowScaleParsingError),
+    biflowDirectionError(#[from_located(module = "self")] biflowDirectionParsingError),
+    ethernetHeaderLengthError(#[from_located(module = "self")] ethernetHeaderLengthParsingError),
+    ethernetPayloadLengthError(#[from_located(module = "self")] ethernetPayloadLengthParsingError),
+    ethernetTotalLengthError(#[from_located(module = "self")] ethernetTotalLengthParsingError),
+    dot1qVlanIdError(#[from_located(module = "self")] dot1qVlanIdParsingError),
+    dot1qPriorityError(#[from_located(module = "self")] dot1qPriorityParsingError),
+    dot1qCustomerVlanIdError(#[from_located(module = "self")] dot1qCustomerVlanIdParsingError),
+    dot1qCustomerPriorityError(#[from_located(module = "self")] dot1qCustomerPriorityParsingError),
+    metroEvcIdError(#[from_located(module = "self")] metroEvcIdParsingError),
+    metroEvcTypeError(#[from_located(module = "self")] metroEvcTypeParsingError),
+    pseudoWireIdError(#[from_located(module = "self")] pseudoWireIdParsingError),
+    pseudoWireTypeError(#[from_located(module = "self")] pseudoWireTypeParsingError),
+    pseudoWireControlWordError(#[from_located(module = "self")] pseudoWireControlWordParsingError),
+    ingressPhysicalInterfaceError(#[from_located(module = "self")] ingressPhysicalInterfaceParsingError),
+    egressPhysicalInterfaceError(#[from_located(module = "self")] egressPhysicalInterfaceParsingError),
+    postDot1qVlanIdError(#[from_located(module = "self")] postDot1qVlanIdParsingError),
+    postDot1qCustomerVlanIdError(#[from_located(module = "self")] postDot1qCustomerVlanIdParsingError),
+    ethernetTypeError(#[from_located(module = "self")] ethernetTypeParsingError),
+    postIpPrecedenceError(#[from_located(module = "self")] postIpPrecedenceParsingError),
+    collectionTimeMillisecondsError(#[from_located(module = "self")] collectionTimeMillisecondsParsingError),
+    exportSctpStreamIdError(#[from_located(module = "self")] exportSctpStreamIdParsingError),
+    maxExportSecondsError(#[from_located(module = "self")] maxExportSecondsParsingError),
+    maxFlowEndSecondsError(#[from_located(module = "self")] maxFlowEndSecondsParsingError),
+    messageMD5ChecksumError(#[from_located(module = "self")] messageMD5ChecksumParsingError),
+    messageScopeError(#[from_located(module = "self")] messageScopeParsingError),
+    minExportSecondsError(#[from_located(module = "self")] minExportSecondsParsingError),
+    minFlowStartSecondsError(#[from_located(module = "self")] minFlowStartSecondsParsingError),
+    opaqueOctetsError(#[from_located(module = "self")] opaqueOctetsParsingError),
+    sessionScopeError(#[from_located(module = "self")] sessionScopeParsingError),
+    maxFlowEndMicrosecondsError(#[from_located(module = "self")] maxFlowEndMicrosecondsParsingError),
+    maxFlowEndMillisecondsError(#[from_located(module = "self")] maxFlowEndMillisecondsParsingError),
+    maxFlowEndNanosecondsError(#[from_located(module = "self")] maxFlowEndNanosecondsParsingError),
+    minFlowStartMicrosecondsError(#[from_located(module = "self")] minFlowStartMicrosecondsParsingError),
+    minFlowStartMillisecondsError(#[from_located(module = "self")] minFlowStartMillisecondsParsingError),
+    minFlowStartNanosecondsError(#[from_located(module = "self")] minFlowStartNanosecondsParsingError),
+    collectorCertificateError(#[from_located(module = "self")] collectorCertificateParsingError),
+    exporterCertificateError(#[from_located(module = "self")] exporterCertificateParsingError),
+    dataRecordsReliabilityError(#[from_located(module = "self")] dataRecordsReliabilityParsingError),
+    observationPointTypeError(#[from_located(module = "self")] observationPointTypeParsingError),
+    newConnectionDeltaCountError(#[from_located(module = "self")] newConnectionDeltaCountParsingError),
+    connectionSumDurationSecondsError(#[from_located(module = "self")] connectionSumDurationSecondsParsingError),
+    connectionTransactionIdError(#[from_located(module = "self")] connectionTransactionIdParsingError),
+    postNATSourceIPv6AddressError(#[from_located(module = "self")] postNATSourceIPv6AddressParsingError),
+    postNATDestinationIPv6AddressError(#[from_located(module = "self")] postNATDestinationIPv6AddressParsingError),
+    natPoolIdError(#[from_located(module = "self")] natPoolIdParsingError),
+    natPoolNameError(#[from_located(module = "self")] natPoolNameParsingError),
+    anonymizationFlagsError(#[from_located(module = "self")] anonymizationFlagsParsingError),
+    anonymizationTechniqueError(#[from_located(module = "self")] anonymizationTechniqueParsingError),
+    informationElementIndexError(#[from_located(module = "self")] informationElementIndexParsingError),
+    p2pTechnologyError(#[from_located(module = "self")] p2pTechnologyParsingError),
+    tunnelTechnologyError(#[from_located(module = "self")] tunnelTechnologyParsingError),
+    encryptedTechnologyError(#[from_located(module = "self")] encryptedTechnologyParsingError),
+    basicListError(#[from_located(module = "self")] basicListParsingError),
+    subTemplateListError(#[from_located(module = "self")] subTemplateListParsingError),
+    subTemplateMultiListError(#[from_located(module = "self")] subTemplateMultiListParsingError),
+    bgpValidityStateError(#[from_located(module = "self")] bgpValidityStateParsingError),
+    IPSecSPIError(#[from_located(module = "self")] IPSecSPIParsingError),
+    greKeyError(#[from_located(module = "self")] greKeyParsingError),
+    natTypeError(#[from_located(module = "self")] natTypeParsingError),
+    initiatorPacketsError(#[from_located(module = "self")] initiatorPacketsParsingError),
+    responderPacketsError(#[from_located(module = "self")] responderPacketsParsingError),
+    observationDomainNameError(#[from_located(module = "self")] observationDomainNameParsingError),
+    selectionSequenceIdError(#[from_located(module = "self")] selectionSequenceIdParsingError),
+    selectorIdError(#[from_located(module = "self")] selectorIdParsingError),
+    informationElementIdError(#[from_located(module = "self")] informationElementIdParsingError),
+    selectorAlgorithmError(#[from_located(module = "self")] selectorAlgorithmParsingError),
+    samplingPacketIntervalError(#[from_located(module = "self")] samplingPacketIntervalParsingError),
+    samplingPacketSpaceError(#[from_located(module = "self")] samplingPacketSpaceParsingError),
+    samplingTimeIntervalError(#[from_located(module = "self")] samplingTimeIntervalParsingError),
+    samplingTimeSpaceError(#[from_located(module = "self")] samplingTimeSpaceParsingError),
+    samplingSizeError(#[from_located(module = "self")] samplingSizeParsingError),
+    samplingPopulationError(#[from_located(module = "self")] samplingPopulationParsingError),
+    samplingProbabilityError(#[from_located(module = "self")] samplingProbabilityParsingError),
+    dataLinkFrameSizeError(#[from_located(module = "self")] dataLinkFrameSizeParsingError),
+    ipHeaderPacketSectionError(#[from_located(module = "self")] ipHeaderPacketSectionParsingError),
+    ipPayloadPacketSectionError(#[from_located(module = "self")] ipPayloadPacketSectionParsingError),
+    dataLinkFrameSectionError(#[from_located(module = "self")] dataLinkFrameSectionParsingError),
+    mplsLabelStackSectionError(#[from_located(module = "self")] mplsLabelStackSectionParsingError),
+    mplsPayloadPacketSectionError(#[from_located(module = "self")] mplsPayloadPacketSectionParsingError),
+    selectorIdTotalPktsObservedError(#[from_located(module = "self")] selectorIdTotalPktsObservedParsingError),
+    selectorIdTotalPktsSelectedError(#[from_located(module = "self")] selectorIdTotalPktsSelectedParsingError),
+    absoluteErrorError(#[from_located(module = "self")] absoluteErrorParsingError),
+    relativeErrorError(#[from_located(module = "self")] relativeErrorParsingError),
+    observationTimeSecondsError(#[from_located(module = "self")] observationTimeSecondsParsingError),
+    observationTimeMillisecondsError(#[from_located(module = "self")] observationTimeMillisecondsParsingError),
+    observationTimeMicrosecondsError(#[from_located(module = "self")] observationTimeMicrosecondsParsingError),
+    observationTimeNanosecondsError(#[from_located(module = "self")] observationTimeNanosecondsParsingError),
+    digestHashValueError(#[from_located(module = "self")] digestHashValueParsingError),
+    hashIPPayloadOffsetError(#[from_located(module = "self")] hashIPPayloadOffsetParsingError),
+    hashIPPayloadSizeError(#[from_located(module = "self")] hashIPPayloadSizeParsingError),
+    hashOutputRangeMinError(#[from_located(module = "self")] hashOutputRangeMinParsingError),
+    hashOutputRangeMaxError(#[from_located(module = "self")] hashOutputRangeMaxParsingError),
+    hashSelectedRangeMinError(#[from_located(module = "self")] hashSelectedRangeMinParsingError),
+    hashSelectedRangeMaxError(#[from_located(module = "self")] hashSelectedRangeMaxParsingError),
+    hashDigestOutputError(#[from_located(module = "self")] hashDigestOutputParsingError),
+    hashInitialiserValueError(#[from_located(module = "self")] hashInitialiserValueParsingError),
+    selectorNameError(#[from_located(module = "self")] selectorNameParsingError),
+    upperCILimitError(#[from_located(module = "self")] upperCILimitParsingError),
+    lowerCILimitError(#[from_located(module = "self")] lowerCILimitParsingError),
+    confidenceLevelError(#[from_located(module = "self")] confidenceLevelParsingError),
+    informationElementDataTypeError(#[from_located(module = "self")] informationElementDataTypeParsingError),
+    informationElementDescriptionError(#[from_located(module = "self")] informationElementDescriptionParsingError),
+    informationElementNameError(#[from_located(module = "self")] informationElementNameParsingError),
+    informationElementRangeBeginError(#[from_located(module = "self")] informationElementRangeBeginParsingError),
+    informationElementRangeEndError(#[from_located(module = "self")] informationElementRangeEndParsingError),
+    informationElementSemanticsError(#[from_located(module = "self")] informationElementSemanticsParsingError),
+    informationElementUnitsError(#[from_located(module = "self")] informationElementUnitsParsingError),
+    privateEnterpriseNumberError(#[from_located(module = "self")] privateEnterpriseNumberParsingError),
+    virtualStationInterfaceIdError(#[from_located(module = "self")] virtualStationInterfaceIdParsingError),
+    virtualStationInterfaceNameError(#[from_located(module = "self")] virtualStationInterfaceNameParsingError),
+    virtualStationUUIDError(#[from_located(module = "self")] virtualStationUUIDParsingError),
+    virtualStationNameError(#[from_located(module = "self")] virtualStationNameParsingError),
+    layer2SegmentIdError(#[from_located(module = "self")] layer2SegmentIdParsingError),
+    layer2OctetDeltaCountError(#[from_located(module = "self")] layer2OctetDeltaCountParsingError),
+    layer2OctetTotalCountError(#[from_located(module = "self")] layer2OctetTotalCountParsingError),
+    ingressUnicastPacketTotalCountError(#[from_located(module = "self")] ingressUnicastPacketTotalCountParsingError),
+    ingressMulticastPacketTotalCountError(#[from_located(module = "self")] ingressMulticastPacketTotalCountParsingError),
+    ingressBroadcastPacketTotalCountError(#[from_located(module = "self")] ingressBroadcastPacketTotalCountParsingError),
+    egressUnicastPacketTotalCountError(#[from_located(module = "self")] egressUnicastPacketTotalCountParsingError),
+    egressBroadcastPacketTotalCountError(#[from_located(module = "self")] egressBroadcastPacketTotalCountParsingError),
+    monitoringIntervalStartMilliSecondsError(#[from_located(module = "self")] monitoringIntervalStartMilliSecondsParsingError),
+    monitoringIntervalEndMilliSecondsError(#[from_located(module = "self")] monitoringIntervalEndMilliSecondsParsingError),
+    portRangeStartError(#[from_located(module = "self")] portRangeStartParsingError),
+    portRangeEndError(#[from_located(module = "self")] portRangeEndParsingError),
+    portRangeStepSizeError(#[from_located(module = "self")] portRangeStepSizeParsingError),
+    portRangeNumPortsError(#[from_located(module = "self")] portRangeNumPortsParsingError),
+    staMacAddressError(#[from_located(module = "self")] staMacAddressParsingError),
+    staIPv4AddressError(#[from_located(module = "self")] staIPv4AddressParsingError),
+    wtpMacAddressError(#[from_located(module = "self")] wtpMacAddressParsingError),
+    ingressInterfaceTypeError(#[from_located(module = "self")] ingressInterfaceTypeParsingError),
+    egressInterfaceTypeError(#[from_located(module = "self")] egressInterfaceTypeParsingError),
+    rtpSequenceNumberError(#[from_located(module = "self")] rtpSequenceNumberParsingError),
+    userNameError(#[from_located(module = "self")] userNameParsingError),
+    applicationCategoryNameError(#[from_located(module = "self")] applicationCategoryNameParsingError),
+    applicationSubCategoryNameError(#[from_located(module = "self")] applicationSubCategoryNameParsingError),
+    applicationGroupNameError(#[from_located(module = "self")] applicationGroupNameParsingError),
+    originalFlowsPresentError(#[from_located(module = "self")] originalFlowsPresentParsingError),
+    originalFlowsInitiatedError(#[from_located(module = "self")] originalFlowsInitiatedParsingError),
+    originalFlowsCompletedError(#[from_located(module = "self")] originalFlowsCompletedParsingError),
+    distinctCountOfSourceIPAddressError(#[from_located(module = "self")] distinctCountOfSourceIPAddressParsingError),
+    distinctCountOfDestinationIPAddressError(#[from_located(module = "self")] distinctCountOfDestinationIPAddressParsingError),
+    distinctCountOfSourceIPv4AddressError(#[from_located(module = "self")] distinctCountOfSourceIPv4AddressParsingError),
+    distinctCountOfDestinationIPv4AddressError(#[from_located(module = "self")] distinctCountOfDestinationIPv4AddressParsingError),
+    distinctCountOfSourceIPv6AddressError(#[from_located(module = "self")] distinctCountOfSourceIPv6AddressParsingError),
+    distinctCountOfDestinationIPv6AddressError(#[from_located(module = "self")] distinctCountOfDestinationIPv6AddressParsingError),
+    valueDistributionMethodError(#[from_located(module = "self")] valueDistributionMethodParsingError),
+    rfc3550JitterMillisecondsError(#[from_located(module = "self")] rfc3550JitterMillisecondsParsingError),
+    rfc3550JitterMicrosecondsError(#[from_located(module = "self")] rfc3550JitterMicrosecondsParsingError),
+    rfc3550JitterNanosecondsError(#[from_located(module = "self")] rfc3550JitterNanosecondsParsingError),
+    dot1qDEIError(#[from_located(module = "self")] dot1qDEIParsingError),
+    dot1qCustomerDEIError(#[from_located(module = "self")] dot1qCustomerDEIParsingError),
+    flowSelectorAlgorithmError(#[from_located(module = "self")] flowSelectorAlgorithmParsingError),
+    flowSelectedOctetDeltaCountError(#[from_located(module = "self")] flowSelectedOctetDeltaCountParsingError),
+    flowSelectedPacketDeltaCountError(#[from_located(module = "self")] flowSelectedPacketDeltaCountParsingError),
+    flowSelectedFlowDeltaCountError(#[from_located(module = "self")] flowSelectedFlowDeltaCountParsingError),
+    selectorIDTotalFlowsObservedError(#[from_located(module = "self")] selectorIDTotalFlowsObservedParsingError),
+    selectorIDTotalFlowsSelectedError(#[from_located(module = "self")] selectorIDTotalFlowsSelectedParsingError),
+    samplingFlowIntervalError(#[from_located(module = "self")] samplingFlowIntervalParsingError),
+    samplingFlowSpacingError(#[from_located(module = "self")] samplingFlowSpacingParsingError),
+    flowSamplingTimeIntervalError(#[from_located(module = "self")] flowSamplingTimeIntervalParsingError),
+    flowSamplingTimeSpacingError(#[from_located(module = "self")] flowSamplingTimeSpacingParsingError),
+    hashFlowDomainError(#[from_located(module = "self")] hashFlowDomainParsingError),
+    transportOctetDeltaCountError(#[from_located(module = "self")] transportOctetDeltaCountParsingError),
+    transportPacketDeltaCountError(#[from_located(module = "self")] transportPacketDeltaCountParsingError),
+    originalExporterIPv4AddressError(#[from_located(module = "self")] originalExporterIPv4AddressParsingError),
+    originalExporterIPv6AddressError(#[from_located(module = "self")] originalExporterIPv6AddressParsingError),
+    originalObservationDomainIdError(#[from_located(module = "self")] originalObservationDomainIdParsingError),
+    intermediateProcessIdError(#[from_located(module = "self")] intermediateProcessIdParsingError),
+    ignoredDataRecordTotalCountError(#[from_located(module = "self")] ignoredDataRecordTotalCountParsingError),
+    dataLinkFrameTypeError(#[from_located(module = "self")] dataLinkFrameTypeParsingError),
+    sectionOffsetError(#[from_located(module = "self")] sectionOffsetParsingError),
+    sectionExportedOctetsError(#[from_located(module = "self")] sectionExportedOctetsParsingError),
+    dot1qServiceInstanceTagError(#[from_located(module = "self")] dot1qServiceInstanceTagParsingError),
+    dot1qServiceInstanceIdError(#[from_located(module = "self")] dot1qServiceInstanceIdParsingError),
+    dot1qServiceInstancePriorityError(#[from_located(module = "self")] dot1qServiceInstancePriorityParsingError),
+    dot1qCustomerSourceMacAddressError(#[from_located(module = "self")] dot1qCustomerSourceMacAddressParsingError),
+    dot1qCustomerDestinationMacAddressError(#[from_located(module = "self")] dot1qCustomerDestinationMacAddressParsingError),
+    postLayer2OctetDeltaCountError(#[from_located(module = "self")] postLayer2OctetDeltaCountParsingError),
+    postMCastLayer2OctetDeltaCountError(#[from_located(module = "self")] postMCastLayer2OctetDeltaCountParsingError),
+    postLayer2OctetTotalCountError(#[from_located(module = "self")] postLayer2OctetTotalCountParsingError),
+    postMCastLayer2OctetTotalCountError(#[from_located(module = "self")] postMCastLayer2OctetTotalCountParsingError),
+    minimumLayer2TotalLengthError(#[from_located(module = "self")] minimumLayer2TotalLengthParsingError),
+    maximumLayer2TotalLengthError(#[from_located(module = "self")] maximumLayer2TotalLengthParsingError),
+    droppedLayer2OctetDeltaCountError(#[from_located(module = "self")] droppedLayer2OctetDeltaCountParsingError),
+    droppedLayer2OctetTotalCountError(#[from_located(module = "self")] droppedLayer2OctetTotalCountParsingError),
+    ignoredLayer2OctetTotalCountError(#[from_located(module = "self")] ignoredLayer2OctetTotalCountParsingError),
+    notSentLayer2OctetTotalCountError(#[from_located(module = "self")] notSentLayer2OctetTotalCountParsingError),
+    layer2OctetDeltaSumOfSquaresError(#[from_located(module = "self")] layer2OctetDeltaSumOfSquaresParsingError),
+    layer2OctetTotalSumOfSquaresError(#[from_located(module = "self")] layer2OctetTotalSumOfSquaresParsingError),
+    layer2FrameDeltaCountError(#[from_located(module = "self")] layer2FrameDeltaCountParsingError),
+    layer2FrameTotalCountError(#[from_located(module = "self")] layer2FrameTotalCountParsingError),
+    pseudoWireDestinationIPv4AddressError(#[from_located(module = "self")] pseudoWireDestinationIPv4AddressParsingError),
+    ignoredLayer2FrameTotalCountError(#[from_located(module = "self")] ignoredLayer2FrameTotalCountParsingError),
+    mibObjectValueIntegerError(#[from_located(module = "self")] mibObjectValueIntegerParsingError),
+    mibObjectValueOctetStringError(#[from_located(module = "self")] mibObjectValueOctetStringParsingError),
+    mibObjectValueOIDError(#[from_located(module = "self")] mibObjectValueOIDParsingError),
+    mibObjectValueBitsError(#[from_located(module = "self")] mibObjectValueBitsParsingError),
+    mibObjectValueIPAddressError(#[from_located(module = "self")] mibObjectValueIPAddressParsingError),
+    mibObjectValueCounterError(#[from_located(module = "self")] mibObjectValueCounterParsingError),
+    mibObjectValueGaugeError(#[from_located(module = "self")] mibObjectValueGaugeParsingError),
+    mibObjectValueTimeTicksError(#[from_located(module = "self")] mibObjectValueTimeTicksParsingError),
+    mibObjectValueUnsignedError(#[from_located(module = "self")] mibObjectValueUnsignedParsingError),
+    mibObjectValueTableError(#[from_located(module = "self")] mibObjectValueTableParsingError),
+    mibObjectValueRowError(#[from_located(module = "self")] mibObjectValueRowParsingError),
+    mibObjectIdentifierError(#[from_located(module = "self")] mibObjectIdentifierParsingError),
+    mibSubIdentifierError(#[from_located(module = "self")] mibSubIdentifierParsingError),
+    mibIndexIndicatorError(#[from_located(module = "self")] mibIndexIndicatorParsingError),
+    mibCaptureTimeSemanticsError(#[from_located(module = "self")] mibCaptureTimeSemanticsParsingError),
+    mibContextEngineIDError(#[from_located(module = "self")] mibContextEngineIDParsingError),
+    mibContextNameError(#[from_located(module = "self")] mibContextNameParsingError),
+    mibObjectNameError(#[from_located(module = "self")] mibObjectNameParsingError),
+    mibObjectDescriptionError(#[from_located(module = "self")] mibObjectDescriptionParsingError),
+    mibObjectSyntaxError(#[from_located(module = "self")] mibObjectSyntaxParsingError),
+    mibModuleNameError(#[from_located(module = "self")] mibModuleNameParsingError),
+    mobileIMSIError(#[from_located(module = "self")] mobileIMSIParsingError),
+    mobileMSISDNError(#[from_located(module = "self")] mobileMSISDNParsingError),
+    httpStatusCodeError(#[from_located(module = "self")] httpStatusCodeParsingError),
+    sourceTransportPortsLimitError(#[from_located(module = "self")] sourceTransportPortsLimitParsingError),
+    httpRequestMethodError(#[from_located(module = "self")] httpRequestMethodParsingError),
+    httpRequestHostError(#[from_located(module = "self")] httpRequestHostParsingError),
+    httpRequestTargetError(#[from_located(module = "self")] httpRequestTargetParsingError),
+    httpMessageVersionError(#[from_located(module = "self")] httpMessageVersionParsingError),
+    natInstanceIDError(#[from_located(module = "self")] natInstanceIDParsingError),
+    internalAddressRealmError(#[from_located(module = "self")] internalAddressRealmParsingError),
+    externalAddressRealmError(#[from_located(module = "self")] externalAddressRealmParsingError),
+    natQuotaExceededEventError(#[from_located(module = "self")] natQuotaExceededEventParsingError),
+    natThresholdEventError(#[from_located(module = "self")] natThresholdEventParsingError),
+    httpUserAgentError(#[from_located(module = "self")] httpUserAgentParsingError),
+    httpContentTypeError(#[from_located(module = "self")] httpContentTypeParsingError),
+    httpReasonPhraseError(#[from_located(module = "self")] httpReasonPhraseParsingError),
+    maxSessionEntriesError(#[from_located(module = "self")] maxSessionEntriesParsingError),
+    maxBIBEntriesError(#[from_located(module = "self")] maxBIBEntriesParsingError),
+    maxEntriesPerUserError(#[from_located(module = "self")] maxEntriesPerUserParsingError),
+    maxSubscribersError(#[from_located(module = "self")] maxSubscribersParsingError),
+    maxFragmentsPendingReassemblyError(#[from_located(module = "self")] maxFragmentsPendingReassemblyParsingError),
+    addressPoolHighThresholdError(#[from_located(module = "self")] addressPoolHighThresholdParsingError),
+    addressPoolLowThresholdError(#[from_located(module = "self")] addressPoolLowThresholdParsingError),
+    addressPortMappingHighThresholdError(#[from_located(module = "self")] addressPortMappingHighThresholdParsingError),
+    addressPortMappingLowThresholdError(#[from_located(module = "self")] addressPortMappingLowThresholdParsingError),
+    addressPortMappingPerUserHighThresholdError(#[from_located(module = "self")] addressPortMappingPerUserHighThresholdParsingError),
+    globalAddressMappingHighThresholdError(#[from_located(module = "self")] globalAddressMappingHighThresholdParsingError),
+    vpnIdentifierError(#[from_located(module = "self")] vpnIdentifierParsingError),
+    bgpCommunityError(#[from_located(module = "self")] bgpCommunityParsingError),
+    bgpSourceCommunityListError(#[from_located(module = "self")] bgpSourceCommunityListParsingError),
+    bgpDestinationCommunityListError(#[from_located(module = "self")] bgpDestinationCommunityListParsingError),
+    bgpExtendedCommunityError(#[from_located(module = "self")] bgpExtendedCommunityParsingError),
+    bgpSourceExtendedCommunityListError(#[from_located(module = "self")] bgpSourceExtendedCommunityListParsingError),
+    bgpDestinationExtendedCommunityListError(#[from_located(module = "self")] bgpDestinationExtendedCommunityListParsingError),
+    bgpLargeCommunityError(#[from_located(module = "self")] bgpLargeCommunityParsingError),
+    bgpSourceLargeCommunityListError(#[from_located(module = "self")] bgpSourceLargeCommunityListParsingError),
+    bgpDestinationLargeCommunityListError(#[from_located(module = "self")] bgpDestinationLargeCommunityListParsingError),
+    srhFlagsIPv6Error(#[from_located(module = "self")] srhFlagsIPv6ParsingError),
+    srhTagIPv6Error(#[from_located(module = "self")] srhTagIPv6ParsingError),
+    srhSegmentIPv6Error(#[from_located(module = "self")] srhSegmentIPv6ParsingError),
+    srhActiveSegmentIPv6Error(#[from_located(module = "self")] srhActiveSegmentIPv6ParsingError),
+    srhSegmentIPv6BasicListError(#[from_located(module = "self")] srhSegmentIPv6BasicListParsingError),
+    srhSegmentIPv6ListSectionError(#[from_located(module = "self")] srhSegmentIPv6ListSectionParsingError),
+    srhSegmentsIPv6LeftError(#[from_located(module = "self")] srhSegmentsIPv6LeftParsingError),
+    srhIPv6SectionError(#[from_located(module = "self")] srhIPv6SectionParsingError),
+    srhIPv6ActiveSegmentTypeError(#[from_located(module = "self")] srhIPv6ActiveSegmentTypeParsingError),
+    srhSegmentIPv6LocatorLengthError(#[from_located(module = "self")] srhSegmentIPv6LocatorLengthParsingError),
+    srhSegmentIPv6EndpointBehaviorError(#[from_located(module = "self")] srhSegmentIPv6EndpointBehaviorParsingError),
+    transportChecksumError(#[from_located(module = "self")] transportChecksumParsingError),
+    icmpHeaderPacketSectionError(#[from_located(module = "self")] icmpHeaderPacketSectionParsingError),
+    gtpuFlagsError(#[from_located(module = "self")] gtpuFlagsParsingError),
+    gtpuMsgTypeError(#[from_located(module = "self")] gtpuMsgTypeParsingError),
+    gtpuTEidError(#[from_located(module = "self")] gtpuTEidParsingError),
+    gtpuSequenceNumError(#[from_located(module = "self")] gtpuSequenceNumParsingError),
+    gtpuQFIError(#[from_located(module = "self")] gtpuQFIParsingError),
+    gtpuPduTypeError(#[from_located(module = "self")] gtpuPduTypeParsingError),
+    bgpSourceAsPathListError(#[from_located(module = "self")] bgpSourceAsPathListParsingError),
+    bgpDestinationAsPathListError(#[from_located(module = "self")] bgpDestinationAsPathListParsingError),
+}
+
+
+impl<'a> netgauze_parse_utils::ReadablePduWithTwoInputs<'a, &IE, u16, LocatedFieldParsingError<'a>>
+for Field {
+    #[inline]
+    fn from_wire(
+        buf: netgauze_parse_utils::Span<'a>,
+        ie: &IE,
+        length: u16,
+    ) -> nom::IResult<netgauze_parse_utils::Span<'a>, Self, LocatedFieldParsingError<'a>> {
+        let (buf, value) = match ie {
+            IE::Nokia(value_ie) => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_two_inputs(buf, value_ie, length)?;
+                (buf, crate::ie::Field::Nokia(value))
+            }
+            IE::NetGauze(value_ie) => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_two_inputs(buf, value_ie, length)?;
+                (buf, crate::ie::Field::NetGauze(value))
+            }
+            IE::Cisco(value_ie) => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_two_inputs(buf, value_ie, length)?;
+                (buf, crate::ie::Field::Cisco(value))
+            }
+            IE::VMWare(value_ie) => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_two_inputs(buf, value_ie, length)?;
+                (buf, crate::ie::Field::VMWare(value))
+            }
+            IE::octetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::octetDeltaCount(value))
+            }
+            IE::packetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::packetDeltaCount(value))
+            }
+            IE::deltaFlowCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::deltaFlowCount(value))
+            }
+            IE::protocolIdentifier => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::protocolIdentifier(value))
+            }
+            IE::ipClassOfService => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipClassOfService(value))
+            }
+            IE::tcpControlBits => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpControlBits(value))
+            }
+            IE::sourceTransportPort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceTransportPort(value))
+            }
+            IE::sourceIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceIPv4Address(value))
+            }
+            IE::sourceIPv4PrefixLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceIPv4PrefixLength(value))
+            }
+            IE::ingressInterface => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ingressInterface(value))
+            }
+            IE::destinationTransportPort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::destinationTransportPort(value))
+            }
+            IE::destinationIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::destinationIPv4Address(value))
+            }
+            IE::destinationIPv4PrefixLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::destinationIPv4PrefixLength(value))
+            }
+            IE::egressInterface => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::egressInterface(value))
+            }
+            IE::ipNextHopIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipNextHopIPv4Address(value))
+            }
+            IE::bgpSourceAsNumber => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpSourceAsNumber(value))
+            }
+            IE::bgpDestinationAsNumber => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpDestinationAsNumber(value))
+            }
+            IE::bgpNextHopIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpNextHopIPv4Address(value))
+            }
+            IE::postMCastPacketDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postMCastPacketDeltaCount(value))
+            }
+            IE::postMCastOctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postMCastOctetDeltaCount(value))
+            }
+            IE::flowEndSysUpTime => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowEndSysUpTime(value))
+            }
+            IE::flowStartSysUpTime => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowStartSysUpTime(value))
+            }
+            IE::postOctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postOctetDeltaCount(value))
+            }
+            IE::postPacketDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postPacketDeltaCount(value))
+            }
+            IE::minimumIpTotalLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::minimumIpTotalLength(value))
+            }
+            IE::maximumIpTotalLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maximumIpTotalLength(value))
+            }
+            IE::sourceIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceIPv6Address(value))
+            }
+            IE::destinationIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::destinationIPv6Address(value))
+            }
+            IE::sourceIPv6PrefixLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceIPv6PrefixLength(value))
+            }
+            IE::destinationIPv6PrefixLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::destinationIPv6PrefixLength(value))
+            }
+            IE::flowLabelIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowLabelIPv6(value))
+            }
+            IE::icmpTypeCodeIPv4 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::icmpTypeCodeIPv4(value))
+            }
+            IE::igmpType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::igmpType(value))
+            }
+            IE::samplingInterval => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingInterval(value))
+            }
+            IE::samplingAlgorithm => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingAlgorithm(value))
+            }
+            IE::flowActiveTimeout => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowActiveTimeout(value))
+            }
+            IE::flowIdleTimeout => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowIdleTimeout(value))
+            }
+            IE::engineType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::engineType(value))
+            }
+            IE::engineId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::engineId(value))
+            }
+            IE::exportedOctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exportedOctetTotalCount(value))
+            }
+            IE::exportedMessageTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exportedMessageTotalCount(value))
+            }
+            IE::exportedFlowRecordTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exportedFlowRecordTotalCount(value))
+            }
+            IE::ipv4RouterSc => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipv4RouterSc(value))
+            }
+            IE::sourceIPv4Prefix => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceIPv4Prefix(value))
+            }
+            IE::destinationIPv4Prefix => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::destinationIPv4Prefix(value))
+            }
+            IE::mplsTopLabelType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsTopLabelType(value))
+            }
+            IE::mplsTopLabelIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsTopLabelIPv4Address(value))
+            }
+            IE::samplerId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplerId(value))
+            }
+            IE::samplerMode => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplerMode(value))
+            }
+            IE::samplerRandomInterval => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplerRandomInterval(value))
+            }
+            IE::classId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::classId(value))
+            }
+            IE::minimumTTL => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::minimumTTL(value))
+            }
+            IE::maximumTTL => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maximumTTL(value))
+            }
+            IE::fragmentIdentification => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::fragmentIdentification(value))
+            }
+            IE::postIpClassOfService => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postIpClassOfService(value))
+            }
+            IE::sourceMacAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceMacAddress(value))
+            }
+            IE::postDestinationMacAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postDestinationMacAddress(value))
+            }
+            IE::vlanId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::vlanId(value))
+            }
+            IE::postVlanId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postVlanId(value))
+            }
+            IE::ipVersion => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipVersion(value))
+            }
+            IE::flowDirection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowDirection(value))
+            }
+            IE::ipNextHopIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipNextHopIPv6Address(value))
+            }
+            IE::bgpNextHopIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpNextHopIPv6Address(value))
+            }
+            IE::ipv6ExtensionHeaders => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipv6ExtensionHeaders(value))
+            }
+            IE::mplsTopLabelStackSection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsTopLabelStackSection(value))
+            }
+            IE::mplsLabelStackSection2 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection2(value))
+            }
+            IE::mplsLabelStackSection3 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection3(value))
+            }
+            IE::mplsLabelStackSection4 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection4(value))
+            }
+            IE::mplsLabelStackSection5 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection5(value))
+            }
+            IE::mplsLabelStackSection6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection6(value))
+            }
+            IE::mplsLabelStackSection7 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection7(value))
+            }
+            IE::mplsLabelStackSection8 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection8(value))
+            }
+            IE::mplsLabelStackSection9 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection9(value))
+            }
+            IE::mplsLabelStackSection10 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection10(value))
+            }
+            IE::destinationMacAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::destinationMacAddress(value))
+            }
+            IE::postSourceMacAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postSourceMacAddress(value))
+            }
+            IE::interfaceName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::interfaceName(value))
+            }
+            IE::interfaceDescription => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::interfaceDescription(value))
+            }
+            IE::samplerName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplerName(value))
+            }
+            IE::octetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::octetTotalCount(value))
+            }
+            IE::packetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::packetTotalCount(value))
+            }
+            IE::flagsAndSamplerId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flagsAndSamplerId(value))
+            }
+            IE::fragmentOffset => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::fragmentOffset(value))
+            }
+            IE::forwardingStatus => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::forwardingStatus(value))
+            }
+            IE::mplsVpnRouteDistinguisher => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsVpnRouteDistinguisher(value))
+            }
+            IE::mplsTopLabelPrefixLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsTopLabelPrefixLength(value))
+            }
+            IE::srcTrafficIndex => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srcTrafficIndex(value))
+            }
+            IE::dstTrafficIndex => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dstTrafficIndex(value))
+            }
+            IE::applicationDescription => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::applicationDescription(value))
+            }
+            IE::applicationId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::applicationId(value))
+            }
+            IE::applicationName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::applicationName(value))
+            }
+            IE::postIpDiffServCodePoint => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postIpDiffServCodePoint(value))
+            }
+            IE::multicastReplicationFactor => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::multicastReplicationFactor(value))
+            }
+            IE::className => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::className(value))
+            }
+            IE::classificationEngineId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::classificationEngineId(value))
+            }
+            IE::layer2packetSectionOffset => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2packetSectionOffset(value))
+            }
+            IE::layer2packetSectionSize => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2packetSectionSize(value))
+            }
+            IE::layer2packetSectionData => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2packetSectionData(value))
+            }
+            IE::bgpNextAdjacentAsNumber => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpNextAdjacentAsNumber(value))
+            }
+            IE::bgpPrevAdjacentAsNumber => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpPrevAdjacentAsNumber(value))
+            }
+            IE::exporterIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exporterIPv4Address(value))
+            }
+            IE::exporterIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exporterIPv6Address(value))
+            }
+            IE::droppedOctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::droppedOctetDeltaCount(value))
+            }
+            IE::droppedPacketDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::droppedPacketDeltaCount(value))
+            }
+            IE::droppedOctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::droppedOctetTotalCount(value))
+            }
+            IE::droppedPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::droppedPacketTotalCount(value))
+            }
+            IE::flowEndReason => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowEndReason(value))
+            }
+            IE::commonPropertiesId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::commonPropertiesId(value))
+            }
+            IE::observationPointId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observationPointId(value))
+            }
+            IE::icmpTypeCodeIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::icmpTypeCodeIPv6(value))
+            }
+            IE::mplsTopLabelIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsTopLabelIPv6Address(value))
+            }
+            IE::lineCardId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::lineCardId(value))
+            }
+            IE::portId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::portId(value))
+            }
+            IE::meteringProcessId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::meteringProcessId(value))
+            }
+            IE::exportingProcessId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exportingProcessId(value))
+            }
+            IE::templateId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::templateId(value))
+            }
+            IE::wlanChannelId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::wlanChannelId(value))
+            }
+            IE::wlanSSID => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::wlanSSID(value))
+            }
+            IE::flowId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowId(value))
+            }
+            IE::observationDomainId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observationDomainId(value))
+            }
+            IE::flowStartSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowStartSeconds(value))
+            }
+            IE::flowEndSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowEndSeconds(value))
+            }
+            IE::flowStartMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowStartMilliseconds(value))
+            }
+            IE::flowEndMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowEndMilliseconds(value))
+            }
+            IE::flowStartMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowStartMicroseconds(value))
+            }
+            IE::flowEndMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowEndMicroseconds(value))
+            }
+            IE::flowStartNanoseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowStartNanoseconds(value))
+            }
+            IE::flowEndNanoseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowEndNanoseconds(value))
+            }
+            IE::flowStartDeltaMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowStartDeltaMicroseconds(value))
+            }
+            IE::flowEndDeltaMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowEndDeltaMicroseconds(value))
+            }
+            IE::systemInitTimeMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::systemInitTimeMilliseconds(value))
+            }
+            IE::flowDurationMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowDurationMilliseconds(value))
+            }
+            IE::flowDurationMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowDurationMicroseconds(value))
+            }
+            IE::observedFlowTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observedFlowTotalCount(value))
+            }
+            IE::ignoredPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ignoredPacketTotalCount(value))
+            }
+            IE::ignoredOctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ignoredOctetTotalCount(value))
+            }
+            IE::notSentFlowTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::notSentFlowTotalCount(value))
+            }
+            IE::notSentPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::notSentPacketTotalCount(value))
+            }
+            IE::notSentOctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::notSentOctetTotalCount(value))
+            }
+            IE::destinationIPv6Prefix => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::destinationIPv6Prefix(value))
+            }
+            IE::sourceIPv6Prefix => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceIPv6Prefix(value))
+            }
+            IE::postOctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postOctetTotalCount(value))
+            }
+            IE::postPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postPacketTotalCount(value))
+            }
+            IE::flowKeyIndicator => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowKeyIndicator(value))
+            }
+            IE::postMCastPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postMCastPacketTotalCount(value))
+            }
+            IE::postMCastOctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postMCastOctetTotalCount(value))
+            }
+            IE::icmpTypeIPv4 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::icmpTypeIPv4(value))
+            }
+            IE::icmpCodeIPv4 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::icmpCodeIPv4(value))
+            }
+            IE::icmpTypeIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::icmpTypeIPv6(value))
+            }
+            IE::icmpCodeIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::icmpCodeIPv6(value))
+            }
+            IE::udpSourcePort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::udpSourcePort(value))
+            }
+            IE::udpDestinationPort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::udpDestinationPort(value))
+            }
+            IE::tcpSourcePort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpSourcePort(value))
+            }
+            IE::tcpDestinationPort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpDestinationPort(value))
+            }
+            IE::tcpSequenceNumber => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpSequenceNumber(value))
+            }
+            IE::tcpAcknowledgementNumber => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpAcknowledgementNumber(value))
+            }
+            IE::tcpWindowSize => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpWindowSize(value))
+            }
+            IE::tcpUrgentPointer => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpUrgentPointer(value))
+            }
+            IE::tcpHeaderLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpHeaderLength(value))
+            }
+            IE::ipHeaderLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipHeaderLength(value))
+            }
+            IE::totalLengthIPv4 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::totalLengthIPv4(value))
+            }
+            IE::payloadLengthIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::payloadLengthIPv6(value))
+            }
+            IE::ipTTL => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipTTL(value))
+            }
+            IE::nextHeaderIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::nextHeaderIPv6(value))
+            }
+            IE::mplsPayloadLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsPayloadLength(value))
+            }
+            IE::ipDiffServCodePoint => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipDiffServCodePoint(value))
+            }
+            IE::ipPrecedence => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipPrecedence(value))
+            }
+            IE::fragmentFlags => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::fragmentFlags(value))
+            }
+            IE::octetDeltaSumOfSquares => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::octetDeltaSumOfSquares(value))
+            }
+            IE::octetTotalSumOfSquares => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::octetTotalSumOfSquares(value))
+            }
+            IE::mplsTopLabelTTL => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsTopLabelTTL(value))
+            }
+            IE::mplsLabelStackLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackLength(value))
+            }
+            IE::mplsLabelStackDepth => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackDepth(value))
+            }
+            IE::mplsTopLabelExp => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsTopLabelExp(value))
+            }
+            IE::ipPayloadLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipPayloadLength(value))
+            }
+            IE::udpMessageLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::udpMessageLength(value))
+            }
+            IE::isMulticast => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::isMulticast(value))
+            }
+            IE::ipv4IHL => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipv4IHL(value))
+            }
+            IE::ipv4Options => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipv4Options(value))
+            }
+            IE::tcpOptions => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpOptions(value))
+            }
+            IE::paddingOctets => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::paddingOctets(value))
+            }
+            IE::collectorIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::collectorIPv4Address(value))
+            }
+            IE::collectorIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::collectorIPv6Address(value))
+            }
+            IE::exportInterface => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exportInterface(value))
+            }
+            IE::exportProtocolVersion => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exportProtocolVersion(value))
+            }
+            IE::exportTransportProtocol => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exportTransportProtocol(value))
+            }
+            IE::collectorTransportPort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::collectorTransportPort(value))
+            }
+            IE::exporterTransportPort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exporterTransportPort(value))
+            }
+            IE::tcpSynTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpSynTotalCount(value))
+            }
+            IE::tcpFinTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpFinTotalCount(value))
+            }
+            IE::tcpRstTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpRstTotalCount(value))
+            }
+            IE::tcpPshTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpPshTotalCount(value))
+            }
+            IE::tcpAckTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpAckTotalCount(value))
+            }
+            IE::tcpUrgTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpUrgTotalCount(value))
+            }
+            IE::ipTotalLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipTotalLength(value))
+            }
+            IE::postNATSourceIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postNATSourceIPv4Address(value))
+            }
+            IE::postNATDestinationIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postNATDestinationIPv4Address(value))
+            }
+            IE::postNAPTSourceTransportPort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postNAPTSourceTransportPort(value))
+            }
+            IE::postNAPTDestinationTransportPort => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postNAPTDestinationTransportPort(value))
+            }
+            IE::natOriginatingAddressRealm => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::natOriginatingAddressRealm(value))
+            }
+            IE::natEvent => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::natEvent(value))
+            }
+            IE::initiatorOctets => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::initiatorOctets(value))
+            }
+            IE::responderOctets => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::responderOctets(value))
+            }
+            IE::firewallEvent => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::firewallEvent(value))
+            }
+            IE::ingressVRFID => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ingressVRFID(value))
+            }
+            IE::egressVRFID => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::egressVRFID(value))
+            }
+            IE::VRFname => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::VRFname(value))
+            }
+            IE::postMplsTopLabelExp => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postMplsTopLabelExp(value))
+            }
+            IE::tcpWindowScale => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tcpWindowScale(value))
+            }
+            IE::biflowDirection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::biflowDirection(value))
+            }
+            IE::ethernetHeaderLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ethernetHeaderLength(value))
+            }
+            IE::ethernetPayloadLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ethernetPayloadLength(value))
+            }
+            IE::ethernetTotalLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ethernetTotalLength(value))
+            }
+            IE::dot1qVlanId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qVlanId(value))
+            }
+            IE::dot1qPriority => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qPriority(value))
+            }
+            IE::dot1qCustomerVlanId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qCustomerVlanId(value))
+            }
+            IE::dot1qCustomerPriority => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qCustomerPriority(value))
+            }
+            IE::metroEvcId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::metroEvcId(value))
+            }
+            IE::metroEvcType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::metroEvcType(value))
+            }
+            IE::pseudoWireId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::pseudoWireId(value))
+            }
+            IE::pseudoWireType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::pseudoWireType(value))
+            }
+            IE::pseudoWireControlWord => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::pseudoWireControlWord(value))
+            }
+            IE::ingressPhysicalInterface => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ingressPhysicalInterface(value))
+            }
+            IE::egressPhysicalInterface => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::egressPhysicalInterface(value))
+            }
+            IE::postDot1qVlanId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postDot1qVlanId(value))
+            }
+            IE::postDot1qCustomerVlanId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postDot1qCustomerVlanId(value))
+            }
+            IE::ethernetType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ethernetType(value))
+            }
+            IE::postIpPrecedence => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postIpPrecedence(value))
+            }
+            IE::collectionTimeMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::collectionTimeMilliseconds(value))
+            }
+            IE::exportSctpStreamId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exportSctpStreamId(value))
+            }
+            IE::maxExportSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxExportSeconds(value))
+            }
+            IE::maxFlowEndSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxFlowEndSeconds(value))
+            }
+            IE::messageMD5Checksum => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::messageMD5Checksum(value))
+            }
+            IE::messageScope => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::messageScope(value))
+            }
+            IE::minExportSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::minExportSeconds(value))
+            }
+            IE::minFlowStartSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::minFlowStartSeconds(value))
+            }
+            IE::opaqueOctets => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::opaqueOctets(value))
+            }
+            IE::sessionScope => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sessionScope(value))
+            }
+            IE::maxFlowEndMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxFlowEndMicroseconds(value))
+            }
+            IE::maxFlowEndMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxFlowEndMilliseconds(value))
+            }
+            IE::maxFlowEndNanoseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxFlowEndNanoseconds(value))
+            }
+            IE::minFlowStartMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::minFlowStartMicroseconds(value))
+            }
+            IE::minFlowStartMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::minFlowStartMilliseconds(value))
+            }
+            IE::minFlowStartNanoseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::minFlowStartNanoseconds(value))
+            }
+            IE::collectorCertificate => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::collectorCertificate(value))
+            }
+            IE::exporterCertificate => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::exporterCertificate(value))
+            }
+            IE::dataRecordsReliability => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dataRecordsReliability(value))
+            }
+            IE::observationPointType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observationPointType(value))
+            }
+            IE::newConnectionDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::newConnectionDeltaCount(value))
+            }
+            IE::connectionSumDurationSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::connectionSumDurationSeconds(value))
+            }
+            IE::connectionTransactionId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::connectionTransactionId(value))
+            }
+            IE::postNATSourceIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postNATSourceIPv6Address(value))
+            }
+            IE::postNATDestinationIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postNATDestinationIPv6Address(value))
+            }
+            IE::natPoolId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::natPoolId(value))
+            }
+            IE::natPoolName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::natPoolName(value))
+            }
+            IE::anonymizationFlags => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::anonymizationFlags(value))
+            }
+            IE::anonymizationTechnique => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::anonymizationTechnique(value))
+            }
+            IE::informationElementIndex => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementIndex(value))
+            }
+            IE::p2pTechnology => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::p2pTechnology(value))
+            }
+            IE::tunnelTechnology => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::tunnelTechnology(value))
+            }
+            IE::encryptedTechnology => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::encryptedTechnology(value))
+            }
+            IE::basicList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::basicList(value))
+            }
+            IE::subTemplateList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::subTemplateList(value))
+            }
+            IE::subTemplateMultiList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::subTemplateMultiList(value))
+            }
+            IE::bgpValidityState => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpValidityState(value))
+            }
+            IE::IPSecSPI => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::IPSecSPI(value))
+            }
+            IE::greKey => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::greKey(value))
+            }
+            IE::natType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::natType(value))
+            }
+            IE::initiatorPackets => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::initiatorPackets(value))
+            }
+            IE::responderPackets => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::responderPackets(value))
+            }
+            IE::observationDomainName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observationDomainName(value))
+            }
+            IE::selectionSequenceId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::selectionSequenceId(value))
+            }
+            IE::selectorId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::selectorId(value))
+            }
+            IE::informationElementId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementId(value))
+            }
+            IE::selectorAlgorithm => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::selectorAlgorithm(value))
+            }
+            IE::samplingPacketInterval => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingPacketInterval(value))
+            }
+            IE::samplingPacketSpace => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingPacketSpace(value))
+            }
+            IE::samplingTimeInterval => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingTimeInterval(value))
+            }
+            IE::samplingTimeSpace => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingTimeSpace(value))
+            }
+            IE::samplingSize => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingSize(value))
+            }
+            IE::samplingPopulation => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingPopulation(value))
+            }
+            IE::samplingProbability => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingProbability(value))
+            }
+            IE::dataLinkFrameSize => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dataLinkFrameSize(value))
+            }
+            IE::ipHeaderPacketSection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipHeaderPacketSection(value))
+            }
+            IE::ipPayloadPacketSection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ipPayloadPacketSection(value))
+            }
+            IE::dataLinkFrameSection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dataLinkFrameSection(value))
+            }
+            IE::mplsLabelStackSection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsLabelStackSection(value))
+            }
+            IE::mplsPayloadPacketSection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mplsPayloadPacketSection(value))
+            }
+            IE::selectorIdTotalPktsObserved => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::selectorIdTotalPktsObserved(value))
+            }
+            IE::selectorIdTotalPktsSelected => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::selectorIdTotalPktsSelected(value))
+            }
+            IE::absoluteError => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::absoluteError(value))
+            }
+            IE::relativeError => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::relativeError(value))
+            }
+            IE::observationTimeSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observationTimeSeconds(value))
+            }
+            IE::observationTimeMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observationTimeMilliseconds(value))
+            }
+            IE::observationTimeMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observationTimeMicroseconds(value))
+            }
+            IE::observationTimeNanoseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::observationTimeNanoseconds(value))
+            }
+            IE::digestHashValue => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::digestHashValue(value))
+            }
+            IE::hashIPPayloadOffset => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashIPPayloadOffset(value))
+            }
+            IE::hashIPPayloadSize => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashIPPayloadSize(value))
+            }
+            IE::hashOutputRangeMin => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashOutputRangeMin(value))
+            }
+            IE::hashOutputRangeMax => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashOutputRangeMax(value))
+            }
+            IE::hashSelectedRangeMin => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashSelectedRangeMin(value))
+            }
+            IE::hashSelectedRangeMax => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashSelectedRangeMax(value))
+            }
+            IE::hashDigestOutput => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashDigestOutput(value))
+            }
+            IE::hashInitialiserValue => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashInitialiserValue(value))
+            }
+            IE::selectorName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::selectorName(value))
+            }
+            IE::upperCILimit => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::upperCILimit(value))
+            }
+            IE::lowerCILimit => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::lowerCILimit(value))
+            }
+            IE::confidenceLevel => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::confidenceLevel(value))
+            }
+            IE::informationElementDataType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementDataType(value))
+            }
+            IE::informationElementDescription => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementDescription(value))
+            }
+            IE::informationElementName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementName(value))
+            }
+            IE::informationElementRangeBegin => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementRangeBegin(value))
+            }
+            IE::informationElementRangeEnd => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementRangeEnd(value))
+            }
+            IE::informationElementSemantics => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementSemantics(value))
+            }
+            IE::informationElementUnits => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::informationElementUnits(value))
+            }
+            IE::privateEnterpriseNumber => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::privateEnterpriseNumber(value))
+            }
+            IE::virtualStationInterfaceId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::virtualStationInterfaceId(value))
+            }
+            IE::virtualStationInterfaceName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::virtualStationInterfaceName(value))
+            }
+            IE::virtualStationUUID => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::virtualStationUUID(value))
+            }
+            IE::virtualStationName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::virtualStationName(value))
+            }
+            IE::layer2SegmentId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2SegmentId(value))
+            }
+            IE::layer2OctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2OctetDeltaCount(value))
+            }
+            IE::layer2OctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2OctetTotalCount(value))
+            }
+            IE::ingressUnicastPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ingressUnicastPacketTotalCount(value))
+            }
+            IE::ingressMulticastPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ingressMulticastPacketTotalCount(value))
+            }
+            IE::ingressBroadcastPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ingressBroadcastPacketTotalCount(value))
+            }
+            IE::egressUnicastPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::egressUnicastPacketTotalCount(value))
+            }
+            IE::egressBroadcastPacketTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::egressBroadcastPacketTotalCount(value))
+            }
+            IE::monitoringIntervalStartMilliSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::monitoringIntervalStartMilliSeconds(value))
+            }
+            IE::monitoringIntervalEndMilliSeconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::monitoringIntervalEndMilliSeconds(value))
+            }
+            IE::portRangeStart => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::portRangeStart(value))
+            }
+            IE::portRangeEnd => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::portRangeEnd(value))
+            }
+            IE::portRangeStepSize => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::portRangeStepSize(value))
+            }
+            IE::portRangeNumPorts => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::portRangeNumPorts(value))
+            }
+            IE::staMacAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::staMacAddress(value))
+            }
+            IE::staIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::staIPv4Address(value))
+            }
+            IE::wtpMacAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::wtpMacAddress(value))
+            }
+            IE::ingressInterfaceType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ingressInterfaceType(value))
+            }
+            IE::egressInterfaceType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::egressInterfaceType(value))
+            }
+            IE::rtpSequenceNumber => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::rtpSequenceNumber(value))
+            }
+            IE::userName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::userName(value))
+            }
+            IE::applicationCategoryName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::applicationCategoryName(value))
+            }
+            IE::applicationSubCategoryName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::applicationSubCategoryName(value))
+            }
+            IE::applicationGroupName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::applicationGroupName(value))
+            }
+            IE::originalFlowsPresent => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::originalFlowsPresent(value))
+            }
+            IE::originalFlowsInitiated => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::originalFlowsInitiated(value))
+            }
+            IE::originalFlowsCompleted => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::originalFlowsCompleted(value))
+            }
+            IE::distinctCountOfSourceIPAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::distinctCountOfSourceIPAddress(value))
+            }
+            IE::distinctCountOfDestinationIPAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::distinctCountOfDestinationIPAddress(value))
+            }
+            IE::distinctCountOfSourceIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::distinctCountOfSourceIPv4Address(value))
+            }
+            IE::distinctCountOfDestinationIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::distinctCountOfDestinationIPv4Address(value))
+            }
+            IE::distinctCountOfSourceIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::distinctCountOfSourceIPv6Address(value))
+            }
+            IE::distinctCountOfDestinationIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::distinctCountOfDestinationIPv6Address(value))
+            }
+            IE::valueDistributionMethod => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::valueDistributionMethod(value))
+            }
+            IE::rfc3550JitterMilliseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::rfc3550JitterMilliseconds(value))
+            }
+            IE::rfc3550JitterMicroseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::rfc3550JitterMicroseconds(value))
+            }
+            IE::rfc3550JitterNanoseconds => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::rfc3550JitterNanoseconds(value))
+            }
+            IE::dot1qDEI => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qDEI(value))
+            }
+            IE::dot1qCustomerDEI => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qCustomerDEI(value))
+            }
+            IE::flowSelectorAlgorithm => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowSelectorAlgorithm(value))
+            }
+            IE::flowSelectedOctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowSelectedOctetDeltaCount(value))
+            }
+            IE::flowSelectedPacketDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowSelectedPacketDeltaCount(value))
+            }
+            IE::flowSelectedFlowDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowSelectedFlowDeltaCount(value))
+            }
+            IE::selectorIDTotalFlowsObserved => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::selectorIDTotalFlowsObserved(value))
+            }
+            IE::selectorIDTotalFlowsSelected => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::selectorIDTotalFlowsSelected(value))
+            }
+            IE::samplingFlowInterval => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingFlowInterval(value))
+            }
+            IE::samplingFlowSpacing => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::samplingFlowSpacing(value))
+            }
+            IE::flowSamplingTimeInterval => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowSamplingTimeInterval(value))
+            }
+            IE::flowSamplingTimeSpacing => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::flowSamplingTimeSpacing(value))
+            }
+            IE::hashFlowDomain => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::hashFlowDomain(value))
+            }
+            IE::transportOctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::transportOctetDeltaCount(value))
+            }
+            IE::transportPacketDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::transportPacketDeltaCount(value))
+            }
+            IE::originalExporterIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::originalExporterIPv4Address(value))
+            }
+            IE::originalExporterIPv6Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::originalExporterIPv6Address(value))
+            }
+            IE::originalObservationDomainId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::originalObservationDomainId(value))
+            }
+            IE::intermediateProcessId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::intermediateProcessId(value))
+            }
+            IE::ignoredDataRecordTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ignoredDataRecordTotalCount(value))
+            }
+            IE::dataLinkFrameType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dataLinkFrameType(value))
+            }
+            IE::sectionOffset => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sectionOffset(value))
+            }
+            IE::sectionExportedOctets => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sectionExportedOctets(value))
+            }
+            IE::dot1qServiceInstanceTag => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qServiceInstanceTag(value))
+            }
+            IE::dot1qServiceInstanceId => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qServiceInstanceId(value))
+            }
+            IE::dot1qServiceInstancePriority => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qServiceInstancePriority(value))
+            }
+            IE::dot1qCustomerSourceMacAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qCustomerSourceMacAddress(value))
+            }
+            IE::dot1qCustomerDestinationMacAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::dot1qCustomerDestinationMacAddress(value))
+            }
+            IE::postLayer2OctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postLayer2OctetDeltaCount(value))
+            }
+            IE::postMCastLayer2OctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postMCastLayer2OctetDeltaCount(value))
+            }
+            IE::postLayer2OctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postLayer2OctetTotalCount(value))
+            }
+            IE::postMCastLayer2OctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::postMCastLayer2OctetTotalCount(value))
+            }
+            IE::minimumLayer2TotalLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::minimumLayer2TotalLength(value))
+            }
+            IE::maximumLayer2TotalLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maximumLayer2TotalLength(value))
+            }
+            IE::droppedLayer2OctetDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::droppedLayer2OctetDeltaCount(value))
+            }
+            IE::droppedLayer2OctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::droppedLayer2OctetTotalCount(value))
+            }
+            IE::ignoredLayer2OctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ignoredLayer2OctetTotalCount(value))
+            }
+            IE::notSentLayer2OctetTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::notSentLayer2OctetTotalCount(value))
+            }
+            IE::layer2OctetDeltaSumOfSquares => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2OctetDeltaSumOfSquares(value))
+            }
+            IE::layer2OctetTotalSumOfSquares => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2OctetTotalSumOfSquares(value))
+            }
+            IE::layer2FrameDeltaCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2FrameDeltaCount(value))
+            }
+            IE::layer2FrameTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::layer2FrameTotalCount(value))
+            }
+            IE::pseudoWireDestinationIPv4Address => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::pseudoWireDestinationIPv4Address(value))
+            }
+            IE::ignoredLayer2FrameTotalCount => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::ignoredLayer2FrameTotalCount(value))
+            }
+            IE::mibObjectValueInteger => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueInteger(value))
+            }
+            IE::mibObjectValueOctetString => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueOctetString(value))
+            }
+            IE::mibObjectValueOID => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueOID(value))
+            }
+            IE::mibObjectValueBits => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueBits(value))
+            }
+            IE::mibObjectValueIPAddress => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueIPAddress(value))
+            }
+            IE::mibObjectValueCounter => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueCounter(value))
+            }
+            IE::mibObjectValueGauge => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueGauge(value))
+            }
+            IE::mibObjectValueTimeTicks => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueTimeTicks(value))
+            }
+            IE::mibObjectValueUnsigned => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueUnsigned(value))
+            }
+            IE::mibObjectValueTable => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueTable(value))
+            }
+            IE::mibObjectValueRow => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectValueRow(value))
+            }
+            IE::mibObjectIdentifier => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectIdentifier(value))
+            }
+            IE::mibSubIdentifier => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibSubIdentifier(value))
+            }
+            IE::mibIndexIndicator => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibIndexIndicator(value))
+            }
+            IE::mibCaptureTimeSemantics => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibCaptureTimeSemantics(value))
+            }
+            IE::mibContextEngineID => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibContextEngineID(value))
+            }
+            IE::mibContextName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibContextName(value))
+            }
+            IE::mibObjectName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectName(value))
+            }
+            IE::mibObjectDescription => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectDescription(value))
+            }
+            IE::mibObjectSyntax => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibObjectSyntax(value))
+            }
+            IE::mibModuleName => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mibModuleName(value))
+            }
+            IE::mobileIMSI => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mobileIMSI(value))
+            }
+            IE::mobileMSISDN => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::mobileMSISDN(value))
+            }
+            IE::httpStatusCode => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::httpStatusCode(value))
+            }
+            IE::sourceTransportPortsLimit => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::sourceTransportPortsLimit(value))
+            }
+            IE::httpRequestMethod => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::httpRequestMethod(value))
+            }
+            IE::httpRequestHost => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::httpRequestHost(value))
+            }
+            IE::httpRequestTarget => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::httpRequestTarget(value))
+            }
+            IE::httpMessageVersion => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::httpMessageVersion(value))
+            }
+            IE::natInstanceID => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::natInstanceID(value))
+            }
+            IE::internalAddressRealm => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::internalAddressRealm(value))
+            }
+            IE::externalAddressRealm => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::externalAddressRealm(value))
+            }
+            IE::natQuotaExceededEvent => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::natQuotaExceededEvent(value))
+            }
+            IE::natThresholdEvent => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::natThresholdEvent(value))
+            }
+            IE::httpUserAgent => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::httpUserAgent(value))
+            }
+            IE::httpContentType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::httpContentType(value))
+            }
+            IE::httpReasonPhrase => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::httpReasonPhrase(value))
+            }
+            IE::maxSessionEntries => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxSessionEntries(value))
+            }
+            IE::maxBIBEntries => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxBIBEntries(value))
+            }
+            IE::maxEntriesPerUser => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxEntriesPerUser(value))
+            }
+            IE::maxSubscribers => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxSubscribers(value))
+            }
+            IE::maxFragmentsPendingReassembly => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::maxFragmentsPendingReassembly(value))
+            }
+            IE::addressPoolHighThreshold => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::addressPoolHighThreshold(value))
+            }
+            IE::addressPoolLowThreshold => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::addressPoolLowThreshold(value))
+            }
+            IE::addressPortMappingHighThreshold => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::addressPortMappingHighThreshold(value))
+            }
+            IE::addressPortMappingLowThreshold => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::addressPortMappingLowThreshold(value))
+            }
+            IE::addressPortMappingPerUserHighThreshold => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::addressPortMappingPerUserHighThreshold(value))
+            }
+            IE::globalAddressMappingHighThreshold => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::globalAddressMappingHighThreshold(value))
+            }
+            IE::vpnIdentifier => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::vpnIdentifier(value))
+            }
+            IE::bgpCommunity => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpCommunity(value))
+            }
+            IE::bgpSourceCommunityList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpSourceCommunityList(value))
+            }
+            IE::bgpDestinationCommunityList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpDestinationCommunityList(value))
+            }
+            IE::bgpExtendedCommunity => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpExtendedCommunity(value))
+            }
+            IE::bgpSourceExtendedCommunityList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpSourceExtendedCommunityList(value))
+            }
+            IE::bgpDestinationExtendedCommunityList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpDestinationExtendedCommunityList(value))
+            }
+            IE::bgpLargeCommunity => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpLargeCommunity(value))
+            }
+            IE::bgpSourceLargeCommunityList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpSourceLargeCommunityList(value))
+            }
+            IE::bgpDestinationLargeCommunityList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpDestinationLargeCommunityList(value))
+            }
+            IE::srhFlagsIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhFlagsIPv6(value))
+            }
+            IE::srhTagIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhTagIPv6(value))
+            }
+            IE::srhSegmentIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhSegmentIPv6(value))
+            }
+            IE::srhActiveSegmentIPv6 => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhActiveSegmentIPv6(value))
+            }
+            IE::srhSegmentIPv6BasicList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhSegmentIPv6BasicList(value))
+            }
+            IE::srhSegmentIPv6ListSection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhSegmentIPv6ListSection(value))
+            }
+            IE::srhSegmentsIPv6Left => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhSegmentsIPv6Left(value))
+            }
+            IE::srhIPv6Section => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhIPv6Section(value))
+            }
+            IE::srhIPv6ActiveSegmentType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhIPv6ActiveSegmentType(value))
+            }
+            IE::srhSegmentIPv6LocatorLength => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhSegmentIPv6LocatorLength(value))
+            }
+            IE::srhSegmentIPv6EndpointBehavior => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::srhSegmentIPv6EndpointBehavior(value))
+            }
+            IE::transportChecksum => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::transportChecksum(value))
+            }
+            IE::icmpHeaderPacketSection => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::icmpHeaderPacketSection(value))
+            }
+            IE::gtpuFlags => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::gtpuFlags(value))
+            }
+            IE::gtpuMsgType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::gtpuMsgType(value))
+            }
+            IE::gtpuTEid => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::gtpuTEid(value))
+            }
+            IE::gtpuSequenceNum => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::gtpuSequenceNum(value))
+            }
+            IE::gtpuQFI => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::gtpuQFI(value))
+            }
+            IE::gtpuPduType => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::gtpuPduType(value))
+            }
+            IE::bgpSourceAsPathList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpSourceAsPathList(value))
+            }
+            IE::bgpDestinationAsPathList => {
+                let (buf, value) = netgauze_parse_utils::parse_into_located_one_input(buf, length)?;
+                (buf, crate::ie::Field::bgpDestinationAsPathList(value))
+            }
+            _ => todo!("Handle unknown IEs")
+        };
+        Ok((buf, value))
+    }
+}

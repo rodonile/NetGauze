@@ -1,0 +1,1946 @@
+
+IE ID: 4 Sub-Registry URL: Http("https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml") Sub-Registry ID: protocol-numbers-1
+[crates/ipfix-code-generator/src/lib.rs:383:9] subreg_parsed = (
+    0,
+    [
+        InformationElementSubRegistry {
+            value: 0,
+            name: "HOPOPT",
+            description: "IPv6 Hop-by-Hop Option",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc8200",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 1,
+            name: "ICMP",
+            description: "Internet Control Message",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc792",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 2,
+            name: "IGMP",
+            description: "Internet Group Management",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc1112",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 3,
+            name: "GGP",
+            description: "Gateway-to-Gateway",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc823",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 4,
+            name: "IPv4",
+            description: "IPv4 encapsulation",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc2003",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 5,
+            name: "ST",
+            description: "Stream",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc1190",
+                },
+                Xref {
+                    ty: "rfc",
+                    data: "rfc1819",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 6,
+            name: "TCP",
+            description: "Transmission Control",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc9293",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 7,
+            name: "CBT",
+            description: "CBT",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Tony_Ballardie",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 8,
+            name: "EGP",
+            description: "Exterior Gateway Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc888",
+                },
+                Xref {
+                    ty: "person",
+                    data: "David_Mills",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 9,
+            name: "IGP",
+            description: "any private interior gateway             \n(used by Cisco for their IGRP)",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Internet_Assigned_Numbers_Authority",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 10,
+            name: "BBNRCCMON",
+            description: "BBN RCC Monitoring",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steve_Chipman",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 11,
+            name: "NVPII",
+            description: "Network Voice Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc741",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Steve_Casner",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 12,
+            name: "PUP",
+            description: "PUP",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 13,
+            name: "ARGUSdeprecated",
+            description: "ARGUS",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Robert_W_Scheifler",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 14,
+            name: "EMCON",
+            description: "EMCON",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Bich_Nguyen",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 15,
+            name: "XNET",
+            description: "Cross Net Debugger",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Jack_Haverty",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 16,
+            name: "CHAOS",
+            description: "Chaos",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "J_Noel_Chiappa",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 17,
+            name: "UDP",
+            description: "User Datagram",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc768",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Jon_Postel",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 18,
+            name: "MUX",
+            description: "Multiplexing",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Jon_Postel",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 19,
+            name: "DCNMEAS",
+            description: "DCN Measurement Subsystems",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "David_Mills",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 20,
+            name: "HMP",
+            description: "Host Monitoring",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc869",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Bob_Hinden",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 21,
+            name: "PRM",
+            description: "Packet Radio Measurement",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Zaw_Sing_Su",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 22,
+            name: "XNSIDP",
+            description: "XEROX NS IDP",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 23,
+            name: "TRUNK1",
+            description: "Trunk-1",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Barry_Boehm",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 24,
+            name: "TRUNK2",
+            description: "Trunk-2",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Barry_Boehm",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 25,
+            name: "LEAF1",
+            description: "Leaf-1",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Barry_Boehm",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 26,
+            name: "LEAF2",
+            description: "Leaf-2",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Barry_Boehm",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 27,
+            name: "RDP",
+            description: "Reliable Data Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc908",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Bob_Hinden",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 28,
+            name: "IRTP",
+            description: "Internet Reliable Transaction",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc938",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Trudy_Miller",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 29,
+            name: "ISOTP4",
+            description: "ISO Transport Protocol Class 4",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc905",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Robert_Cole",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 30,
+            name: "NETBLT",
+            description: "Bulk Data Transfer Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc969",
+                },
+                Xref {
+                    ty: "person",
+                    data: "David_Clark",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 31,
+            name: "MFENSP",
+            description: "MFE Network Services Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Barry_Howard",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 32,
+            name: "MERITINP",
+            description: "MERIT Internodal Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Hans_Werner_Braun",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 33,
+            name: "DCCP",
+            description: "Datagram Congestion Control Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc4340",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 34,
+            name: "3PC",
+            description: "Third Party Connect Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Stuart_A_Friedberg",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 35,
+            name: "IDPR",
+            description: "Inter-Domain Policy Routing Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Martha_Steenstrup",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 36,
+            name: "XTP",
+            description: "XTP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Greg_Chesson",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 37,
+            name: "DDP",
+            description: "Datagram Delivery Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Wesley_Craig",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 38,
+            name: "IDPRCMTP",
+            description: "IDPR Control Message Transport Proto",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Martha_Steenstrup",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 39,
+            name: "TP",
+            description: "TP++ Transport Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Dirk_Fromhein",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 40,
+            name: "IL",
+            description: "IL Transport Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Dave_Presotto",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 41,
+            name: "IPv6",
+            description: "IPv6 encapsulation",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc2473",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 42,
+            name: "SDRP",
+            description: "Source Demand Routing Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Deborah_Estrin",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 43,
+            name: "IPv6Route",
+            description: "Routing Header for IPv6",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steve_Deering",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 44,
+            name: "IPv6Frag",
+            description: "Fragment Header for IPv6",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steve_Deering",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 45,
+            name: "IDRP",
+            description: "Inter-Domain Routing Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Sue_Hares",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 46,
+            name: "RSVP",
+            description: "Reservation Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc2205",
+                },
+                Xref {
+                    ty: "rfc",
+                    data: "rfc3209",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Bob_Braden",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 47,
+            name: "GRE",
+            description: "Generic Routing Encapsulation",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc2784",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Tony_Li",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 48,
+            name: "DSR",
+            description: "Dynamic Source Routing Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc4728",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 49,
+            name: "BNA",
+            description: "BNA",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 50,
+            name: "ESP",
+            description: "Encap Security Payload",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc4303",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 51,
+            name: "AH",
+            description: "Authentication Header",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc4302",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 52,
+            name: "INLSP",
+            description: "Integrated Net Layer Security  TUBA",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "K_Robert_Glenn",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 53,
+            name: "SWIPEdeprecated",
+            description: "IP with Encryption",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "John_Ioannidis",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 54,
+            name: "NARP",
+            description: "NBMA Address Resolution Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc1735",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 55,
+            name: "MinIPv4",
+            description: "Minimal IPv4 Encapsulation",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc2004",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Charlie_Perkins",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 56,
+            name: "TLSP",
+            description: "Transport Layer Security Protocol        \nusing Kryptonet key management",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Christer_Oberg",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 57,
+            name: "SKIP",
+            description: "SKIP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Tom_Markson",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 58,
+            name: "IPv6ICMP",
+            description: "ICMP for IPv6",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc8200",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 59,
+            name: "IPv6NoNxt",
+            description: "No Next Header for IPv6",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc8200",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 60,
+            name: "IPv6Opts",
+            description: "Destination Options for IPv6",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc8200",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 61,
+            name: "anyhostinternalprotocol",
+            description: "any host internal protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Internet_Assigned_Numbers_Authority",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 62,
+            name: "CFTP",
+            description: "CFTP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Harry_Forsdick",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 63,
+            name: "anylocalnetwork",
+            description: "any local network",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Internet_Assigned_Numbers_Authority",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 64,
+            name: "SATEXPAK",
+            description: "SATNET and Backroom EXPAK",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steven_Blumenthal",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 65,
+            name: "KRYPTOLAN",
+            description: "Kryptolan",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 66,
+            name: "RVD",
+            description: "MIT Remote Virtual Disk Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Michael_Greenwald",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 67,
+            name: "IPPC",
+            description: "Internet Pluribus Packet Core",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steven_Blumenthal",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 68,
+            name: "anydistributedfilesystem",
+            description: "any distributed file system",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Internet_Assigned_Numbers_Authority",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 69,
+            name: "SATMON",
+            description: "SATNET Monitoring",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steven_Blumenthal",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 70,
+            name: "VISA",
+            description: "VISA Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Gene_Tsudik",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 71,
+            name: "IPCV",
+            description: "Internet Packet Core Utility",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steven_Blumenthal",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 72,
+            name: "CPNX",
+            description: "Computer Protocol Network Executive",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 73,
+            name: "CPHB",
+            description: "Computer Protocol Heart Beat",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 74,
+            name: "WSN",
+            description: "Wang Span Network",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 75,
+            name: "PVP",
+            description: "Packet Video Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steve_Casner",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 76,
+            name: "BRSATMON",
+            description: "Backroom SATNET Monitoring",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steven_Blumenthal",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 77,
+            name: "SUNND",
+            description: "SUN ND PROTOCOL-Temporary",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "William_Melohn",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 78,
+            name: "WBMON",
+            description: "WIDEBAND Monitoring",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steven_Blumenthal",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 79,
+            name: "WBEXPAK",
+            description: "WIDEBAND EXPAK",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Steven_Blumenthal",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 80,
+            name: "ISOIP",
+            description: "ISO Internet Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Marshall_T_Rose",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 81,
+            name: "VMTP",
+            description: "VMTP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Dave_Cheriton",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 82,
+            name: "SECUREVMTP",
+            description: "SECURE-VMTP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Dave_Cheriton",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 83,
+            name: "VINES",
+            description: "VINES",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 84,
+            name: "IPTM",
+            description: "Internet Protocol Traffic Manager",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Jim_Stevens",
+                },
+                Xref {
+                    ty: "note",
+                    data: "1",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 85,
+            name: "NSFNETIGP",
+            description: "NSFNET-IGP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Hans_Werner_Braun",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 86,
+            name: "DGP",
+            description: "Dissimilar Gateway Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Mike_Little",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 87,
+            name: "TCF",
+            description: "TCF",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Guillermo_A_Loyola",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 88,
+            name: "EIGRP",
+            description: "EIGRP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc7868",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 89,
+            name: "OSPFIGP",
+            description: "OSPFIGP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc1583",
+                },
+                Xref {
+                    ty: "rfc",
+                    data: "rfc2328",
+                },
+                Xref {
+                    ty: "rfc",
+                    data: "rfc5340",
+                },
+                Xref {
+                    ty: "person",
+                    data: "John_Moy",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 90,
+            name: "SpriteRPC",
+            description: "Sprite RPC Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 91,
+            name: "LARP",
+            description: "Locus Address Resolution Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 92,
+            name: "MTP",
+            description: "Multicast Transport Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Susie_Armstrong",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 93,
+            name: "AX25",
+            description: "AX.25 Frames",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Brian_Kantor",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 94,
+            name: "IPIP",
+            description: "IP-within-IP Encapsulation Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "John_Ioannidis",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 95,
+            name: "MICPdeprecated",
+            description: "Mobile Internetworking Control Pro.",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "John_Ioannidis",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 96,
+            name: "SCCSP",
+            description: "Semaphore Communications Sec. Pro.",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Howard_Hart",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 97,
+            name: "ETHERIP",
+            description: "Ethernet-within-IP Encapsulation",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc3378",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 98,
+            name: "ENCAP",
+            description: "Encapsulation Header",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc1241",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Robert_Woodburn",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 99,
+            name: "anyprivateencryptionscheme",
+            description: "any private encryption scheme",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Internet_Assigned_Numbers_Authority",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 100,
+            name: "GMTP",
+            description: "GMTP",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 101,
+            name: "IFMP",
+            description: "Ipsilon Flow Management Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Bob_Hinden",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 102,
+            name: "PNNI",
+            description: "PNNI over IP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Ross_Callon",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 103,
+            name: "PIM",
+            description: "Protocol Independent Multicast",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc7761",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Dino_Farinacci",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 104,
+            name: "ARIS",
+            description: "ARIS",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Nancy_Feldman",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 105,
+            name: "SCPS",
+            description: "SCPS",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Robert_Durst",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 106,
+            name: "QNX",
+            description: "QNX",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Michael_Hunter",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 107,
+            name: "AN",
+            description: "Active Networks",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Bob_Braden",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 108,
+            name: "IPComp",
+            description: "IP Payload Compression Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc2393",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 109,
+            name: "SNP",
+            description: "Sitara Networks Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Manickam_R_Sridhar",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 110,
+            name: "CompaqPeer",
+            description: "Compaq Peer Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Victor_Volpe",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 111,
+            name: "IPXinIP",
+            description: "IPX in IP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "CJ_Lee",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 112,
+            name: "VRRP",
+            description: "Virtual Router Redundancy Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc9568",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 113,
+            name: "PGM",
+            description: "PGM Reliable Transport Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Tony_Speakman",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 114,
+            name: "any0hopprotocol",
+            description: "any 0-hop protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Internet_Assigned_Numbers_Authority",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 115,
+            name: "L2TP",
+            description: "Layer Two Tunneling Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc3931",
+                },
+                Xref {
+                    ty: "person",
+                    data: "Bernard_Aboba",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 116,
+            name: "DDX",
+            description: "D-II Data Exchange (DDX)",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "John_Worley",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 117,
+            name: "IATP",
+            description: "Interactive Agent Transfer Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "John_Murphy",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 118,
+            name: "STP",
+            description: "Schedule Transfer Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Jean_Michel_Pittet",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 119,
+            name: "SRP",
+            description: "SpectraLink Radio Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Mark_Hamilton",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 120,
+            name: "UTI",
+            description: "UTI",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Peter_Lothberg",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 121,
+            name: "SMP",
+            description: "Simple Message Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Leif_Ekblad",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 122,
+            name: "SMdeprecated",
+            description: "Simple Multicast Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Jon_Crowcroft",
+                },
+                Xref {
+                    ty: "draft",
+                    data: "draft-perlman-simple-multicast",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 123,
+            name: "PTP",
+            description: "Performance Transparency Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Michael_Welzl",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 124,
+            name: "ISISoverIPv4",
+            description: "ISIS over IPv4",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Tony_Przygienda",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 125,
+            name: "FIRE",
+            description: "FIRE",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Criag_Partridge",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 126,
+            name: "CRTP",
+            description: "Combat Radio Transport Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Robert_Sautter",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 127,
+            name: "CRUDP",
+            description: "Combat Radio User Datagram",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Robert_Sautter",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 128,
+            name: "SSCOPMCE",
+            description: "SSCOPMCE",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Kurt_Waber",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 129,
+            name: "IPLT",
+            description: "IPLT",
+            comments: None,
+            parameters: None,
+            xrefs: [],
+        },
+        InformationElementSubRegistry {
+            value: 130,
+            name: "SPS",
+            description: "Secure Packet Shield",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Bill_McIntosh",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 131,
+            name: "PIPE",
+            description: "Private IP Encapsulation within IP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Bernhard_Petri",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 132,
+            name: "SCTP",
+            description: "Stream Control Transmission Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Randall_R_Stewart",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 133,
+            name: "FC",
+            description: "Fibre Channel",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Murali_Rajagopal",
+                },
+                Xref {
+                    ty: "rfc",
+                    data: "rfc6172",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 134,
+            name: "RSVPE2EIGNORE",
+            description: "RSVP-E2E-IGNORE",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc3175",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 135,
+            name: "MobilityHeader",
+            description: "Mobility Header",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc6275",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 136,
+            name: "UDPLite",
+            description: "UDPLite",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc3828",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 137,
+            name: "MPLSinIP",
+            description: "MPLS-in-IP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc4023",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 138,
+            name: "manet",
+            description: "MANET Protocols",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc5498",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 139,
+            name: "HIP",
+            description: "Host Identity Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc7401",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 140,
+            name: "Shim6",
+            description: "Shim6 Protocol",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc5533",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 141,
+            name: "WESP",
+            description: "Wrapped Encapsulating Security Payload",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc5840",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 142,
+            name: "ROHC",
+            description: "Robust Header Compression",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc5858",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 143,
+            name: "Ethernet",
+            description: "Ethernet",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc8986",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 144,
+            name: "AGGFRAG",
+            description: "AGGFRAG encapsulation payload for ESP",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc9347",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 145,
+            name: "NSH",
+            description: "Network Service Header",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "rfc",
+                    data: "rfc9491",
+                },
+            ],
+        },
+        InformationElementSubRegistry {
+            value: 255,
+            name: "Reserved255",
+            description: "Reserved",
+            comments: None,
+            parameters: None,
+            xrefs: [
+                Xref {
+                    ty: "person",
+                    data: "Internet_Assigned_Numbers_Authority",
+                },
+            ],
+        },
+    ],
+)

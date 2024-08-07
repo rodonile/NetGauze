@@ -30,7 +30,8 @@ criterion = { workspace = true, optional = true } # Dev dep for bench
 tracing = { workspace = true, optional = true }
 tokio-util = { workspace = true, features = ["codec"], optional = true }
 bytes = { workspace = true, optional = true }
-
+pnet = { version = "0.35" }
+pcap-file = { version = "2.0.0" }
 
 [features]
 default = ["serde"]
@@ -52,7 +53,6 @@ pcap-parser = { workspace = true, features = ["data"] }
 reqwest = { workspace = true, features = ["blocking"] }
 roxmltree = { workspace = true }
 netgauze-ipfix-code-generator = { version = "0.3.0", path = "../ipfix-code-generator" }
-
 
 [[bench]]
 name = "serde_benchmark"
