@@ -18,6 +18,7 @@ pub mod codec;
 pub mod ie;
 pub mod ipfix;
 pub mod netflow;
+pub mod pcap;
 #[cfg(feature = "serde")]
 pub mod wire;
 

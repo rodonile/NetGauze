@@ -346,6 +346,7 @@ impl WritablePdu<ScopeFieldSpecifierWritingError> for ScopeFieldSpecifier {
         writer.write_u16::<NetworkEndian>(self.length())?;
         let pen = self.element_id().pen();
         if pen != 0 {
+            // is it actually possible in nfv9 for a scope field to be a PEN IE?
             writer.write_u32::<NetworkEndian>(pen)?;
         }
         Ok(())
