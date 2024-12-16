@@ -56,7 +56,7 @@ pub(crate) enum HttpPublisherActorCommand {
 pub enum Message<T> {
     insert {
         ts: String,
-        node: String,
+        peer_src: String,
         writer_id: String,
         payload: T,
     },

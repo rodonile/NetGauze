@@ -45,7 +45,7 @@ pub async fn init_flow_collection(flow_config: FlowConfig) -> anyhow::Result<()>
                         config.clone(),
                         |x: Arc<FlowRequest>, writer_id: String| Message::insert {
                             ts: format!("{}", chrono::Utc::now().format("%Y-%m-%d %H:%M:%S")),
-                            node: format!("{}", x.0),
+                            peer_src: format!("{}", x.0.ip()),
                             writer_id,
                             payload: x.1.clone(),
                         },
