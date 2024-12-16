@@ -19,10 +19,7 @@ use figment::{
 };
 
 use figment::providers::Yaml;
-use netgauze_collector::{
-    config::{CollectorConfig},
-    init_flow_collection,
-};
+use netgauze_collector::{config::CollectorConfig, init_flow_collection};
 use std::{env, path::PathBuf, str::FromStr};
 use tracing::{info, Level};
 

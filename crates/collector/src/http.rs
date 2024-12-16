@@ -115,7 +115,9 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
                     match msg {
                         Ok(msg) => {
                             let msg = (self.converter)(msg, self.writer_id.clone());
-                            self.send(msg).await?;
+                            if let Err(err) = self.send(msg).await {
+                                error!("error sending message: {err}");
+                            }
                         },
                         Err(err) => {
                             error!("[{}] Shutting down due to error receiving flow packet {err}", self.name);
