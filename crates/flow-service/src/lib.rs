@@ -49,7 +49,7 @@ impl Display for Subscription {
 /// Enable socket reuse
 pub fn new_udp_reuse_port(
     local_addr: SocketAddr,
-    device: Option<String>,
+    _device: Option<String>,
 ) -> io::Result<tokio::net::UdpSocket> {
     let udp_sock = socket2::Socket::new(
         if local_addr.is_ipv4() {
@@ -67,18 +67,6 @@ pub fn new_udp_reuse_port(
     // from tokio-rs/mio/blob/master/src/sys/unix/net.rs
     udp_sock.set_cloexec(true)?;
     udp_sock.set_nonblocking(true)?;
-    if let Some(name) = device {
-        unsafe {
-            let c_str = std::ffi::CString::new(name)?;
-            let index = libc::if_nametoindex(c_str.as_ptr() as *const libc::c_char);
-            let index = std::num::NonZeroU32::new(index as u32);
-            if local_addr.is_ipv4() {
-                udp_sock.bind_device_by_index_v4(index)?;
-            } else {
-                udp_sock.bind_device_by_index_v6(index)?;
-            }
-        }
-    }
     udp_sock.bind(&socket2::SockAddr::from(local_addr))?;
     let udp_sock: std::net::UdpSocket = udp_sock.into();
     udp_sock.try_into()
