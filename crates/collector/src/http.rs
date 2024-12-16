@@ -171,12 +171,10 @@ impl HttpPublisherActorHandle {
         &self.name
     }
 
-    fn create_http2_client(
+    fn create_http_client(
         config: &HttpPublisherEndpoint,
     ) -> Result<reqwest::Client, reqwest::Error> {
-        let mut builder = reqwest::Client::builder()
-            // Enable HTTP/2 support
-            .http2_prior_knowledge();
+        let mut builder = reqwest::Client::builder();
         if let Some(timeout) = config.tcp_keepalive {
             builder = builder.timeout(timeout);
         }
@@ -205,7 +203,7 @@ impl HttpPublisherActorHandle {
         converter: F,
         msg_recv: async_channel::Receiver<Arc<T>>,
     ) -> Result<(JoinHandle<Result<String, reqwest::Error>>, Self), reqwest::Error> {
-        let client = HttpPublisherActorHandle::create_http2_client(&config)?;
+        let client = HttpPublisherActorHandle::create_http_client(&config)?;
         let (cmd_tx, cmd_rx) = mpsc::channel(100);
         info!("[{}] Starting HTTP publisher", name);
         let actor =
