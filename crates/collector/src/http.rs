@@ -15,6 +15,7 @@
 
 use serde::{Deserialize, Serialize};
 use std::{sync::Arc, time::Duration};
+use futures_util::SinkExt;
 use tokio::{sync::mpsc, task::JoinHandle};
 use tracing::{debug, error, info};
 
@@ -77,6 +78,7 @@ struct HttpPublisherActor<T, O, F: Fn(Arc<T>, String) -> Message<O>> {
     converter: F,
     msg_recv: async_channel::Receiver<Arc<T>>,
     cmd_recv: mpsc::Receiver<HttpPublisherActorCommand>,
+    buf: Vec<Message<O>>,
 }
 
 impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublisherActor<T, O, F> {
@@ -96,6 +98,7 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
             converter,
             msg_recv,
             cmd_recv,
+            buf: Vec::new(),
         }
     }
 
@@ -115,9 +118,13 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
                     match msg {
                         Ok(msg) => {
                             let msg = (self.converter)(msg, self.writer_id.clone());
-                            if let Err(err) = self.send(msg).await {
-                                error!("error sending message: {err}");
+                            self.buf.push(msg);
+                            if self.buf.len() > 100 {
+                                self.buf.clear();
                             }
+                            // if let Err(err) = self.send(msg).await {
+                            //     error!("error sending message: {err}");
+                            // }
                         },
                         Err(err) => {
                             error!("[{}] Shutting down due to error receiving flow packet {err}", self.name);
