@@ -122,6 +122,11 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
                     match msg {
                         Ok(msg) => {
                             let msg = (self.converter)(msg, self.writer_id.clone());
+                            if futures.len() > 10 {
+                                while futures.len() > 0 {
+                                    futures.next().await;
+                                }
+                            }
                             self.buf.push(msg);
                             if self.buf.len() > 100 {
                                 futures.push_back(Self::send(&self.client, self.url.clone(), self.buf.clone()));
