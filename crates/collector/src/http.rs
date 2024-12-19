@@ -106,12 +106,13 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
     }
 
     async fn send<M: Serialize>(client: &Client, url: String, value: M) -> reqwest::Result<()> {
+        debug!("Sending new batch");
         client
             .post(url.as_str())
             .json(&value)
             .send()
             .await
-            .map(|_| ())
+            .map(|_| {debug!("Batch sent")})
     }
 
     async fn run(mut self) -> Result<String, reqwest::Error> {
@@ -128,11 +129,11 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
                                 }
                             }
                             self.buf.push(msg);
+                            debug!("[{}] Queued up a message for sending, there are {} messages in flights", self.name, futures.len());
                             if self.buf.len() > 100 {
                                 futures.push_back(Self::send(&self.client, self.url.clone(), self.buf.clone()));
                                 self.buf.clear();
                             }
-                            debug!("[{}] Queued up a message for sending, there are {} messages in flights", self.name, futures.len());
                         },
                         Err(err) => {
                             error!("[{}] Shutting down due to error receiving flow packet {err}", self.name);
@@ -141,9 +142,9 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
                     }
                 }
                 ret = futures.next() => {
-                    //if let Some(msg) = ret {
+                    if ret.is_some() {
                         debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
-                    //}
+                    }
                 }
                 cmd = self.cmd_recv.recv() => {
                     return match cmd {
