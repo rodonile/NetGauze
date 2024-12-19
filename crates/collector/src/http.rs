@@ -143,7 +143,9 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
                             let msg = (self.converter)(msg, self.writer_id.clone());
                             if futures.len() > 10 {
                                // while futures.len() > 0 {
+                                debug!("[{}] clearing futures", self.name, futures.len());
                                     futures.next().await;
+                                debug!("[{}] futures cleared", self.name, futures.len());
                                 //}
                             }
                             self.buf.push(msg);
@@ -160,7 +162,7 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
                     }
                 }
                 Some(ret) = futures.next() => {
-                    
+
                     debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
                     //}
                 }
