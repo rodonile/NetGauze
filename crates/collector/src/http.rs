@@ -13,9 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use futures_util::{stream::FuturesOrdered, StreamExt};
+use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::{sync::Arc, time::Duration};
-use futures_util::SinkExt;
 use tokio::{sync::mpsc, task::JoinHandle};
 use tracing::{debug, error, info};
 
@@ -78,7 +79,6 @@ struct HttpPublisherActor<T, O, F: Fn(Arc<T>, String) -> Message<O>> {
     converter: F,
     msg_recv: async_channel::Receiver<Arc<T>>,
     cmd_recv: mpsc::Receiver<HttpPublisherActorCommand>,
-    buf: Vec<Message<O>>,
 }
 
 impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublisherActor<T, O, F> {
@@ -98,13 +98,12 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
             converter,
             msg_recv,
             cmd_recv,
-            buf: Vec::new(),
         }
     }
 
-    async fn send<M: Serialize>(&mut self, value: M) -> reqwest::Result<()> {
-        self.client
-            .post(self.url.as_str())
+    async fn send<M: Serialize>(client: &Client, url: String, value: M) -> reqwest::Result<()> {
+        client
+            .post(url.as_str())
             .json(&value)
             .send()
             .await
@@ -112,25 +111,24 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
     }
 
     async fn run(mut self) -> Result<String, reqwest::Error> {
+        let mut futures = FuturesOrdered::new();
         loop {
             tokio::select! {
                 msg = self.msg_recv.recv() => {
                     match msg {
                         Ok(msg) => {
                             let msg = (self.converter)(msg, self.writer_id.clone());
-                            self.buf.push(msg);
-                            if self.buf.len() > 100 {
-                                self.buf.clear();
-                            }
-                            // if let Err(err) = self.send(msg).await {
-                            //     error!("error sending message: {err}");
-                            // }
+                            futures.push_back(Self::send(&self.client, self.url.clone(), msg));
+                            debug!("[{}] Queued up a message for sending", self.name);
                         },
                         Err(err) => {
                             error!("[{}] Shutting down due to error receiving flow packet {err}", self.name);
                             return Ok(self.name)
                         }
                     }
+                }
+                ret = futures.next() => {
+                    debug!("[{}] message sent: {ret:?}", self.name);
                 }
                 cmd = self.cmd_recv.recv() => {
                     return match cmd {
