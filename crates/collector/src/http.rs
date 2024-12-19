@@ -118,8 +118,13 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
                     match msg {
                         Ok(msg) => {
                             let msg = (self.converter)(msg, self.writer_id.clone());
+                            // futures.len() == 100 {
+                            //     futures.next().await;
+                            //     futures.next().await;
+                            //     futures.next().await;
+                            // }
                             futures.push_back(Self::send(&self.client, self.url.clone(), msg));
-                            debug!("[{}] Queued up a message for sending", self.name);
+                            debug!("[{}] Queued up a message for sending, there are {} messages in flights", self.name, futures.len());
                         },
                         Err(err) => {
                             error!("[{}] Shutting down due to error receiving flow packet {err}", self.name);
@@ -128,7 +133,7 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
                     }
                 }
                 ret = futures.next() => {
-                    debug!("[{}] message sent: {ret:?}", self.name);
+                    debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
                 }
                 cmd = self.cmd_recv.recv() => {
                     return match cmd {
