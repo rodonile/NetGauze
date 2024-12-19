@@ -55,7 +55,7 @@ pub(crate) enum HttpPublisherActorCommand {
 /// Message representation to be sent to Feldera
 #[allow(non_camel_case_types)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Message<T> {
+pub enum Message<T: Clone> {
     insert {
         ts: String,
         peer_src: String,
@@ -64,7 +64,7 @@ pub enum Message<T> {
     },
 }
 
-struct HttpPublisherActor<T, O, F: Fn(Arc<T>, String) -> Message<O>> {
+struct HttpPublisherActor<T, O: std::clone::Clone, F: Fn(Arc<T>, String) -> Message<O>> {
     /// Human friendly name for logging purposes
     name: String,
     /// Writer ID used to annotate the messages
@@ -79,9 +79,12 @@ struct HttpPublisherActor<T, O, F: Fn(Arc<T>, String) -> Message<O>> {
     converter: F,
     msg_recv: async_channel::Receiver<Arc<T>>,
     cmd_recv: mpsc::Receiver<HttpPublisherActorCommand>,
+    buf: Vec<Message<O>>,
 }
 
-impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublisherActor<T, O, F> {
+impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Message<O>>
+    HttpPublisherActor<T, O, F>
+{
     fn new(
         name: String,
         client: reqwest::Client,
@@ -98,6 +101,7 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
             converter,
             msg_recv,
             cmd_recv,
+            buf: Vec::new(),
         }
     }
 
@@ -118,12 +122,11 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
                     match msg {
                         Ok(msg) => {
                             let msg = (self.converter)(msg, self.writer_id.clone());
-                            // futures.len() == 100 {
-                            //     futures.next().await;
-                            //     futures.next().await;
-                            //     futures.next().await;
-                            // }
-                            futures.push_back(Self::send(&self.client, self.url.clone(), msg));
+                            self.buf.push(msg);
+                            if self.buf.len() > 100 {
+                                futures.push_back(Self::send(&self.client, self.url.clone(), self.buf.clone()));
+                                self.buf.clear();
+                            }
                             debug!("[{}] Queued up a message for sending, there are {} messages in flights", self.name, futures.len());
                         },
                         Err(err) => {
@@ -133,7 +136,9 @@ impl<T: Serialize, O: Serialize, F: Fn(Arc<T>, String) -> Message<O>> HttpPublis
                     }
                 }
                 ret = futures.next() => {
-                    debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
+                    //if let Some(msg) = ret {
+                        debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
+                    //}
                 }
                 cmd = self.cmd_recv.recv() => {
                     return match cmd {
@@ -205,7 +210,7 @@ impl HttpPublisherActorHandle {
 
     pub fn new<
         T: Serialize + Send + Sync + 'static,
-        O: Serialize + Send + Sync + 'static,
+        O: Serialize + std::clone::Clone + Send + Sync + 'static,
         F: Fn(Arc<T>, String) -> Message<O> + Send + 'static,
     >(
         name: String,
