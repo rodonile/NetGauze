@@ -159,10 +159,10 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
                         }
                     }
                 }
-                ret = futures.next() => {
-                    if ret.is_some() {
-                        debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
-                    }
+                Some(ret) = futures.next() => {
+                    
+                    debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
+                    //}
                 }
             }
         }
