@@ -119,14 +119,32 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
         let mut futures = FuturesOrdered::new();
         loop {
             tokio::select! {
+                biased;
+                 cmd = self.cmd_recv.recv() => {
+                    return match cmd {
+                        None => {
+                            debug!("[{}] Shutting down due to close command stream", self.name);
+                            Ok(self.name.clone())
+                        }
+                        Some(cmd) => {
+                            match cmd {
+                                HttpPublisherActorCommand::Shutdown(tx) => {
+                                    info!("[{}] Received shutdown command, shutting down", self.name);
+                                    let _ = tx.send(self.name.clone()).await;
+                                    Ok(self.name.clone())
+                                }
+                            }
+                        }
+                    }
+                }
                 msg = self.msg_recv.recv() => {
                     match msg {
                         Ok(msg) => {
                             let msg = (self.converter)(msg, self.writer_id.clone());
                             if futures.len() > 10 {
-                                while futures.len() > 0 {
+                               // while futures.len() > 0 {
                                     futures.next().await;
-                                }
+                                //}
                             }
                             self.buf.push(msg);
                             debug!("[{}] Queued up a message for sending, there are {} messages in flights", self.name, futures.len());
@@ -144,23 +162,6 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
                 ret = futures.next() => {
                     if ret.is_some() {
                         debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
-                    }
-                }
-                cmd = self.cmd_recv.recv() => {
-                    return match cmd {
-                        None => {
-                            debug!("[{}] Shutting down due to close command stream", self.name);
-                            Ok(self.name.clone())
-                        }
-                        Some(cmd) => {
-                            match cmd {
-                                HttpPublisherActorCommand::Shutdown(tx) => {
-                                    info!("[{}] Received shutdown command, shutting down", self.name);
-                                    let _ = tx.send(self.name.clone()).await;
-                                    Ok(self.name.clone())
-                                }
-                            }
-                        }
                     }
                 }
             }
