@@ -14,7 +14,6 @@
 // limitations under the License.
 
 use futures_util::{stream::FuturesOrdered, StreamExt};
-use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::{sync::Arc, time::Duration};
 use tokio::{sync::mpsc, task::JoinHandle};
@@ -64,7 +63,7 @@ pub enum Message<T: Clone> {
     },
 }
 
-struct HttpPublisherActor<T, O: std::clone::Clone, F: Fn(Arc<T>, String) -> Message<O>> {
+struct HttpPublisherActor<T, O: Clone, F: Fn(Arc<T>, String) -> Message<O>> {
     /// Human friendly name for logging purposes
     name: String,
     /// Writer ID used to annotate the messages
@@ -82,7 +81,7 @@ struct HttpPublisherActor<T, O: std::clone::Clone, F: Fn(Arc<T>, String) -> Mess
     buf: Vec<Message<O>>,
 }
 
-impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Message<O>>
+impl<T: Serialize, O: Serialize + Clone, F: Fn(Arc<T>, String) -> Message<O>>
     HttpPublisherActor<T, O, F>
 {
     fn new(
@@ -105,14 +104,18 @@ impl<T: Serialize, O: Serialize + std::clone::Clone, F: Fn(Arc<T>, String) -> Me
         }
     }
 
-    async fn send<M: Serialize>(client: &Client, url: String, value: M) -> reqwest::Result<()> {
+    async fn send<M: Serialize>(
+        client: &reqwest::Client,
+        url: String,
+        value: M,
+    ) -> reqwest::Result<()> {
         debug!("Sending new batch");
         client
             .post(url.as_str())
             .json(&value)
             .send()
             .await
-            .map(|_| {debug!("Batch sent")})
+            .map(|_| debug!("Batch sent"))
     }
 
     async fn run(mut self) -> Result<String, reqwest::Error> {
@@ -219,7 +222,7 @@ impl HttpPublisherActorHandle {
 
     pub fn new<
         T: Serialize + Send + Sync + 'static,
-        O: Serialize + std::clone::Clone + Send + Sync + 'static,
+        O: Serialize + Clone + Send + Sync + 'static,
         F: Fn(Arc<T>, String) -> Message<O> + Send + 'static,
     >(
         name: String,

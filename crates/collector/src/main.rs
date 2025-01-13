@@ -41,7 +41,7 @@ fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
     let config_file = PathBuf::from(&args[1]);
     let config: CollectorConfig = match Figment::new()
         .merge(Yaml::file(config_file))
-        .merge(Env::prefixed("APP_"))
+        .merge(Env::prefixed("NG_"))
         .extract()
     {
         Ok(config) => config,
