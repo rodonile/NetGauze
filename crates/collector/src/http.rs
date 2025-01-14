@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use futures_util::{stream::FuturesOrdered, StreamExt};
+use futures_util::{stream::FuturesOrdered, SinkExt, StreamExt};
 use serde::{Deserialize, Serialize};
 use std::{sync::Arc, time::Duration};
 use tokio::{sync::mpsc, task::JoinHandle};
@@ -104,10 +104,10 @@ impl<T: Serialize, O: Serialize + Clone, F: Fn(Arc<T>, String) -> Message<O>>
         }
     }
 
-    async fn send<M: Serialize>(
-        client: &reqwest::Client,
+    async fn send<'a, M: Serialize>(
+        client: &'_ reqwest::Client,
         url: String,
-        value: M,
+        value: &'a M,
     ) -> reqwest::Result<()> {
         debug!("Sending new batch");
         client
@@ -119,7 +119,6 @@ impl<T: Serialize, O: Serialize + Clone, F: Fn(Arc<T>, String) -> Message<O>>
     }
 
     async fn run(mut self) -> Result<String, reqwest::Error> {
-        let mut futures = FuturesOrdered::new();
         loop {
             tokio::select! {
                 biased;
@@ -144,17 +143,12 @@ impl<T: Serialize, O: Serialize + Clone, F: Fn(Arc<T>, String) -> Message<O>>
                     match msg {
                         Ok(msg) => {
                             let msg = (self.converter)(msg, self.writer_id.clone());
-                            if futures.len() > 10 {
-                               // while futures.len() > 0 {
-                                debug!("[{}] clearing futures {}", self.name, futures.len());
-                                    futures.next().await;
-                                debug!("[{}] futures cleared {}", self.name, futures.len());
-                                //}
-                            }
                             self.buf.push(msg);
-                            debug!("[{}] Queued up a message for sending, there are {} messages in flights", self.name, futures.len());
+                            debug!("[{}] Queued up a message for sending, there are {} messages in the queue", self.name, self.buf.len());
                             if self.buf.len() > 100 {
-                                futures.push_back(Self::send(&self.client, self.url.clone(), self.buf.clone()));
+                                debug!("[{}] Blocking to send {} messages", self.name, self.buf.len());
+                                Self::send(&self.client, self.url.clone(), &self.buf).await?;
+                                debug!("[{}] messages send {} clearing buffer", self.name, self.buf.len());
                                 self.buf.clear();
                             }
                         },
@@ -163,11 +157,6 @@ impl<T: Serialize, O: Serialize + Clone, F: Fn(Arc<T>, String) -> Message<O>>
                             return Ok(self.name)
                         }
                     }
-                }
-                Some(ret) = futures.next() => {
-
-                    debug!("[{}] message sent: {ret:?}, there are {} messages in flights", self.name, futures.len());
-                    //}
                 }
             }
         }
