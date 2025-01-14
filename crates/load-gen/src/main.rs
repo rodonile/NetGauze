@@ -76,6 +76,7 @@ pub async fn start_sender(
     let producer: FutureProducer = ClientConfig::new()
         .set("bootstrap.servers", broker)
         .set("message.timeout.ms", "5000")
+        .set("compression.type", "gzip")
         .create()
         .expect("Producer creation error");
 
