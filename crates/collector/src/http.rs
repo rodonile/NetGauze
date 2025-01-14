@@ -145,10 +145,10 @@ impl<T: Serialize, O: Serialize + Clone, F: Fn(Arc<T>, String) -> Message<O>>
                             let msg = (self.converter)(msg, self.writer_id.clone());
                             self.buf.push(msg);
                             debug!("[{}] Queued up a message for sending, there are {} messages in the queue", self.name, self.buf.len());
-                            if self.buf.len() > 100 {
-                                debug!("[{}] Blocking to send {} messages", self.name, self.buf.len());
+                            if self.buf.len() > 300 {
+                                info!("[{}] Blocking to send {} messages", self.name, self.buf.len());
                                 Self::send(&self.client, self.url.clone(), &self.buf).await?;
-                                debug!("[{}] messages send {} clearing buffer", self.name, self.buf.len());
+                                info!("[{}] messages send {} clearing buffer", self.name, self.buf.len());
                                 self.buf.clear();
                             }
                         },
