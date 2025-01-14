@@ -103,7 +103,8 @@ pub async fn start_sender(
             Duration::from_secs(0),
         );
         match produce_future.await {
-            Ok(delivery) => println!("Sent: {:?}", delivery),
+            // Ok(delivery) => println!("Sent: {:?}", delivery),
+            Ok(delivery) => {},
             Err((e, _)) => println!("Error: {:?}", e),
         }
         counter.fetch_add(1, Ordering::Relaxed);
