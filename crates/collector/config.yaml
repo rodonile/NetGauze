@@ -13,7 +13,7 @@ flow:
     # NetGauze can listen to multiple addresses/interfaces at the same time
     - address: 0.0.0.0:9991
       # Optionally Bind to an interface/VRF
-#     interface: eth0
+      interface: vrf-dev
       # Optionally, number of I/O tasks per address/interface, default is 1
       workers: 2
     # more interfaces/ip ares possible
@@ -24,10 +24,10 @@ flow:
   # A packet is copied for each publisher group, and load-balancing is defined between endpoints in the same group.
   publishers:
     group1:
-      buffer_size: 1000
+      buffer_size: 10000
       endpoints:
         http1: !Http
-          url: http://10.212.242.69:8080/v0/pipelines/vmware/ingress/flows?format=json
+          url: http://localhost:8080/v0/pipelines/vmware/ingress/flows?format=json&array=true
           writer_id: writer1
           #http2: !Http
           #url: http://10.212.242.69:8080/ingress/flows?format=json

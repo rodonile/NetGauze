@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="ipfix.xsl"?>
+<?xml-model href="ipfix.rng" schematypens="http://relaxng.org/ns/structure/1.0" ?>
+<registry xmlns="http://www.iana.org/assignments" id="ipfix">
+    <registry id="ipfix-information-elements">
+        <title>HUAWEI PEN=2011 IPFIX Information Elements</title>
+        <record>
+            <name>unknown</name>
+            <dataType>unsigned16</dataType>
+            <dataTypeSemantics>default</dataTypeSemantics>
+            <elementId>232</elementId>
+            <applicability>data</applicability>
+            <status>current</status>
+            <description>
+                <paragraph>
+                    Unknown Information Element.
+                </paragraph>
+            </description>
+            <units></units>
+            <xref type="html" data=""/>
+            <revision>0</revision>
+            <date>2024-12-13</date>
+        </record>
+    </registry>
+</registry>

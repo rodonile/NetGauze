@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="ipfix.xsl"?>
+<?xml-model href="ipfix.rng" schematypens="http://relaxng.org/ns/structure/1.0" ?>
+<registry xmlns="http://www.iana.org/assignments" id="ipfix">
+    <registry id="ipfix-information-elements">
+        <title>NetGauze IPFIX Information Elements</title>
+
+        <record>
+            <name>peerIPv4Address</name>
+            <dataType>ipv4Address</dataType>
+            <dataTypeSemantics>default</dataTypeSemantics>
+            <elementId>1</elementId>
+            <applicability>all</applicability>
+            <status>current</status>
+            <description>
+                <paragraph>
+                    The IPv4 address or the peer router sending this flow record.
+                </paragraph>
+            </description>
+            <units></units>
+            <xref type="html" data="https://github.com/NetGauze/NetGauze"/>
+            <revision>0</revision>
+            <date>2024-10-11</date>
+        </record>
+
+        <record>
+            <name>peerIPv6Address</name>
+            <dataType>ipv6Address</dataType>
+            <dataTypeSemantics>default</dataTypeSemantics>
+            <elementId>2</elementId>
+            <applicability>all</applicability>
+            <status>current</status>
+            <description>
+                <paragraph>
+                    The IPv6 address or the peer router sending this flow record.
+                </paragraph>
+            </description>
+            <units></units>
+            <xref type="html" data="https://github.com/NetGauze/NetGauze"/>
+            <revision>0</revision>
+            <date>2024-10-11</date>
+        </record>
+
+        <record>
+            <name>collectorHostname</name>
+            <dataType>string</dataType>
+            <dataTypeSemantics>default</dataTypeSemantics>
+            <elementId>3</elementId>
+            <applicability>data</applicability>
+            <status>current</status>
+            <description>
+                <paragraph>
+                    The name of the NetGauze collector that received this flow record.
+                </paragraph>
+            </description>
+            <units></units>
+            <xref type="html" data="https://github.com/NetGauze/NetGauze"/>
+            <revision>0</revision>
+            <date>2024-10-11</date>
+        </record>
+
+        <record>
+            <name>collectorLocation</name>
+            <dataType>string</dataType>
+            <dataTypeSemantics>default</dataTypeSemantics>
+            <elementId>4</elementId>
+            <applicability>data</applicability>
+            <status>current</status>
+            <description>
+                <paragraph>
+                    The location of the NetGauze collector that received this flow record.
+                </paragraph>
+            </description>
+            <units></units>
+            <xref type="html" data="https://github.com/NetGauze/NetGauze"/>
+            <revision>0</revision>
+            <date>2024-10-11</date>
+        </record>
+
+        <record>
+            <name>timestampArrival</name>
+            <dataType>dateTimeSeconds</dataType>
+            <dataTypeSemantics>default</dataTypeSemantics>
+            <elementId>10</elementId>
+            <applicability>data</applicability>
+            <status>current</status>
+            <description>
+                <paragraph>
+                    The absolute timestamp of arrival of this flow record at the NetGauze collector.
+                </paragraph>
+            </description>
+            <units>seconds</units>
+            <xref type="html" data="https://github.com/NetGauze/NetGauze"/>
+            <revision>0</revision>
+            <date>2024-10-11</date>
+        </record>
+
+        <record>
+            <name>isRenormalized</name>
+            <dataType>boolean</dataType>
+            <dataTypeSemantics>default</dataTypeSemantics>
+            <elementId>20</elementId>
+            <applicability>data</applicability>
+            <status>current</status>
+            <description>
+                <paragraph>
+                    Flag to signal whether octetDeltaCount and packetDeltaCount have been renormalized.
+                </paragraph>
+            </description>
+            <units></units>
+            <xref type="html" data="https://github.com/NetGauze/NetGauze"/>
+            <revision>0</revision>
+            <date>2024-10-11</date>
+        </record>
+
+        <record>
+            <name>samplingInfoOrigin</name>
+            <dataType>string</dataType>
+            <dataTypeSemantics>default</dataTypeSemantics>
+            <elementId>21</elementId>
+            <applicability>data</applicability>
+            <status>current</status>
+            <description>
+                <paragraph>
+                    The value representing the origin where the sampling data is coming from. 
+                    Example: flow_record: from Flow Data Record
+                             flow_option: from Option Data Record
+                             map: from static maps
+                </paragraph>
+            </description>
+            <units></units>
+            <xref type="html" data="https://github.com/NetGauze/NetGauze"/>
+            <revision>0</revision>
+            <date>2024-10-11</date>
+        </record>
+        
+    </registry>
+</registry>
