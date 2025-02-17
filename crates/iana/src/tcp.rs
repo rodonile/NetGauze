@@ -28,15 +28,17 @@
 //! println!("{}", flags_json);
 //! // output: {"FIN":true,"SYN":true,"RST":true,"PSH":false,"ACK":false,"URG":false,"ECE":true,"CWR":false}
 //! let value2: u8 = u8::from(flags);
-//!   
+//!
 //! assert_eq!(value, value2);
 //! ```
 
 use serde::{Deserialize, Serialize};
+use std::ops::{BitOr, BitOrAssign};
+use std::fmt::{Display, Formatter};
 
 /// TCP Header Flags registered at IANA
 /// [TCP Parameters](https://www.iana.org/assignments/tcp-parameters/tcp-parameters.xml)
-#[derive(PartialEq, Eq, Clone, Copy, Debug, Hash, Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Clone, Copy, Debug, Default, Hash, Serialize, Deserialize)]
 #[allow(non_snake_case)]
 #[cfg_attr(feature = "fuzz", derive(arbitrary::Arbitrary))]
 pub struct TCPHeaderFlags {
@@ -90,6 +92,52 @@ impl TCPHeaderFlags {
             CWR,
         }
     }
+}
+
+impl BitOr for TCPHeaderFlags {
+        type Output = Self;
+
+        fn bitor(self, rhs: Self) -> Self::Output {
+                TCPHeaderFlags {
+                FIN: self.FIN | rhs.FIN,
+                SYN: self.SYN | rhs.SYN,
+                RST: self.RST | rhs.RST,
+                PSH: self.PSH | rhs.PSH,
+                ACK: self.ACK | rhs.ACK,
+                URG: self.URG | rhs.URG,
+                ECE: self.ECE | rhs.ECE,
+                CWR: self.CWR | rhs.CWR,
+                }
+        }
+}
+
+impl BitOrAssign for TCPHeaderFlags {
+        fn bitor_assign(&mut self, rhs: Self) {
+                self.FIN |= rhs.FIN;
+                self.SYN |= rhs.SYN;
+                self.RST |= rhs.RST;
+                self.PSH |= rhs.PSH;
+                self.ACK |= rhs.ACK;
+                self.URG |= rhs.URG;
+                self.ECE |= rhs.ECE;
+                self.CWR |= rhs.CWR;
+        }
+}
+
+// Discuss: is ok to have this formatting for now?
+impl Display for TCPHeaderFlags {
+  fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+      let mut flags = Vec::new();
+      if self.FIN { flags.push("FIN"); }
+      if self.SYN { flags.push("SYN"); }
+      if self.RST { flags.push("RST"); }
+      if self.PSH { flags.push("PSH"); }
+      if self.ACK { flags.push("ACK"); }
+      if self.URG { flags.push("URG"); }
+      if self.ECE { flags.push("ECE"); }
+      if self.CWR { flags.push("CWR"); }
+      write!(f, "{:?}", flags)
+  }
 }
 
 impl From<u16> for TCPHeaderFlags {
@@ -219,4 +267,63 @@ mod tests {
         let value2: u8 = flags.into();
         assert_eq!(value, value2);
     }
+
+    #[test]
+    fn test_bitor() {
+        let flags1 = TCPHeaderFlags {
+            FIN: true,
+            SYN: false,
+            RST: false,
+            PSH: false,
+            ACK: false,
+            URG: true,
+            ECE: false,
+            CWR: false,
+        };
+        let mut flags2 = TCPHeaderFlags {
+            FIN: false,
+            SYN: true,
+            RST: false,
+            PSH: false,
+            ACK: false,
+            URG: false,
+            ECE: false,
+            CWR: false,
+        };
+        let flags3 = flags1 | flags2;
+        assert_eq!(
+            flags3,
+            TCPHeaderFlags {
+                FIN: true,
+                SYN: true,
+                RST: false,
+                PSH: false,
+                ACK: false,
+                URG: true,
+                ECE: false,
+                CWR: false,
+            }
+        );
+        flags2 |= flags1;
+        assert_eq!(
+                flags2,
+                flags3
+        )
+    }
+
+     #[test]
+     fn test_display() {
+         let flags = TCPHeaderFlags {
+             FIN: true,
+             SYN: true,
+             RST: true,
+             PSH: false,
+             ACK: false,
+             URG: false,
+             ECE: true,
+             CWR: false,
+         };
+         assert_eq!(format!("{}", flags), "[\"FIN\", \"SYN\", \"RST\", \"ECE\"]");
+     }
+
 }
