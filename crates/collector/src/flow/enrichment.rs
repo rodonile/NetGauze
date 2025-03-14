@@ -26,6 +26,9 @@
 //!   actor
 //! - `EnrichmentOperation` - Operations to update/delete enrichment data
 
+
+// TODO: add counter for enriched flows (counter for enriched and one for default)
+
 use crate::flow::EnrichedFlow;
 use netgauze_analytics::aggregation::Window;
 use netgauze_flow_pkt::FlatFlowInfo;
@@ -36,6 +39,7 @@ use std::{
 };
 use tokio::{sync::mpsc, task::JoinHandle};
 use tracing::{error, info, warn};
+use std::sync::{Arc, RwLock};
 
 /// Operations to update or delete enrichment data
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -101,8 +105,10 @@ impl FlowEnrichmentStats {
     }
 }
 
+#[derive(Debug)]
 struct FlowEnrichment {
-    labels: HashMap<IpAddr, (u32, HashMap<String, String>)>,
+    // labels: HashMap<IpAddr, (u32, HashMap<String, String>)>,
+    labels: Arc<RwLock<HashMap<IpAddr, (u32, HashMap<String, String>)>>>,
     writer_id: String,
     cmd_rx: mpsc::Receiver<FlowEnrichmentActorCommand>,
     enrichment_rx: async_channel::Receiver<EnrichmentOperation>,
@@ -129,8 +135,8 @@ impl FlowEnrichment {
             ]),
         );
         Self {
+            labels: Arc::new(RwLock::new(HashMap::new())),
             writer_id,
-            labels: HashMap::new(),
             cmd_rx,
             enrichment_rx,
             agg_rx,
@@ -141,29 +147,42 @@ impl FlowEnrichment {
     }
 
     fn apply_enrichment(&mut self, op: EnrichmentOperation) {
+        info!("Received enrichment Operation: {op:?}");
+        let mut labels = self.labels.write().unwrap();
         match op {
             EnrichmentOperation::Upsert(id, ip, enrichment) => {
-                self.labels.insert(ip, (id, enrichment));
+                info!("Inserting enrichment: {id} {ip} {enrichment:?}");
+                labels.insert(ip, (id, enrichment));
+                info!("Label Map after insert: {:?}", labels);
             }
             EnrichmentOperation::Delete(id) => {
                 let mut to_remove = None;
-                for (ip, (i, _)) in &self.labels {
+                for (ip, (i, _)) in &*labels {
                     if id == *i {
                         to_remove = Some(*ip);
                         break;
                     }
                 }
                 if let Some(ip) = to_remove {
-                    self.labels.remove(&ip);
+                    labels.remove(&ip);
                 }
+                info!("Label Map after delete: {:?}", labels);
             }
         }
     }
 
     fn enrich(&self, window: Window, peer: SocketAddr, flow: FlatFlowInfo) -> EnrichedFlow {
-        let (_, labels) = self.labels.get(&peer.ip()).unwrap_or(&self.default_labels);
+        info!("Label Map in enrich: {:?}", self.labels);
+
+        let labels = self.labels.read().unwrap();
+
+        let (_, labels) = labels.get(&peer.ip()).unwrap_or(&self.default_labels);
         let (window_start, window_end) = window;
         let ts = chrono::Utc::now();
+
+        info!("Label Map in enrich: {:?}", labels);
+        info!("Enriching flow: {} with labels: {:?}", serde_json::to_string(&flow).unwrap(), labels);
+
         EnrichedFlow {
             labels: labels.clone(),
             peer_src: peer.ip(),
@@ -196,7 +215,9 @@ impl FlowEnrichment {
                     match enrichment {
                         Ok(op) => {
                             self.stats.received_enrichment_ops.add(1, &[]);
+                            info!("Received enrichment operation: {op:?}");
                             self.apply_enrichment(op);
+                            info!("FlowEnrichment struct after apply_enrichment: {:?}", self);
                         }
                         Err(err) => {
                             warn!("Enrichment channel closed, shutting down: {err:?}");
@@ -217,13 +238,19 @@ impl FlowEnrichment {
                                     opentelemetry::Value::I64(peer.port().into()),
                                 ),
                             ];
+
+                            info!("FlowEnrichment struct before enrich: {:?}", self);
+
                             self.stats.received_flows.add(1, &peer_tags);
                             let enriched = self.enrich(window, peer, flat_flow);
+
+                            info!("Enriched flow: {}", serde_json::to_string(&enriched).unwrap());
+
                             if let Err(err) = self.enriched_tx.send(enriched).await {
                                 error!("FlowEnrichment send error: {err}");
-                                 self.stats.send_error.add(1, &peer_tags);
+                                self.stats.send_error.add(1, &peer_tags);
                             } else {
-                                 self.stats.sent.add(1, &peer_tags);
+                                self.stats.sent.add(1, &peer_tags);
                             }
                         }
                         Err(err) => {

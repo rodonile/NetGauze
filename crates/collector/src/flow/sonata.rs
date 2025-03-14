@@ -203,7 +203,9 @@ impl SonataActor {
         // Deserialize the str payload as a SonataData struct
         let sonata_data = match msg.payload() {
             Some(p) => match serde_json::from_slice::<SonataData>(p) {
-                Ok(data) => data,
+                Ok(data) => {
+                    info!("Sonata messate received: {}", serde_json::to_string(&data).unwrap());
+                    data},
                 Err(err) => {
                     self.stats.json_decoding_error.add(
                         1,
