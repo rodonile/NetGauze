@@ -1,0 +1,9 @@
+services:
+  netgauze-collector:
+    image: netgauze-collector
+    container_name: netgauze-collector
+    network_mode: host
+    volumes:
+      - /home/taarole8/sbd_ssl/:/home/taarole8/sbd_ssl
+      # - /home/taarole8/netgauze-dev/Netgauze/docker-bin/:/opt/bin
+    entrypoint: ["/opt/bin/netgauze-collector", "crates/collector/config_vmware_full.yaml"]
