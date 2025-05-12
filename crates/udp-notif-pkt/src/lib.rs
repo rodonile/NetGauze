@@ -21,10 +21,11 @@ pub mod yang;
 
 use bytes::Bytes;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use std::{collections::HashMap, convert::TryFrom};
 use strum_macros::Display;
 
-use yang::notification::Notification;
+use yang::notification::{Notification, NotificationEnvelope};
 
 const UDP_NOTIF_VERSION: u8 = 1;
 
@@ -161,15 +162,6 @@ pub(crate) fn arbitrary_bytes(u: &mut arbitrary::Unstructured<'_>) -> arbitrary:
     Ok(Bytes::from(value))
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
-pub enum UdpNotifPayload {
-    #[serde(rename = "ietf-notification:notification")]
-    Notification(Notification),
-
-    #[serde(untagged)]
-    Unknown(Bytes),
-}
-
 // TODO: keep here or move to a separate file?
 #[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct UdpNotifPacketDecoded {
@@ -216,56 +208,58 @@ impl UdpNotifPacketDecoded {
     }
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
+pub enum UdpNotifPayload {
+    //TODO: rename to old version s.t. it's clear this is the deprecated version
+    #[serde(rename = "ietf-notification:notification")]
+    Notification(Notification),
+
+    #[serde(rename = "ietf-yp-notification:envelope")]
+    NotificationEnvelope(NotificationEnvelope),
+    // TODO: fix this how to handle unknown payloads (error or forward the message?)
+    // --> remove this, if it's unknown we just ignore it and give error...
+    // #[serde(other)]
+    // Unknown,
+    // Unknown(Bytes),
+}
+
 #[derive(Debug, Display)]
-pub enum ConversionError {
+pub enum UdpNotifPayloadConversionError {
     InvalidPayload,
     UnsupportedMediaType(MediaType),
     JsonError(serde_json::Error),
-    Utf8Error(std::str::Utf8Error),
     CborError(ciborium::de::Error<std::io::Error>),
 }
 
-impl From<serde_json::Error> for ConversionError {
+impl From<serde_json::Error> for UdpNotifPayloadConversionError {
     fn from(err: serde_json::Error) -> Self {
-        ConversionError::JsonError(err)
+        UdpNotifPayloadConversionError::JsonError(err)
     }
 }
 
-impl From<std::str::Utf8Error> for ConversionError {
-    fn from(err: std::str::Utf8Error) -> Self {
-        ConversionError::Utf8Error(err)
-    }
-}
-
-impl From<ciborium::de::Error<std::io::Error>> for ConversionError {
+impl From<ciborium::de::Error<std::io::Error>> for UdpNotifPayloadConversionError {
     fn from(err: ciborium::de::Error<std::io::Error>) -> Self {
-        ConversionError::CborError(err)
+        UdpNotifPayloadConversionError::CborError(err)
     }
 }
 
 impl TryFrom<&UdpNotifPacket> for UdpNotifPacketDecoded {
-    type Error = ConversionError;
+    type Error = UdpNotifPayloadConversionError;
 
-    fn try_from(pkt: &UdpNotifPacket) -> Result<Self, ConversionError> {
+    fn try_from(pkt: &UdpNotifPacket) -> Result<Self, UdpNotifPayloadConversionError> {
         let payload: UdpNotifPayload;
         match pkt.media_type() {
             MediaType::YangDataJson => {
                 payload = serde_json::from_slice(pkt.payload())?;
             }
-            MediaType::YangDataXml => {
-                // TODO: test this (decoding might work, but serialization might not)
-                let payload_str = std::str::from_utf8(pkt.payload())?;
-                payload = serde_json::from_str(payload_str)?; // TODO: use xml
-                                                              // deserializer
-                                                              // serde_xml_rs?
-            }
             MediaType::YangDataCbor => {
-                payload = ciborium::de::from_reader(std::io::Cursor::new(pkt.payload()))?;
+                let val: Value = ciborium::de::from_reader(std::io::Cursor::new(pkt.payload()))?;
+                payload = serde_json::from_value(val)?;
             }
             media_type => {
-                //TODO: log payload to trace?
-                payload = UdpNotifPayload::Unknown(pkt.payload().clone());
-                Err(ConversionError::UnsupportedMediaType(media_type))?;
+                return Err(UdpNotifPayloadConversionError::UnsupportedMediaType(
+                    media_type,
+                ));
             }
         }
 

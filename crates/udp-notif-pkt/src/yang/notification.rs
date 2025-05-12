@@ -26,39 +26,78 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use strum_macros::Display;
 
 pub type SubscriptionId = u32;
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Notification {
-    #[serde(rename = "eventTime")]
-    event_time: DateTime<Utc>,
-
+    // #[serde(rename = "eventTime")]
+    // event_time: DateTime<Utc>,
     #[serde(rename = "ietf-notification-sequencing:sysName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     node_id: Option<String>,
 
     #[serde(flatten)]
-    notification: NotificationVariant,
+    notification: Option<NotificationVariant>,
 
     #[serde(flatten)]
     extra_fields: Value,
 }
 
 impl Notification {
-    pub fn event_time(&self) -> &DateTime<Utc> {
-        &self.event_time
-    }
+    // pub fn event_time(&self) -> &DateTime<Utc> {
+    //     &self.event_time
+    // }
     pub fn node_id(&self) -> Option<&String> {
         self.node_id.as_ref()
     }
-    pub fn notification(&self) -> &NotificationVariant {
-        &self.notification
+    pub fn notification(&self) -> Option<&NotificationVariant> {
+        self.notification.as_ref()
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub struct NotificationEnvelope {
+    // event_time: DateTime<Utc>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    hostname: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    sequence_number: Option<u32>,
+
+    // #[serde(alias = "notification-contents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    contents: Option<NotificationVariant>,
+
+    // TODO: fallback to old draft version... (eventually remove this)
+    //       --> discuss if we like to do it with aliases... (though we'd change
+    //           the structure of the messages, need to discuss...)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    notification_contents: Option<NotificationVariant>,
+
+    #[serde(flatten)]
+    extra_fields: Value,
+}
+
+impl NotificationEnvelope {
+    // pub fn event_time(&self) -> &DateTime<Utc> {
+    //     &self.event_time
+    // }
+    pub fn hostname(&self) -> Option<&String> {
+        self.hostname.as_ref()
+    }
+    pub fn sequence_number(&self) -> Option<u32> {
+        self.sequence_number
+    }
+    pub fn contents(&self) -> Option<&NotificationVariant> {
+        self.contents.as_ref()
     }
 }
 
 /// Notification Variants
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Display, Serialize, Deserialize, PartialEq, Eq)]
 pub enum NotificationVariant {
     #[serde(rename = "ietf-subscribed-notifications:subscription-started")]
     SubscriptionStarted(SubscriptionStartedModified),
@@ -71,6 +110,11 @@ pub enum NotificationVariant {
 
     #[serde(rename = "ietf-yang-push:push-update")]
     YangPushUpdate(YangPushUpdate),
+
+    //TODO: check what it is and if we need.... (and if we might need more types meaning we
+    // might need a capture all here)
+    #[serde(rename = "ietf-yang-push:push-change-update")]
+    YangPushChangeUpdate(Value),
 }
 
 /// Subscription Started and Modified Message
@@ -101,7 +145,8 @@ pub struct SubscriptionStartedModified {
     #[serde(skip_serializing_if = "Option::is_none")]
     module_version: Option<Vec<YangPushModuleVersion>>,
 
-    #[serde(rename = "ietf-yang-push-revision:content-id")]
+    #[serde(rename = "ietf-yang-push-revision:yang-library-content-id")]
+    #[serde(alias = "ietf-yang-push-revision:content-id")] //TODO: check if we need this one
     #[serde(skip_serializing_if = "Option::is_none")]
     content_id: Option<String>,
 
@@ -278,14 +323,21 @@ pub enum UpdateTrigger {
     #[serde(rename_all = "kebab-case")]
     Periodic {
         period: CentiSeconds,
+
+        #[serde(skip_serializing_if = "Option::is_none")]
         anchor_time: Option<DateTime<Utc>>,
     },
 
     #[serde(rename = "ietf-yang-push:on-change")]
     #[serde(rename_all = "kebab-case")]
     OnChange {
+        #[serde(skip_serializing_if = "Option::is_none")]
         dampening_period: Option<CentiSeconds>,
+
+        #[serde(skip_serializing_if = "Option::is_none")]
         sync_on_start: Option<bool>,
+
+        #[serde(skip_serializing_if = "Option::is_none")]
         excluded_change: Option<Vec<ChangeType>>,
     },
 }
@@ -483,9 +535,8 @@ mod tests {
 
         // Create a Notification instance
         let notification = Notification {
-            event_time: Utc.timestamp_millis_opt(0).unwrap(),
             node_id: Some("example-node".to_string()),
-            notification: NotificationVariant::SubscriptionStarted(sub_started),
+            notification: Some(NotificationVariant::SubscriptionStarted(sub_started)),
             extra_fields: serde_json::json!({}),
         };
 
@@ -570,21 +621,16 @@ mod tests {
 
         // Create a Notification instance
         let notification = Notification {
-            event_time: Utc.timestamp_millis_opt(0).unwrap(),
             node_id: Some("example-node".to_string()),
-            notification: NotificationVariant::SubscriptionStarted(sub_started),
+            notification: Some(NotificationVariant::SubscriptionStarted(sub_started)),
             extra_fields: serde_json::json!({}),
         };
 
         // Notification getters
-        assert_eq!(
-            notification.event_time(),
-            &Utc.timestamp_millis_opt(0).unwrap()
-        );
         assert_eq!(notification.node_id(), Some(&"example-node".to_string()));
         assert!(matches!(
             notification.notification(),
-            NotificationVariant::SubscriptionStarted(_)
+            Some(NotificationVariant::SubscriptionStarted(_))
         ));
     }
 
@@ -599,9 +645,8 @@ mod tests {
 
         // Create a Notification instance
         let notification = Notification {
-            event_time: Utc.timestamp_millis_opt(0).unwrap(),
             node_id: Some("example-node".to_string()),
-            notification: NotificationVariant::SubscriptionTerminated(sub_terminated),
+            notification: Some(NotificationVariant::SubscriptionTerminated(sub_terminated)),
             extra_fields: serde_json::json!({}),
         };
 
@@ -669,9 +714,8 @@ mod tests {
 
         // Create a Notification instance
         let notification = Notification {
-            event_time: Utc.timestamp_millis_opt(0).unwrap(),
             node_id: Some("example-node".to_string()),
-            notification: NotificationVariant::YangPushUpdate(yang_push_update),
+            notification: Some(NotificationVariant::YangPushUpdate(yang_push_update)),
             extra_fields: serde_json::json!({}),
         };
 

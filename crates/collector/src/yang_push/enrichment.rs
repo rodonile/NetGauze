@@ -55,13 +55,15 @@ pub enum YangPushEnrichmentActorCommand {
     Shutdown,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub enum YangPushEnrichmentActorError {
     EnrichmentChannelClosed,
     YangPushReceiveError,
     YangPushUpdateNoSubscriptionInfo,
     UnsupportedMediaType(MediaType),
     UnknownPayload,
+    UnknownNotificationVariant,
+    UnsupportedNotificationVariant(NotificationVariant),
 }
 
 impl std::fmt::Display for YangPushEnrichmentActorError {
@@ -80,6 +82,12 @@ impl std::fmt::Display for YangPushEnrichmentActorError {
             }
             Self::UnknownPayload => {
                 write!(f, "unknown udp-notif payload format")
+            }
+            Self::UnknownNotificationVariant => {
+                write!(f, "unknown notification variant")
+            }
+            Self::UnsupportedNotificationVariant(notif) => {
+                write!(f, "unsupported notification variant, type: {}", notif)
             }
         }
     }
@@ -305,7 +313,7 @@ impl YangPushEnrichmentActor {
 
         //TODO: add counters (here or in the functions? let's see...)
         match message.notification() {
-            NotificationVariant::SubscriptionStarted(sub_started) => {
+            Some(NotificationVariant::SubscriptionStarted(sub_started)) => {
                 debug!(
                     "Received Subscription Started Message (peer: {}, id={})",
                     peer,
@@ -313,7 +321,7 @@ impl YangPushEnrichmentActor {
                 );
                 telemetry_message_metadata = self.cache_subscription(peer, sub_started)?;
             }
-            NotificationVariant::SubscriptionModified(sub_modified) => {
+            Some(NotificationVariant::SubscriptionModified(sub_modified)) => {
                 debug!(
                     "Received Subscription Modified Message (peer: {}, id={})",
                     peer,
@@ -321,7 +329,7 @@ impl YangPushEnrichmentActor {
                 );
                 telemetry_message_metadata = self.cache_subscription(peer, sub_modified)?;
             }
-            NotificationVariant::SubscriptionTerminated(sub_terminated) => {
+            Some(NotificationVariant::SubscriptionTerminated(sub_terminated)) => {
                 debug!(
                     "Received Subscription Terminated Message (peer: {}, id={})",
                     peer,
@@ -329,13 +337,30 @@ impl YangPushEnrichmentActor {
                 );
                 telemetry_message_metadata = self.delete_subscription(peer, sub_terminated)?;
             }
-            NotificationVariant::YangPushUpdate(push_update) => {
+            Some(NotificationVariant::YangPushUpdate(push_update)) => {
                 debug!(
                     "Received Yang Push Update Message (peer: {}, id={})",
                     peer,
                     push_update.id()
                 );
                 telemetry_message_metadata = self.get_subscription(peer, &push_update.id())?;
+            }
+            Some(notif) => {
+                warn!(
+                  "YangPushEnrichmentActorError: UnsupportedNotificationVariant (peer: {}, type: {})",
+                  peer,
+                  notif
+              );
+                return Err(
+                    YangPushEnrichmentActorError::UnsupportedNotificationVariant(notif.clone()),
+                );
+            }
+            None => {
+                warn!(
+                    "Receive Notification Message (peer: {}) with unknown/unsupported type",
+                    peer
+                );
+                return Err(YangPushEnrichmentActorError::UnknownNotificationVariant);
             }
         }
 
@@ -400,35 +425,13 @@ impl YangPushEnrichmentActor {
                             ];
                             self.stats.received_messages.add(1, &peer_tags);
 
-                            // Access the notification from the UdpNotifPacket
-                            // TODO: move this to udp-notif-pkt crate
-                            // TODO: this needs to be tested
-                            // let payload: UdpNotifPayload;
-                            // match udp_notif_pkt.media_type() {
-                            //     MediaType::YangDataJson => {
-                            //         payload = serde_json::from_slice(udp_notif_pkt.payload())?;
-                            //     }
-                            //     MediaType::YangDataXml => {
-                            //         let payload_str = std::str::from_utf8(udp_notif_pkt.payload())?;
-                            //         payload = serde_json::from_str(payload_str)?;
-                            //     }
-                            //     MediaType::YangDataCbor => {
-                            //         payload = ciborium::de::from_reader(std::io::Cursor::new(udp_notif_pkt.payload()))?;
-                            //     }
-                            //     media_type => {
-                            //         //TODO: log payload to trace?
-                            //         payload = UdpNotifPayload::Unknown(udp_notif_pkt.payload().clone());
-                            //         Err(YangPushEnrichmentActorError::UnsupportedMediaType(media_type))?;
-                            //     }
-                            // }
-
                             // Decode the UdpNotifPacket into UdpNotifPacketDecoded
                             let udp_notif_pkt_decoded: UdpNotifPacketDecoded = match udp_notif_pkt.try_into() {
                               Ok(decoded) => decoded,
                               Err(err) => {
                                   warn!("Failed to decode UdpNotifPacket: {err}");
                                   self.stats.enrichment_error.add(1, &peer_tags);
-                                  continue; // Skip processing this message
+                                  continue;
                               }
                             };
 
