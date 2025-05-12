@@ -111,8 +111,6 @@ pub struct YangPushSubscriptionMetadata {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport: Option<Transport>,
 
-    // TODO: here figure out how to serialize to "ietf-subscribed-notifications:encode-json" and
-    // such
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encoding: Option<Encoding>,
 
@@ -122,10 +120,8 @@ pub struct YangPushSubscriptionMetadata {
     #[serde(flatten)]
     pub update_trigger: UpdateTrigger,
 
-    // #[serde(rename = "ietf-yang-push-revision:module-version")]
     pub module_version: Vec<YangPushModuleVersion>,
 
-    // #[serde(rename = "ietf-yang-push-revision:content-id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub yang_library_content_id: Option<String>,
 }

@@ -14,7 +14,6 @@
 // limitations under the License.
 
 // TODO: documentation here
-// TODO: also add tests from the pcap that produce enriched telemetrymessages!
 // TODO: add tests for all the match arms and conditions below...
 // TODO: fix error handling / log messages / otel counters...
 // TODO: implement early return...
@@ -32,7 +31,7 @@ use netgauze_udp_notif_pkt::{
         Notification, NotificationVariant, SubscriptionId, SubscriptionStartedModified,
         SubscriptionTerminated, Transport,
     },
-    MediaType, UdpNotifPacket, UdpNotifPacketDecoded, UdpNotifPayload,
+    UdpNotifPacket, UdpNotifPacketDecoded, UdpNotifPayload,
 };
 use serde_json::Value;
 use std::{
@@ -43,9 +42,12 @@ use std::{
 
 use chrono::Utc;
 use colored::*;
+use shadow_rs::shadow;
 use sysinfo::System;
 use tokio::{sync::mpsc, task::JoinHandle};
 use tracing::{debug, error, info, warn};
+
+shadow!(build);
 
 /// Cache for YangPush subscriptions metadata
 pub type SubscriptionsCache = HashMap<SubscriptionId, TelemetryMessageMetadata>;
@@ -59,8 +61,6 @@ pub enum YangPushEnrichmentActorCommand {
 pub enum YangPushEnrichmentActorError {
     EnrichmentChannelClosed,
     YangPushReceiveError,
-    YangPushUpdateNoSubscriptionInfo,
-    UnsupportedMediaType(MediaType),
     UnknownPayload,
     UnknownNotificationVariant,
     UnsupportedNotificationVariant(NotificationVariant),
@@ -71,15 +71,6 @@ impl std::fmt::Display for YangPushEnrichmentActorError {
         match self {
             Self::EnrichmentChannelClosed => write!(f, "enrichment channel closed"),
             Self::YangPushReceiveError => write!(f, "error in flow receive channel"),
-            Self::YangPushUpdateNoSubscriptionInfo => {
-                write!(
-                    f,
-                    "Yang Push update received but no subscription information found in the cache"
-                )
-            }
-            Self::UnsupportedMediaType(media_type) => {
-                write!(f, "Unsupported udp-notif media type: {:?}", media_type)
-            }
             Self::UnknownPayload => {
                 write!(f, "unknown udp-notif payload format")
             }
@@ -130,32 +121,29 @@ impl YangPushEnrichmentStats {
     }
 }
 
-// TODO: make name extendable and/or overwritable from writer_id in
-// config (e.g. name = writer_id + "@" + host_name) ?
-// TODO: move somewhere else?
+/// Fetches local system information into a Manifest object.
+/// (host name, OS version, software version, build info, etc.)
 fn fetch_sysinfo_manifest() -> Manifest {
     let mut sys = System::new_all();
     sys.refresh_all();
 
     Manifest {
-        name: System::host_name(),
+        name: Some(format!(
+            "{}@{}",
+            build::PROJECT_NAME,
+            System::host_name().unwrap_or_else(|| "unknown".to_string())
+        )),
         vendor: Some("NetGauze".to_string()),
         vendor_pen: None,
-        software_version: Some(env!("CARGO_PKG_VERSION").to_string()), /* TODO: working also for
-                                                                        * binary? --> check
-                                                                        * better way/static */
-        software_flavor: Some({
-            if cfg!(debug_assertions) {
-                "debug".to_string()
-            } else {
-                "release".to_string()
-            }
-        }),
+        software_version: Some(format!("{} ({})", build::PKG_VERSION, build::SHORT_COMMIT)),
+        software_flavor: Some(build::BUILD_RUST_CHANNEL.to_string()),
         os_version: System::os_version(),
         os_type: System::name(),
     }
 }
 
+/// Actor responsible for enriching Yang Push notifications.
+/// Sends enriched TelemetryMessage objects.
 struct YangPushEnrichmentActor {
     cmd_rx: mpsc::Receiver<YangPushEnrichmentActorCommand>,
     udp_notif_rx: async_channel::Receiver<Arc<(SocketAddr, UdpNotifPacket)>>,
@@ -193,6 +181,8 @@ impl YangPushEnrichmentActor {
         }
     }
 
+    /// Caches metadata from SubscriptionStarted and SubscriptionModified
+    /// messages.
     fn cache_subscription(
         &mut self,
         peer: SocketAddr,
@@ -249,14 +239,14 @@ impl YangPushEnrichmentActor {
         Ok(telemetry_message_metadata)
     }
 
+    /// Handles SubscriptionTerminated messages by removing subscription
+    /// metadata from the cache.
     fn delete_subscription(
         &mut self,
         peer: SocketAddr,
         sub: &SubscriptionTerminated,
     ) -> Result<TelemetryMessageMetadata, YangPushEnrichmentActorError> {
-        // Get subscription information from the cache
-        // TODO: implement early return with some debug logging if not found in the
-        // cache
+        // Get and delete subscription information from the cache
         let telemetry_message_metadata = self
             .subscriptions
             .get_mut(&peer)
@@ -271,14 +261,14 @@ impl YangPushEnrichmentActor {
         Ok(telemetry_message_metadata)
     }
 
+    /// Retrieves subscription metadata from the cache based on the peer address
+    /// and subscription ID.
     fn get_subscription(
         &self,
         peer: SocketAddr,
         subscription_id: &SubscriptionId,
     ) -> Result<TelemetryMessageMetadata, YangPushEnrichmentActorError> {
         // Get subscription information from the cache
-        // TODO: implement early return with some debug logging if not found in the
-        // cache
         let telemetry_message_metadata = self
             .subscriptions
             .get(&peer)
@@ -289,7 +279,8 @@ impl YangPushEnrichmentActor {
         Ok(telemetry_message_metadata)
     }
 
-    // TODO: move to udp-notif-pkt together with Notification definition...
+    /// Processes a Yang Push notification and produces a TelemetryMessage
+    /// object.
     fn process_notification(
         &mut self,
         peer: SocketAddr,
@@ -393,6 +384,8 @@ impl YangPushEnrichmentActor {
         })
     }
 
+    /// Main loop for the actor: handling commands and incoming notification
+    /// messages.
     async fn run(mut self) -> anyhow::Result<String> {
         loop {
             tokio::select! {
@@ -488,6 +481,7 @@ impl std::fmt::Display for YangPushEnrichmentActorHandleError {
 
 impl std::error::Error for YangPushEnrichmentActorHandleError {}
 
+/// Handle for interacting with the `YangPushEnrichmentActor`.
 #[derive(Debug, Clone)]
 pub struct YangPushEnrichmentActorHandle {
     cmd_send: mpsc::Sender<YangPushEnrichmentActorCommand>,

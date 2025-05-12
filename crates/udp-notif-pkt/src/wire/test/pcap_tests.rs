@@ -215,9 +215,8 @@ fn test_udp_notif_pcap_decoded_payload(pcap_path: PathBuf) {
                     serde_json::to_value(&msg_decoded).unwrap()
                 }
                 Ok(None) => {
-                    // packet is fragmented, need to read the next PDU first before attempting to
-                    // deserialize it
-                    break;
+                    break; // Packet is fragmented, need to read the next PDU
+                           // first
                 }
                 Err(err) => serde_json::to_value(&err)
                     .expect("Couldn't serialize UDP-Notif error message to json"),
@@ -236,19 +235,22 @@ fn test_udp_notif_pcap_decoded_payload(pcap_path: PathBuf) {
             assert_eq!(
                 deserialized_value,
                 expected_value,
-                "Mismatch:\nReceived: {}\nExpected from file: {expected_str}",
+                "Mismatch:\nReceived: {}\nExpected from file: {}",
                 serde_json::to_string(&deserialized_value)
-                    .expect("Couldn't serialize decoded value"),
+                    .expect("Couldn't serialize expected value"),
+                serde_json::to_string(&expected_value).expect("Couldn't serialize decoded value"),
             );
         }
     }
 }
 
 /// Custom normalization function for fields that might sometimes be prefixed
-/// with the module name
+/// with the module name or have legacy names in the JSON output
 fn normalize_json(value: &mut Value) {
     match value {
         Value::Object(map) => {
+            let mut keys_to_replace = Vec::new();
+
             for (key, val) in map.iter_mut() {
                 if key == "encoding" {
                     if let Value::String(s) = val {
@@ -257,9 +259,18 @@ fn normalize_json(value: &mut Value) {
                             *s = stripped.to_string();
                         }
                     }
+                } else if key == "notification-contents" {
+                    keys_to_replace.push(key.clone());
                 }
                 // Recursively normalize nested objects
                 normalize_json(val);
+            }
+
+            // Replace "notification-contents" with "contents"
+            for key in keys_to_replace {
+                if let Some(val) = map.remove(&key) {
+                    map.insert("contents".to_string(), val);
+                }
             }
         }
         Value::Array(array) => {

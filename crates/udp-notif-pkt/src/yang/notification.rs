@@ -67,15 +67,9 @@ pub struct NotificationEnvelope {
     #[serde(skip_serializing_if = "Option::is_none")]
     sequence_number: Option<u32>,
 
-    // #[serde(alias = "notification-contents")]
+    #[serde(alias = "notification-contents")] // fallback to old draft version
     #[serde(skip_serializing_if = "Option::is_none")]
     contents: Option<NotificationVariant>,
-
-    // TODO: fallback to old draft version... (eventually remove this)
-    //       --> discuss if we like to do it with aliases... (though we'd change
-    //           the structure of the messages, need to discuss...)
-    #[serde(skip_serializing_if = "Option::is_none")]
-    notification_contents: Option<NotificationVariant>,
 
     #[serde(flatten)]
     extra_fields: Value,
@@ -146,7 +140,6 @@ pub struct SubscriptionStartedModified {
     module_version: Option<Vec<YangPushModuleVersion>>,
 
     #[serde(rename = "ietf-yang-push-revision:yang-library-content-id")]
-    #[serde(alias = "ietf-yang-push-revision:content-id")] //TODO: check if we need this one
     #[serde(skip_serializing_if = "Option::is_none")]
     content_id: Option<String>,
 
