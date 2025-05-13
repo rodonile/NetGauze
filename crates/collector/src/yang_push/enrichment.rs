@@ -18,18 +18,15 @@
 // TODO: fix error handling / log messages / otel counters...
 // TODO: implement early return...
 
-use crate::{
-    telemetry::{
-        DataCollectionMetadata, Label, LabelValue, Manifest, SessionProtocol, TelemetryMessage,
-        YangPushFilter, YangPushSubscriptionMetadata,
-    },
-    yang_push::telemetry::TelemetryMessageMetadata,
+use crate::telemetry::{
+    DataCollectionMetadata, FilterSpec, Label, LabelValue, Manifest, SessionProtocol,
+    TelemetryMessage, TelemetryMessageMetadata, YangPushSubscriptionMetadata,
 };
-
+use either::Either;
 use netgauze_udp_notif_pkt::{
     yang::notification::{
-        Notification, NotificationVariant, SubscriptionId, SubscriptionStartedModified,
-        SubscriptionTerminated, Transport,
+        Notification, NotificationEnvelope, NotificationVariant, SubscriptionId,
+        SubscriptionStartedModified, SubscriptionTerminated, Transport,
     },
     UdpNotifPacket, UdpNotifPacketDecoded, UdpNotifPayload,
 };
@@ -64,6 +61,7 @@ pub enum YangPushEnrichmentActorError {
     UnknownPayload,
     UnknownNotificationVariant,
     UnsupportedNotificationVariant(NotificationVariant),
+    NotificationSerializationError,
 }
 
 impl std::fmt::Display for YangPushEnrichmentActorError {
@@ -79,6 +77,9 @@ impl std::fmt::Display for YangPushEnrichmentActorError {
             }
             Self::UnsupportedNotificationVariant(notif) => {
                 write!(f, "unsupported notification variant, type: {}", notif)
+            }
+            Self::NotificationSerializationError => {
+                write!(f, "failed to serialize notification")
             }
         }
     }
@@ -188,9 +189,9 @@ impl YangPushEnrichmentActor {
         peer: SocketAddr,
         sub: &SubscriptionStartedModified,
     ) -> Result<TelemetryMessageMetadata, YangPushEnrichmentActorError> {
-        let target_datastore = sub.target().datastore().map(|f| f.to_string());
+        let stream = sub.target().stream().map(|f| f.to_string());
 
-        let target_stream = sub.target().stream().map(|f| f.to_string());
+        let datastore = sub.target().datastore().map(|f| f.to_string());
 
         let xpath_filter: Option<String> = sub
             .target()
@@ -206,9 +207,9 @@ impl YangPushEnrichmentActor {
 
         let subscription_metadata = YangPushSubscriptionMetadata {
             id: Some(sub.id()),
-            filter: YangPushFilter {
-                target_stream,
-                target_datastore,
+            filter_spec: FilterSpec {
+                stream,
+                datastore,
                 xpath_filter,
                 subtree_filter,
             },
@@ -217,8 +218,10 @@ impl YangPushEnrichmentActor {
             encoding: sub.encoding().cloned(),
             purpose: sub.purpose().cloned(),
             update_trigger: sub.update_trigger().clone(),
-            module_version: sub.module_version().cloned().unwrap_or_default(), /* TODO: test here the default... */
-            yang_library_content_id: sub.content_id().map(|id| id.to_string()),
+            module_version: sub.module_version().cloned().unwrap_or_default(), /* TODO: add test
+                                                                                * here for the
+                                                                                * default... */
+            yang_library_content_id: sub.yang_library_content_id().map(|id| id.to_string()),
         };
 
         let telemetry_message_metadata = TelemetryMessageMetadata {
@@ -284,9 +287,10 @@ impl YangPushEnrichmentActor {
     fn process_notification(
         &mut self,
         peer: SocketAddr,
-        message: Notification,
+        message: Either<&Notification, &NotificationEnvelope>,
     ) -> Result<TelemetryMessage, YangPushEnrichmentActorError> {
         let timestamp = Utc::now();
+        let telemetry_message_metadata: TelemetryMessageMetadata;
 
         // Get sonata labels from the cache
         let (_, labels) = self.labels.get(&peer.ip()).unwrap_or(&self.default_labels);
@@ -300,62 +304,82 @@ impl YangPushEnrichmentActor {
             })
             .collect();
 
-        let telemetry_message_metadata: TelemetryMessageMetadata;
+        // Closure to process the NotificationVariant
+        let mut process_variant = |notification_variant: Option<&NotificationVariant>| -> Result<
+            TelemetryMessageMetadata,
+            YangPushEnrichmentActorError,
+        > {
+            match notification_variant {
+                Some(NotificationVariant::SubscriptionStarted(sub_started)) => {
+                    debug!(
+                        "Received Subscription Started Message (peer: {}, id={})",
+                        peer,
+                        sub_started.id()
+                    );
+                    self.cache_subscription(peer, &sub_started)
+                }
+                Some(NotificationVariant::SubscriptionModified(sub_modified)) => {
+                    debug!(
+                        "Received Subscription Modified Message (peer: {}, id={})",
+                        peer,
+                        sub_modified.id()
+                    );
+                    self.cache_subscription(peer, &sub_modified)
+                }
+                Some(NotificationVariant::SubscriptionTerminated(sub_terminated)) => {
+                    debug!(
+                        "Received Subscription Terminated Message (peer: {}, id={})",
+                        peer,
+                        sub_terminated.id()
+                    );
+                    self.delete_subscription(peer, &sub_terminated)
+                }
+                Some(NotificationVariant::YangPushUpdate(push_update)) => {
+                    debug!(
+                        "Received Yang Push Update Message (peer: {}, id={})",
+                        peer,
+                        push_update.id()
+                    );
+                    self.get_subscription(peer, &push_update.id())
+                }
+                Some(notif) => {
+                    warn!(
+                    "YangPushEnrichmentActorError: UnsupportedNotificationVariant (peer: {}, type: {})",
+                    peer,
+                    notif
+                );
+                    Err(YangPushEnrichmentActorError::UnsupportedNotificationVariant(notif.clone()))
+                }
+                None => {
+                    warn!(
+                        "Receive Notification Message (peer: {}) with unknown/unsupported type",
+                        peer
+                    );
+                    Err(YangPushEnrichmentActorError::UnknownNotificationVariant)
+                }
+            }
+        };
 
-        //TODO: add counters (here or in the functions? let's see...)
-        match message.notification() {
-            Some(NotificationVariant::SubscriptionStarted(sub_started)) => {
-                debug!(
-                    "Received Subscription Started Message (peer: {}, id={})",
-                    peer,
-                    sub_started.id()
-                );
-                telemetry_message_metadata = self.cache_subscription(peer, sub_started)?;
+        // Match on the wrapper and call the closure to process the notification content
+        let payload = match message {
+            Either::Left(notification) => {
+                telemetry_message_metadata = process_variant(notification.notification())?;
+                serde_json::to_value(&notification).map_err(|err| {
+                    warn!("Failed to serialize Notification: {err}");
+                    YangPushEnrichmentActorError::NotificationSerializationError
+                })?
             }
-            Some(NotificationVariant::SubscriptionModified(sub_modified)) => {
-                debug!(
-                    "Received Subscription Modified Message (peer: {}, id={})",
-                    peer,
-                    sub_modified.id()
-                );
-                telemetry_message_metadata = self.cache_subscription(peer, sub_modified)?;
+            Either::Right(envelope) => {
+                telemetry_message_metadata = process_variant(envelope.contents())?;
+                serde_json::to_value(&envelope).map_err(|err| {
+                    warn!("Failed to serialize NotificationEnvelope: {err}");
+                    YangPushEnrichmentActorError::NotificationSerializationError
+                })?
             }
-            Some(NotificationVariant::SubscriptionTerminated(sub_terminated)) => {
-                debug!(
-                    "Received Subscription Terminated Message (peer: {}, id={})",
-                    peer,
-                    sub_terminated.id()
-                );
-                telemetry_message_metadata = self.delete_subscription(peer, sub_terminated)?;
-            }
-            Some(NotificationVariant::YangPushUpdate(push_update)) => {
-                debug!(
-                    "Received Yang Push Update Message (peer: {}, id={})",
-                    peer,
-                    push_update.id()
-                );
-                telemetry_message_metadata = self.get_subscription(peer, &push_update.id())?;
-            }
-            Some(notif) => {
-                warn!(
-                  "YangPushEnrichmentActorError: UnsupportedNotificationVariant (peer: {}, type: {})",
-                  peer,
-                  notif
-              );
-                return Err(
-                    YangPushEnrichmentActorError::UnsupportedNotificationVariant(notif.clone()),
-                );
-            }
-            None => {
-                warn!(
-                    "Receive Notification Message (peer: {}) with unknown/unsupported type",
-                    peer
-                );
-                return Err(YangPushEnrichmentActorError::UnknownNotificationVariant);
-            }
-        }
+        };
 
-        // Infer Session Protocol from Transport
+        // TODO: think here --> just set it to yang push so it also works when we didn't
+        // yet recevie sub-started... Infer Session Protocol from Transport
         let mut session_protocol = SessionProtocol::default();
         if let Some(yang_push_subscription) = &telemetry_message_metadata.yang_push_subscription {
             session_protocol = match yang_push_subscription.transport {
@@ -380,7 +404,7 @@ impl YangPushEnrichmentActor {
                 local_port: None,    //TODO: get from config?
                 labels,
             },
-            payload: Some(serde_json::to_value(message).unwrap()), // TODO: handle unwrap better
+            payload: Some(payload),
         })
     }
 
@@ -428,9 +452,31 @@ impl YangPushEnrichmentActor {
                               }
                             };
 
+                            // TODO: also here implement closure to avoid code duplication!
+                            //       also test with a 6wind pcap if it's working properly
                             // Process the notification
                             if let UdpNotifPayload::Notification(notification) = udp_notif_pkt_decoded.payload() {
-                              match self.process_notification(*peer, notification.clone()) { // TODO: Check clone here
+                              match self.process_notification(*peer, Either::Left(notification)) {
+                                  Ok(telemetry_message) => {
+
+                                      // TEMP DEBUG STATEMENT
+                                      info!("{}", serde_json::to_string(&telemetry_message).unwrap().purple());
+
+                                      // Successfully processed and got a TelemetryMessage
+                                      if let Err(err) = self.enriched_tx.send(telemetry_message).await {
+                                          error!("YangPushEnrichmentActor send error: {err}");
+                                          self.stats.send_error.add(1, &peer_tags);
+                                      } else {
+                                          self.stats.sent_messages.add(1, &peer_tags);
+                                      }
+                                  }
+                                  Err(err) => {
+                                      warn!("Error processing notification: {err}");
+                                      self.stats.enrichment_error.add(1, &peer_tags);
+                                  }
+                              }
+                          } else if let UdpNotifPayload::NotificationEnvelope(notification_envelope) = udp_notif_pkt_decoded.payload() {
+                              match self.process_notification(*peer, Either::Right(notification_envelope)) {
                                   Ok(telemetry_message) => {
 
                                       // TEMP DEBUG STATEMENT

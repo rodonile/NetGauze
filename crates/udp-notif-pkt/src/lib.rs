@@ -162,7 +162,6 @@ pub(crate) fn arbitrary_bytes(u: &mut arbitrary::Unstructured<'_>) -> arbitrary:
     Ok(Bytes::from(value))
 }
 
-// TODO: keep here or move to a separate file?
 #[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct UdpNotifPacketDecoded {
     media_type: MediaType,
@@ -210,22 +209,15 @@ impl UdpNotifPacketDecoded {
 
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 pub enum UdpNotifPayload {
-    //TODO: rename to old version s.t. it's clear this is the deprecated version
-    #[serde(rename = "ietf-notification:notification")]
-    Notification(Notification),
-
     #[serde(rename = "ietf-yp-notification:envelope")]
     NotificationEnvelope(NotificationEnvelope),
-    // TODO: fix this how to handle unknown payloads (error or forward the message?)
-    // --> remove this, if it's unknown we just ignore it and give error...
-    // #[serde(other)]
-    // Unknown,
-    // Unknown(Bytes),
+
+    #[serde(rename = "ietf-notification:notification")]
+    Notification(Notification), // deprecated version
 }
 
 #[derive(Debug, Display)]
 pub enum UdpNotifPayloadConversionError {
-    InvalidPayload,
     UnsupportedMediaType(MediaType),
     JsonError(serde_json::Error),
     CborError(ciborium::de::Error<std::io::Error>),
@@ -270,5 +262,153 @@ impl TryFrom<&UdpNotifPacket> for UdpNotifPacketDecoded {
             options: pkt.options.clone(),
             payload,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use bytes::Bytes;
+    use core::panic;
+    use serde_json::json;
+    use std::collections::HashMap;
+    use yang::notification::{Encoding, NotificationVariant};
+
+    #[test]
+    fn test_udp_notif_packet_decoded_known_payload_json_sub_started() {
+        let payload = json!({
+            "ietf-notification:notification": {
+                "eventTime": "2025-05-12T12:00:00Z",
+                "additional_stuff": "example",
+                "ietf-subscribed-notifications:subscription-started": {
+                  "encoding": "encode-json",
+                  "id": 1,
+                  "ietf-distributed-notif:message-publisher-ids": [
+                    16974839, 16973828, 16974828
+                  ],
+                  "ietf-yang-push:datastore": "ietf-datastores:running",
+                  "additional_stuff": [ { "key1": "a" }, { "key2": "b" } ],
+                }
+            }
+        })
+        .to_string()
+        .into_bytes();
+
+        let packet = UdpNotifPacket::new(
+            MediaType::YangDataJson,
+            1234,
+            5678,
+            HashMap::new(),
+            Bytes::from(payload),
+        );
+
+        let decoded: UdpNotifPacketDecoded = (&packet).try_into().unwrap();
+
+        // Test UdpNotifPacketDecoded getters
+        assert_eq!(decoded.media_type(), MediaType::YangDataJson);
+        assert_eq!(decoded.publisher_id(), 1234);
+        assert_eq!(decoded.message_id(), 5678);
+
+        // Check that the payload is a NotificationEnvelope with a SubscriptionStarted
+        // notification
+        match decoded.payload() {
+            UdpNotifPayload::Notification(notification) => {
+                if let Some(notif_variant) = notification.notification() {
+                    match notif_variant {
+                        NotificationVariant::SubscriptionStarted(subscription_started) => {
+                            assert_eq!(subscription_started.id(), 1);
+                            assert_eq!(subscription_started.encoding().unwrap(), &Encoding::Json);
+                            assert_eq!(
+                                subscription_started.target().datastore().unwrap(),
+                                "ietf-datastores:running"
+                            );
+                        }
+                        _ => {
+                            panic!("Expected NotificationVariant::SubscriptionStarted");
+                        }
+                    }
+                }
+            }
+            _ => {
+                panic!("Expected UdpNotifPayload::Notification");
+            }
+        }
+    }
+
+    #[test]
+    fn test_udp_notif_packet_decoded_unknown_mediatype() {
+        let payload = Bytes::from(vec![0x01, 0x02, 0x03]);
+
+        let packet =
+            UdpNotifPacket::new(MediaType::Unknown(99), 1234, 5678, HashMap::new(), payload);
+
+        // Attempt to decode the packet (will throw an error since the media type is
+        // unknown)
+        let result = UdpNotifPacketDecoded::try_from(&packet);
+
+        assert!(result.is_err());
+        if let Err(UdpNotifPayloadConversionError::UnsupportedMediaType(media_type)) = result {
+            assert_eq!(media_type, MediaType::Unknown(99));
+        } else {
+            panic!("Expected UnsupportedMediaType error");
+        }
+    }
+
+    #[test]
+    fn test_udp_notif_packet_decoded_invalid_json_payload() {
+        let payload = Bytes::from(b"invalid json".to_vec());
+
+        let packet =
+            UdpNotifPacket::new(MediaType::YangDataJson, 1234, 5678, HashMap::new(), payload);
+
+        // Attempt to decode the packet (will throw an error since the payload is not
+        // valid JSON)
+        let result = UdpNotifPacketDecoded::try_from(&packet);
+
+        assert!(result.is_err());
+        if let Err(UdpNotifPayloadConversionError::JsonError(json_error)) = result {
+            println!("Expected JsonError: {:?}", json_error);
+        } else {
+            panic!("Expected JsonError");
+        }
+    }
+
+    #[test]
+    fn test_udp_notif_packet_decoded_unknown_notification_variant() {
+        let payload = json!({
+                    "ietf-yp-notification:envelope": {
+                        "event-time": "2025-03-04T07:11:33.252679191+00:00",
+                        "hostname": "some-router",
+                        "sequence-number": 5,
+                        "contents": {
+                            "unknown-notification-variant": {
+                                "id": 12345678,
+                                "encoding": "encode-json",
+                                "transport": "ietf-udp-notif-transport:udp-notif",
+                            }
+                        },
+                      }
+        })
+        .to_string()
+        .into_bytes();
+
+        let packet = UdpNotifPacket::new(
+            MediaType::YangDataJson,
+            1,
+            1,
+            HashMap::new(),
+            Bytes::from(payload),
+        );
+
+        // Attempt to decode the packet (will throw an error since the
+        // NotificationVariant is unknown)
+        let result = UdpNotifPacketDecoded::try_from(&packet);
+
+        assert!(result.is_err());
+        if let Err(UdpNotifPayloadConversionError::JsonError(json_error)) = result {
+            println!("Expected JsonError: {:?}", json_error);
+        } else {
+            panic!("Expected JsonError");
+        }
     }
 }

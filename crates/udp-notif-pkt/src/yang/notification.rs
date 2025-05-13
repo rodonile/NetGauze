@@ -13,16 +13,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// TODO: documentation here...
-// TODO: testing: integrate in the pcap_tests (serde with this structs
-// definitions to check if all messages are recomposed the same way after
-// deserialization!)       --> also add a small tests here in the file for
-// this...
-
-/// References:
-/// - https://datatracker.ietf.org/doc/html/rfc8639
-/// - https://datatracker.ietf.org/doc/html/rfc8641
-/// - https://datatracker.ietf.org/doc/html/draft-ietf-netconf-yang-notifications-versioning-08
+//! # YANG Notification Message
+//!
+//! This module defines data structures and serialization logic for handling
+//! YANG notifications as specified in:
+//! - [RFC 8639](https://datatracker.ietf.org/doc/html/rfc8639): Subscription to
+//!   YANG Notifications
+//! - [RFC 8641](https://datatracker.ietf.org/doc/html/rfc8641): Subscription to
+//!   YANG Notifications for Datastore Updates
+//! - [Notification Versioning Draft](https://datatracker.ietf.org/doc/html/draft-ietf-netconf-yang-notifications-versioning-08)
+//! - [Notification Envelope Draft](https://datatracker.ietf.org/doc/html/draft-ietf-netconf-notif-envelope-01)
+//!
+//! ## Key components:
+//! - **NotificationEnvelope**: Extensible wrapper for Yang-Push notification
+//!   messages with metadata like hostname and sequence number.
+//! - **Notification**: Legacy notification wrapper (deprecated).
+//! - **NotificationVariant**: Enumerates specific notification types (e.g.,
+//!   subscription started/modified/terminated, YANG push updates, etc.).
+//!
+//! ## Notes:
+//! - `extra_fields` with serde(flatten) annotations is used for handling
+//!   additional fields to ensure compatibility with YANG augmentations
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -30,13 +41,46 @@ use strum_macros::Display;
 
 pub type SubscriptionId = u32;
 
+/// Yang-Push Notification Envelope
+/// This is an extensible wrapper for Yang-Push notification messages.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub struct NotificationEnvelope {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    hostname: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    sequence_number: Option<u32>,
+
+    // alias for supporting deprecated 'notification-contents'
+    // instead of 'contents' (> draft-ietf-netconf-notif-envelope-01)
+    #[serde(alias = "notification-contents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    contents: Option<NotificationVariant>,
+
+    #[serde(flatten)]
+    extra_fields: Value,
+}
+
+impl NotificationEnvelope {
+    pub fn hostname(&self) -> Option<&String> {
+        self.hostname.as_ref()
+    }
+    pub fn sequence_number(&self) -> Option<u32> {
+        self.sequence_number
+    }
+    pub fn contents(&self) -> Option<&NotificationVariant> {
+        self.contents.as_ref()
+    }
+}
+
+/// Legacy Yang-Push Notification Wrapper
+/// This is deprecated: use NotificationEnvelope instead
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Notification {
-    // #[serde(rename = "eventTime")]
-    // event_time: DateTime<Utc>,
     #[serde(rename = "ietf-notification-sequencing:sysName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    node_id: Option<String>,
+    sys_name: Option<String>,
 
     #[serde(flatten)]
     notification: Option<NotificationVariant>,
@@ -46,47 +90,11 @@ pub struct Notification {
 }
 
 impl Notification {
-    // pub fn event_time(&self) -> &DateTime<Utc> {
-    //     &self.event_time
-    // }
-    pub fn node_id(&self) -> Option<&String> {
-        self.node_id.as_ref()
+    pub fn sys_name(&self) -> Option<&String> {
+        self.sys_name.as_ref()
     }
     pub fn notification(&self) -> Option<&NotificationVariant> {
         self.notification.as_ref()
-    }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-#[serde(rename_all = "kebab-case")]
-pub struct NotificationEnvelope {
-    // event_time: DateTime<Utc>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    hostname: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    sequence_number: Option<u32>,
-
-    #[serde(alias = "notification-contents")] // fallback to old draft version
-    #[serde(skip_serializing_if = "Option::is_none")]
-    contents: Option<NotificationVariant>,
-
-    #[serde(flatten)]
-    extra_fields: Value,
-}
-
-impl NotificationEnvelope {
-    // pub fn event_time(&self) -> &DateTime<Utc> {
-    //     &self.event_time
-    // }
-    pub fn hostname(&self) -> Option<&String> {
-        self.hostname.as_ref()
-    }
-    pub fn sequence_number(&self) -> Option<u32> {
-        self.sequence_number
-    }
-    pub fn contents(&self) -> Option<&NotificationVariant> {
-        self.contents.as_ref()
     }
 }
 
@@ -105,8 +113,6 @@ pub enum NotificationVariant {
     #[serde(rename = "ietf-yang-push:push-update")]
     YangPushUpdate(YangPushUpdate),
 
-    //TODO: check what it is and if we need.... (and if we might need more types meaning we
-    // might need a capture all here)
     #[serde(rename = "ietf-yang-push:push-change-update")]
     YangPushChangeUpdate(Value),
 }
@@ -141,7 +147,7 @@ pub struct SubscriptionStartedModified {
 
     #[serde(rename = "ietf-yang-push-revision:yang-library-content-id")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    content_id: Option<String>,
+    yang_library_content_id: Option<String>,
 
     #[serde(flatten)]
     extra_fields: Value,
@@ -172,8 +178,8 @@ impl SubscriptionStartedModified {
     pub fn module_version(&self) -> Option<&Vec<YangPushModuleVersion>> {
         self.module_version.as_ref()
     }
-    pub fn content_id(&self) -> Option<&str> {
-        self.content_id.as_deref()
+    pub fn yang_library_content_id(&self) -> Option<&str> {
+        self.yang_library_content_id.as_deref()
     }
 }
 
@@ -272,11 +278,6 @@ impl Target {
 /// collection
 #[derive(Default, Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub enum Transport {
-    // #[serde(rename = "ssh")]
-    // SSH,
-
-    // #[serde(rename = "http")]
-    // HTTP,
     #[serde(rename = "ietf-udp-notif-transport:udp-notif")]
     UDPNotif,
 
@@ -360,17 +361,12 @@ pub struct YangPushModuleVersion {
 pub struct CentiSeconds(u32);
 
 impl CentiSeconds {
-    /// Creates a new `CentiSeconds` instance.
     pub fn new(value: u32) -> Self {
         CentiSeconds(value)
     }
-
-    /// Returns the value in centiseconds.
     pub fn as_u32(&self) -> u32 {
         self.0
     }
-
-    /// Converts the centiseconds to milliseconds.
     pub fn to_milliseconds(&self) -> u32 {
         self.0 * 10
     }
@@ -384,7 +380,6 @@ mod tests {
 
     #[test]
     fn test_transport_serialization() {
-        // Test serialization
         assert_eq!(
             serde_json::to_string(&Transport::UDPNotif).unwrap(),
             r#""ietf-udp-notif-transport:udp-notif""#
@@ -401,7 +396,6 @@ mod tests {
 
     #[test]
     fn test_transport_deserialization() {
-        // Test deserialization
         assert_eq!(
             serde_json::from_str::<Transport>(r#""ietf-udp-notif-transport:udp-notif""#).unwrap(),
             Transport::UDPNotif
@@ -428,7 +422,6 @@ mod tests {
 
     #[test]
     fn test_encoding_serialization() {
-        // Test serialization
         assert_eq!(
             serde_json::to_string(&Encoding::Xml).unwrap(),
             r#""ietf-subscribed-notifications:encode-xml""#
@@ -451,7 +444,6 @@ mod tests {
 
     #[test]
     fn test_encoding_deserialization() {
-        // Test deserialization
         assert_eq!(
             serde_json::from_str::<Encoding>(r#""ietf-subscribed-notifications:encode-xml""#)
                 .unwrap(),
@@ -522,22 +514,21 @@ mod tests {
                 revision: "2025-04-25".to_string(),
                 revision_label: None,
             }]),
-            content_id: Some("content-id".to_string()),
+            yang_library_content_id: Some("content-id".to_string()),
             extra_fields: serde_json::json!({}),
         };
 
         // Create a Notification instance
         let notification = Notification {
-            node_id: Some("example-node".to_string()),
-            notification: Some(NotificationVariant::SubscriptionStarted(sub_started)),
+            sys_name: Some("example-node".to_string()),
+            notification: Some(NotificationVariant::SubscriptionStarted(
+                sub_started.clone(),
+            )),
             extra_fields: serde_json::json!({}),
         };
 
         // Serialize the Notification to JSON
         let serialized = serde_json::to_string(&notification).expect("Serialization failed");
-
-        // Print the serialized JSON
-        println!("{}", format!("Serialized JSON: {serialized}"));
 
         // Deserialize the JSON back to a Notification
         let deserialized: Notification =
@@ -545,6 +536,25 @@ mod tests {
 
         // Assert that the deserialized Notification matches the original
         assert_eq!(notification, deserialized);
+
+        // Create a NotificationEnvelope instance
+        let notification_envelope = NotificationEnvelope {
+            hostname: Some("example-host".to_string()),
+            sequence_number: Some(12345),
+            contents: Some(NotificationVariant::SubscriptionStarted(sub_started)),
+            extra_fields: serde_json::json!({}),
+        };
+
+        // Serialize the NotificationEnvelope to JSON
+        let serialized_envelope =
+            serde_json::to_string(&notification_envelope).expect("Serialization failed");
+
+        // Deserialize the JSON back to a NotificationEnvelope
+        let deserialized_envelope: NotificationEnvelope =
+            serde_json::from_str(&serialized_envelope).expect("Deserialization failed");
+
+        // Assert that the deserialized NotificationEnvelope matches the original
+        assert_eq!(notification_envelope, deserialized_envelope);
     }
 
     #[test]
@@ -596,7 +606,7 @@ mod tests {
                 revision: "2025-04-25".to_string(),
                 revision_label: None,
             }]),
-            content_id: Some("content-id".to_string()),
+            yang_library_content_id: Some("content-id".to_string()),
             extra_fields: serde_json::json!({}),
         };
 
@@ -610,19 +620,40 @@ mod tests {
         assert_eq!(sub_started.transport(), Some(&Transport::UDPNotif));
         assert_eq!(sub_started.encoding(), Some(&Encoding::Json));
         assert_eq!(sub_started.purpose(), Some(&"test-purpose".to_string()));
-        assert_eq!(sub_started.content_id(), Some("content-id"));
+        assert_eq!(sub_started.yang_library_content_id(), Some("content-id"));
 
         // Create a Notification instance
         let notification = Notification {
-            node_id: Some("example-node".to_string()),
-            notification: Some(NotificationVariant::SubscriptionStarted(sub_started)),
+            sys_name: Some("example-node".to_string()),
+            notification: Some(NotificationVariant::SubscriptionStarted(
+                sub_started.clone(),
+            )),
             extra_fields: serde_json::json!({}),
         };
 
         // Notification getters
-        assert_eq!(notification.node_id(), Some(&"example-node".to_string()));
+        assert_eq!(notification.sys_name(), Some(&"example-node".to_string()));
         assert!(matches!(
             notification.notification(),
+            Some(NotificationVariant::SubscriptionStarted(_))
+        ));
+
+        // Create a NotificationEnvelope instance
+        let notification_envelope = NotificationEnvelope {
+            hostname: Some("example-host".to_string()),
+            sequence_number: Some(12345),
+            contents: Some(NotificationVariant::SubscriptionStarted(sub_started)),
+            extra_fields: serde_json::json!({}),
+        };
+
+        // NotificationEnvelope getters
+        assert_eq!(
+            notification_envelope.hostname(),
+            Some(&"example-host".to_string())
+        );
+        assert_eq!(notification_envelope.sequence_number(), Some(12345));
+        assert!(matches!(
+            notification_envelope.contents(),
             Some(NotificationVariant::SubscriptionStarted(_))
         ));
     }
@@ -638,16 +669,15 @@ mod tests {
 
         // Create a Notification instance
         let notification = Notification {
-            node_id: Some("example-node".to_string()),
-            notification: Some(NotificationVariant::SubscriptionTerminated(sub_terminated)),
+            sys_name: Some("example-node".to_string()),
+            notification: Some(NotificationVariant::SubscriptionTerminated(
+                sub_terminated.clone(),
+            )),
             extra_fields: serde_json::json!({}),
         };
 
         // Serialize the Notification to JSON
         let serialized = serde_json::to_string(&notification).expect("Serialization failed");
-
-        // Print the serialized JSON
-        println!("{}", format!("Serialized JSON: {serialized}"));
 
         // Deserialize the JSON back to a Notification
         let deserialized: Notification =
@@ -655,6 +685,25 @@ mod tests {
 
         // Assert that the deserialized Notification matches the original
         assert_eq!(notification, deserialized);
+
+        // Create a NotificationEnvelope instance
+        let notification_envelope = NotificationEnvelope {
+            hostname: Some("example-host".to_string()),
+            sequence_number: Some(12345),
+            contents: Some(NotificationVariant::SubscriptionTerminated(sub_terminated)),
+            extra_fields: serde_json::json!({}),
+        };
+
+        // Serialize the NotificationEnvelope to JSON
+        let serialized_envelope =
+            serde_json::to_string(&notification_envelope).expect("Serialization failed");
+
+        // Deserialize the JSON back to a NotificationEnvelope
+        let deserialized_envelope: NotificationEnvelope =
+            serde_json::from_str(&serialized_envelope).expect("Deserialization failed");
+
+        // Assert that the deserialized NotificationEnvelope matches the original
+        assert_eq!(notification_envelope, deserialized_envelope);
     }
 
     #[test]
@@ -707,16 +756,15 @@ mod tests {
 
         // Create a Notification instance
         let notification = Notification {
-            node_id: Some("example-node".to_string()),
-            notification: Some(NotificationVariant::YangPushUpdate(yang_push_update)),
+            sys_name: Some("example-node".to_string()),
+            notification: Some(NotificationVariant::YangPushUpdate(
+                yang_push_update.clone(),
+            )),
             extra_fields: serde_json::json!({}),
         };
 
         // Serialize the Notification to JSON
         let serialized = serde_json::to_string(&notification).expect("Serialization failed");
-
-        // Print the serialized JSON
-        println!("{}", format!("Serialized JSON: {serialized}"));
 
         // Deserialize the JSON back to a Notification
         let deserialized: Notification =
@@ -724,7 +772,27 @@ mod tests {
 
         // Assert that the deserialized Notification matches the original
         assert_eq!(notification, deserialized);
+
+        // Create a NotificationEnvelope instance
+        let notification_envelope = NotificationEnvelope {
+            hostname: Some("example-host".to_string()),
+            sequence_number: Some(12345),
+            contents: Some(NotificationVariant::YangPushUpdate(yang_push_update)),
+            extra_fields: serde_json::json!({}),
+        };
+
+        // Serialize the NotificationEnvelope to JSON
+        let serialized_envelope =
+            serde_json::to_string(&notification_envelope).expect("Serialization failed");
+
+        // Deserialize the JSON back to a NotificationEnvelope
+        let deserialized_envelope: NotificationEnvelope =
+            serde_json::from_str(&serialized_envelope).expect("Deserialization failed");
+
+        // Assert that the deserialized NotificationEnvelope matches the original
+        assert_eq!(notification_envelope, deserialized_envelope);
     }
+
     #[test]
     fn test_yang_push_update_getter() {
         // Create a YangPushUpdate instance

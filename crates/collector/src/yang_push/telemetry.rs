@@ -13,10 +13,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// TODO: derive Eq everywhere also...
-
-// TODO: documentation here..
-/// Ref: https://datatracker.ietf.org/doc/html/draft-netana-nmop-message-broker-telemetry-message-00
+//! # Telemetry Message Module
+//!
+//! This module defines the structure and serialization logic for telemetry
+//! messages as specified in:
+//! - [Telemetry Message](https://datatracker.ietf.org/doc/html/draft-netana-nmop-message-broker-telemetry-message-00).
+//!
+//! Key components include:
+//! - **TelemetryMessage**: The main structure representing a telemetry message.
+//! - **SessionProtocol**: Enum for supported telemetry session protocols (e.g.,
+//!   YANG Push, NETCONF).
+//! - **Manifest**: Metadata about the network node or data collection system.
+//! - **TelemetryMessageMetadata**: Metadata specific to the telemetry
+//!   notification, with YANG Push subscription details. subscription, such as
+//!   filters, transport, and encoding.
+//! - **DataCollectionMetadata**: Metadata about the data collection, including
+//!   remote addresses and labels.
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -27,8 +39,8 @@ use netgauze_udp_notif_pkt::yang::notification::{
 };
 
 /// Telemetry Message
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-#[serde(rename = "ietf-telemetry-message:notification")]
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq)]
+#[serde(rename = "ietf-telemetry-message:message")]
 #[serde(rename_all = "kebab-case")]
 pub struct TelemetryMessage {
     pub timestamp: chrono::DateTime<Utc>,
@@ -42,7 +54,7 @@ pub struct TelemetryMessage {
 }
 
 /// Telemetry Session Protocol Type
-#[derive(Default, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Default, Debug, Serialize, Deserialize, Eq, PartialEq)]
 pub enum SessionProtocol {
     #[serde(rename = "yp-push")]
     YangPush,
@@ -60,7 +72,7 @@ pub enum SessionProtocol {
 }
 
 /// Generic Metadata Manifest
-#[derive(Default, Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Default, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct Manifest {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,7 +98,7 @@ pub struct Manifest {
 }
 
 /// Telemetry Notification Metadata
-#[derive(Default, Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Default, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct TelemetryMessageMetadata {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -96,14 +108,14 @@ pub struct TelemetryMessageMetadata {
     pub yang_push_subscription: Option<YangPushSubscriptionMetadata>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct YangPushSubscriptionMetadata {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<SubscriptionId>,
 
     #[serde(flatten)]
-    pub filter: YangPushFilter,
+    pub filter_spec: FilterSpec,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_time: Option<DateTime<Utc>>,
@@ -126,14 +138,14 @@ pub struct YangPushSubscriptionMetadata {
     pub yang_library_content_id: Option<String>,
 }
 
-#[derive(Default, Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Default, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
-pub struct YangPushFilter {
+pub struct FilterSpec {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_stream: Option<String>,
+    pub stream: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_datastore: Option<String>,
+    pub datastore: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub xpath_filter: Option<String>,
@@ -142,7 +154,7 @@ pub struct YangPushFilter {
     pub subtree_filter: Option<Value>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct DataCollectionMetadata {
     pub remote_address: IpAddr,
@@ -159,7 +171,7 @@ pub struct DataCollectionMetadata {
     pub labels: Vec<Label>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 pub struct Label {
     pub name: String,
 
@@ -167,7 +179,7 @@ pub struct Label {
     pub value: Option<LabelValue>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(untagged)]
 pub enum LabelValue {
     StringValue {
@@ -215,10 +227,9 @@ mod tests {
                 event_time: None,
                 yang_push_subscription: Some(YangPushSubscriptionMetadata {
                     id: Some(1),
-                    // TODO: test more filter possibilities in custom test for YangPushFilter
-                    filter: YangPushFilter {
-                        target_stream: Some("example-stream-subtree-filter-map".to_string()),
-                        target_datastore: None,
+                    filter_spec: FilterSpec {
+                        stream: Some("example-stream-subtree-filter-map".to_string()),
+                        datastore: None,
                         xpath_filter: None,
                         subtree_filter: Some(serde_json::json!({
                           "example-map": serde_json::json!({
@@ -273,7 +284,7 @@ mod tests {
         println!("{}", format!("Serialized JSON: {serialized}"));
 
         // Expected JSON string
-        let expected_json = r#"{"timestamp":"1970-01-01T00:00:00Z","session-protocol":"yp-push","network-node-manifest":{"name":"node_id","vendor":"FRR"},"data-collection-manifest":{"name":"dev-collector","vendor":"NetGauze","vendor-pen":12345,"software-version":"1.0.0","software-flavor":"release","os-version":"8.10","os-type":"Rocky Linux"},"telemetry-message-metadata":{"yang-push-subscription":{"id":1,"target-stream":"example-stream-subtree-filter-map","subtree-filter":{"example-map":{"e1":"v1","e2":"v2"}},"transport":"ietf-udp-notif-transport:udp-notif","encoding":"ietf-subscribed-notifications:encode-json","ietf-yang-push:periodic":{"period":100,"anchor-time":"1970-01-01T00:00:00Z"},"module-version":[{"module-name":"example-module","revision":"2025-01-01","revision-label":"1.0.0"}],"yang-library-content-id":"random-content-id"}},"data-collection-metadata":{"remote-address":"127.0.0.1","remote-port":8080,"labels":[{"name":"platform_id","string-values":"IETF LAB"},{"name":"test_anykey_label","anydata-values":{"key":"value"}}]}}"#;
+        let expected_json = r#"{"timestamp":"1970-01-01T00:00:00Z","session-protocol":"yp-push","network-node-manifest":{"name":"node_id","vendor":"FRR"},"data-collection-manifest":{"name":"dev-collector","vendor":"NetGauze","vendor-pen":12345,"software-version":"1.0.0","software-flavor":"release","os-version":"8.10","os-type":"Rocky Linux"},"telemetry-message-metadata":{"yang-push-subscription":{"id":1,"stream":"example-stream-subtree-filter-map","subtree-filter":{"example-map":{"e1":"v1","e2":"v2"}},"transport":"ietf-udp-notif-transport:udp-notif","encoding":"ietf-subscribed-notifications:encode-json","ietf-yang-push:periodic":{"period":100,"anchor-time":"1970-01-01T00:00:00Z"},"module-version":[{"module-name":"example-module","revision":"2025-01-01","revision-label":"1.0.0"}],"yang-library-content-id":"random-content-id"}},"data-collection-metadata":{"remote-address":"127.0.0.1","remote-port":8080,"labels":[{"name":"platform_id","string-values":"IETF LAB"},{"name":"test_anykey_label","anydata-values":{"key":"value"}}]}}"#;
 
         // Assert that the serialized JSON string matches the expected JSON string
         assert_eq!(
