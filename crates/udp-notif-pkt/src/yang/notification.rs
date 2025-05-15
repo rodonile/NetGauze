@@ -181,6 +181,7 @@ impl SubscriptionStartedModified {
     pub fn yang_library_content_id(&self) -> Option<&str> {
         self.yang_library_content_id.as_deref()
     }
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         id: SubscriptionId,
         target: Target,

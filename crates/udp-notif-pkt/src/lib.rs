@@ -239,21 +239,18 @@ impl TryFrom<&UdpNotifPacket> for UdpNotifPacketDecoded {
     type Error = UdpNotifPayloadConversionError;
 
     fn try_from(pkt: &UdpNotifPacket) -> Result<Self, UdpNotifPayloadConversionError> {
-        let payload: UdpNotifPayload;
-        match pkt.media_type() {
-            MediaType::YangDataJson => {
-                payload = serde_json::from_slice(pkt.payload())?;
-            }
+        let payload = match pkt.media_type() {
+            MediaType::YangDataJson => serde_json::from_slice(pkt.payload())?,
             MediaType::YangDataCbor => {
                 let val: Value = ciborium::de::from_reader(std::io::Cursor::new(pkt.payload()))?;
-                payload = serde_json::from_value(val)?;
+                serde_json::from_value(val)?
             }
             media_type => {
                 return Err(UdpNotifPayloadConversionError::UnsupportedMediaType(
                     media_type,
                 ));
             }
-        }
+        };
 
         Ok(UdpNotifPacketDecoded {
             media_type: pkt.media_type,
@@ -448,7 +445,7 @@ mod tests {
 
         assert!(result.is_err());
         if let Err(UdpNotifPayloadConversionError::JsonError(json_error)) = result {
-            println!("Expected JsonError: {:?}", json_error);
+            println!("Expected JsonError: {json_error:?}");
         } else {
             panic!("Expected JsonError");
         }
@@ -487,7 +484,7 @@ mod tests {
 
         assert!(result.is_err());
         if let Err(UdpNotifPayloadConversionError::JsonError(json_error)) = result {
-            println!("Expected JsonError: {:?}", json_error);
+            println!("Expected JsonError: {json_error:?}");
         } else {
             panic!("Expected JsonError");
         }
@@ -520,7 +517,7 @@ mod tests {
 
         assert!(result.is_err());
         if let Err(UdpNotifPayloadConversionError::JsonError(json_error)) = result {
-            println!("Expected JsonError: {:?}", json_error);
+            println!("Expected JsonError: {json_error:?}");
         } else {
             panic!("Expected JsonError");
         }

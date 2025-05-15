@@ -280,9 +280,6 @@ mod tests {
         // Serialize the TelemetryMessage to JSON
         let serialized = serde_json::to_string(&original_message).expect("Failed to serialize");
 
-        // Print the serialized JSON string
-        println!("{}", format!("Serialized JSON: {serialized}"));
-
         // Expected JSON string
         let expected_json = r#"{"timestamp":"1970-01-01T00:00:00Z","session-protocol":"yp-push","network-node-manifest":{"name":"node_id","vendor":"FRR"},"data-collection-manifest":{"name":"dev-collector","vendor":"NetGauze","vendor-pen":12345,"software-version":"1.0.0","software-flavor":"release","os-version":"8.10","os-type":"Rocky Linux"},"telemetry-message-metadata":{"yang-push-subscription":{"id":1,"stream":"example-stream-subtree-filter-map","subtree-filter":{"example-map":{"e1":"v1","e2":"v2"}},"transport":"ietf-udp-notif-transport:udp-notif","encoding":"ietf-subscribed-notifications:encode-json","ietf-yang-push:periodic":{"period":100,"anchor-time":"1970-01-01T00:00:00Z"},"module-version":[{"module-name":"example-module","revision":"2025-01-01","revision-label":"1.0.0"}],"yang-library-content-id":"random-content-id"}},"data-collection-metadata":{"remote-address":"127.0.0.1","remote-port":8080,"labels":[{"name":"platform_id","string-values":"IETF LAB"},{"name":"test_anykey_label","anydata-values":{"key":"value"}}]}}"#;
 
@@ -295,10 +292,6 @@ mod tests {
         // Deserialize the JSON string back to a TelemetryMessage
         let deserialized: TelemetryMessage =
             serde_json::from_str(&serialized).expect("Failed to deserialize");
-
-        // Serialize again to check if it matches the previous serialization
-        let re_serialized = serde_json::to_string(&deserialized).expect("Re-serialization failed");
-        println!("{}", format!("Re-serialized JSON: {re_serialized}"));
 
         // Assert that the original and deserialized messages are equal
         assert_eq!(original_message, deserialized);

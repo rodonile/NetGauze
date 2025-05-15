@@ -255,7 +255,7 @@ fn normalize_json(value: &mut Value) {
                 if key == "encoding" {
                     if let Value::String(s) = val {
                         // Remove the prefix if it exists
-                        if let Some(stripped) = s.split(':').last() {
+                        if let Some(stripped) = s.split(':').next_back() {
                             *s = stripped.to_string();
                         }
                     }

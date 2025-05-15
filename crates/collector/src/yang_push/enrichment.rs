@@ -259,7 +259,7 @@ impl YangPushEnrichmentActor {
         };
 
         // Insert the subscription metadata into the cache
-        let peer_subscriptions = self.subscriptions.entry(peer).or_insert_with(HashMap::new);
+        let peer_subscriptions = self.subscriptions.entry(peer).or_default();
         peer_subscriptions.insert(sub.id(), telemetry_message_metadata.clone());
 
         // Update the gauge tracking per-peer subscriptions
@@ -365,7 +365,7 @@ impl YangPushEnrichmentActor {
                         peer,
                         sub_started.id()
                     );
-                    self.cache_subscription(peer, &sub_started)
+                    self.cache_subscription(peer, sub_started)
                 }
                 Some(NotificationVariant::SubscriptionModified(sub_modified)) => {
                     debug!(
@@ -373,7 +373,7 @@ impl YangPushEnrichmentActor {
                         peer,
                         sub_modified.id()
                     );
-                    self.cache_subscription(peer, &sub_modified)
+                    self.cache_subscription(peer, sub_modified)
                 }
                 Some(NotificationVariant::SubscriptionTerminated(sub_terminated)) => {
                     debug!(
@@ -381,7 +381,7 @@ impl YangPushEnrichmentActor {
                         peer,
                         sub_terminated.id()
                     );
-                    self.delete_subscription(peer, &sub_terminated)
+                    self.delete_subscription(peer, sub_terminated)
                 }
                 Some(NotificationVariant::YangPushUpdate(push_update)) => {
                     debug!(
