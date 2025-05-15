@@ -181,6 +181,31 @@ impl SubscriptionStartedModified {
     pub fn yang_library_content_id(&self) -> Option<&str> {
         self.yang_library_content_id.as_deref()
     }
+    pub fn new(
+        id: SubscriptionId,
+        target: Target,
+        stop_time: Option<DateTime<Utc>>,
+        transport: Option<Transport>,
+        encoding: Option<Encoding>,
+        purpose: Option<String>,
+        update_trigger: UpdateTrigger,
+        module_version: Option<Vec<YangPushModuleVersion>>,
+        yang_library_content_id: Option<String>,
+        extra_fields: Value,
+    ) -> Self {
+        Self {
+            id,
+            target,
+            stop_time,
+            transport,
+            encoding,
+            purpose,
+            update_trigger,
+            module_version,
+            yang_library_content_id,
+            extra_fields,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -200,6 +225,13 @@ impl SubscriptionTerminated {
     pub fn reason(&self) -> &str {
         &self.reason
     }
+    pub fn new(id: SubscriptionId, reason: String, extra_fields: Value) -> Self {
+        Self {
+            id,
+            reason,
+            extra_fields,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -217,6 +249,13 @@ impl YangPushUpdate {
     pub fn id(&self) -> SubscriptionId {
         self.id
     }
+    pub fn new(id: SubscriptionId, datastore_contents: Value, extra_fields: Value) -> Self {
+        Self {
+            id,
+            datastore_contents,
+            extra_fields,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -233,6 +272,13 @@ pub struct YangPushChangeUpdate {
 impl YangPushChangeUpdate {
     pub fn id(&self) -> SubscriptionId {
         self.id
+    }
+    pub fn new(id: SubscriptionId, datastore_changes: Value, extra_fields: Value) -> Self {
+        Self {
+            id,
+            datastore_changes,
+            extra_fields,
+        }
     }
 }
 
@@ -288,6 +334,25 @@ impl Target {
     }
     pub fn datastore_xpath_filter(&self) -> Option<&str> {
         self.datastore_xpath_filter.as_deref()
+    }
+    pub fn new(
+        stream: Option<String>,
+        stream_subtree_filter: Option<Value>,
+        stream_xpath_filter: Option<String>,
+        replay_start_time: Option<DateTime<Utc>>,
+        datastore: Option<String>,
+        datastore_subtree_filter: Option<Value>,
+        datastore_xpath_filter: Option<String>,
+    ) -> Self {
+        Self {
+            stream,
+            stream_subtree_filter,
+            stream_xpath_filter,
+            replay_start_time,
+            datastore,
+            datastore_subtree_filter,
+            datastore_xpath_filter,
+        }
     }
 }
 

@@ -13,9 +13,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// TODO: documentation here
-// TODO: add tests for all the match arms and conditions below...
-
+//! A module for processing Yang Push notifications messages.
+//!
+//! This module provides functionality to:
+//! - Cache and manage subscription metadata from Yang-Push Subscription
+//!   Started/Modified/Terminated notifications
+//! - Enrich Yang-Push notifications with metadata from cached subscriptions
+//! - Encapsulate Yang-Push notifications into Telemetry Message objects along
+//!   with the relevant metadata
+//!
+//! The main components are:
+//! - `YangPushEnrichmentActor` - The core actor responsible for processing and
+//!   enriching Yang Push notifications.
+//! - `YangPushEnrichmentActorHandle` - A handle for controlling the enrichment
+//!   actor and subscribing to enriched messages.
+//! - `YangPushEnrichmentStats` - Metrics for tracking the performance and
+//!   behavior of the enrichment process.
 use crate::telemetry::{
     DataCollectionMetadata, FilterSpec, Label, LabelValue, Manifest, SessionProtocol,
     TelemetryMessage, TelemetryMessageMetadata, YangPushSubscriptionMetadata,
@@ -34,7 +47,6 @@ use std::{
 };
 
 use chrono::Utc;
-use colored::*;
 use shadow_rs::shadow;
 use sysinfo::System;
 use tokio::{sync::mpsc, task::JoinHandle};
@@ -50,12 +62,12 @@ pub enum YangPushEnrichmentActorCommand {
     Shutdown,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum YangPushEnrichmentActorError {
     EnrichmentChannelClosed,
     YangPushReceiveError,
-    UnknownNotificationVariant,
-    NotificationSerializationError,
+    NotificationWithoutContent,
+    PayloadSerializationError,
 }
 
 impl std::fmt::Display for YangPushEnrichmentActorError {
@@ -63,11 +75,11 @@ impl std::fmt::Display for YangPushEnrichmentActorError {
         match self {
             Self::EnrichmentChannelClosed => write!(f, "enrichment channel closed"),
             Self::YangPushReceiveError => write!(f, "error in flow receive channel"),
-            Self::UnknownNotificationVariant => {
-                write!(f, "unknown notification variant")
+            Self::NotificationWithoutContent => {
+                write!(f, "Received Yang Push Notification without content")
             }
-            Self::NotificationSerializationError => {
-                write!(f, "failed to serialize notification")
+            Self::PayloadSerializationError => {
+                write!(f, "failed to serialize UDP-Notif Payload")
             }
         }
     }
@@ -237,9 +249,7 @@ impl YangPushEnrichmentActor {
             encoding: sub.encoding().cloned(),
             purpose: sub.purpose().cloned(),
             update_trigger: sub.update_trigger().clone(),
-            module_version: sub.module_version().cloned().unwrap_or_default(), /* TODO: add test
-                                                                                * here for the
-                                                                                * default (Cache subscription tests trying this out..)... */
+            module_version: sub.module_version().cloned().unwrap_or_default(),
             yang_library_content_id: sub.yang_library_content_id().map(|id| id.to_string()),
         };
 
@@ -258,7 +268,7 @@ impl YangPushEnrichmentActor {
 
         debug!(
             "Yang Push Subscription Cache: {}",
-            serde_json::to_string(&self.subscriptions).unwrap().red()
+            serde_json::to_string(&self.subscriptions).unwrap()
         );
 
         Ok(telemetry_message_metadata)
@@ -288,7 +298,7 @@ impl YangPushEnrichmentActor {
 
         debug!(
             "Yang Push Subscription Cache: {}",
-            serde_json::to_string(&self.subscriptions).unwrap().red()
+            serde_json::to_string(&self.subscriptions).unwrap()
         );
 
         Ok(telemetry_message_metadata)
@@ -330,7 +340,6 @@ impl YangPushEnrichmentActor {
         payload: &UdpNotifPayload,
     ) -> Result<TelemetryMessage, YangPushEnrichmentActorError> {
         let timestamp = Utc::now();
-        // let telemetry_message_metadata: TelemetryMessageMetadata;
 
         // Get sonata labels from the cache
         let (_, labels) = self.labels.get(&peer.ip()).unwrap_or(&self.default_labels);
@@ -392,10 +401,10 @@ impl YangPushEnrichmentActor {
                 }
                 None => {
                     warn!(
-                        "Receive Notification Message (peer: {}) with unknown/unsupported type",
+                        "Received Notification Message (peer: {}) without content",
                         peer
                     );
-                    Err(YangPushEnrichmentActorError::UnknownNotificationVariant)
+                    Err(YangPushEnrichmentActorError::NotificationWithoutContent)
                 }
             }
         };
@@ -410,9 +419,10 @@ impl YangPushEnrichmentActor {
             }
         };
 
+        // Re-serialize the UDP-Notif payload into JSON
         let json_payload = serde_json::to_value(payload).map_err(|err| {
-            error!("Failed to serialize UDP-Notif Payload (should never happen): {err}");
-            YangPushEnrichmentActorError::NotificationSerializationError
+            error!("Failed to re-serialize UDP-Notif Payload (should never happen): {err}");
+            YangPushEnrichmentActorError::PayloadSerializationError
         })?;
 
         // Populate metadata and payload in a new TelemetryMessage
@@ -480,10 +490,6 @@ impl YangPushEnrichmentActor {
                             // Process the payload and send the enriched TelemetryMessage
                             match self.process_payload(*peer, pkt_decoded.payload()) {
                                 Ok(telemetry_message) => {
-
-                                    // TODO: remove and also remove colored...
-                                    info!("{}", serde_json::to_string(&telemetry_message).unwrap().purple());
-
                                     if let Err(err) = self.enriched_tx.send(telemetry_message).await {
                                         error!("YangPushEnrichmentActor send error: {err}");
                                         self.stats.send_error.add(1, &peer_tags);
@@ -561,5 +567,255 @@ impl YangPushEnrichmentActorHandle {
 
     pub fn subscribe(&self) -> async_channel::Receiver<TelemetryMessage> {
         self.enriched_rx.clone()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::MediaType;
+    use bytes::Bytes;
+    use netgauze_udp_notif_pkt::yang::notification::{
+        CentiSeconds, Encoding, Target, Transport, UpdateTrigger,
+    };
+    use serde_json::json;
+    use std::{collections::HashMap, net::SocketAddr};
+
+    fn create_subscription_started_modified(
+        id: SubscriptionId,
+        purpose: String,
+    ) -> SubscriptionStartedModified {
+        SubscriptionStartedModified::new(
+            id,
+            Target::new(
+                None,
+                None,
+                None,
+                None,
+                Some("example-datastore-name".to_string()),
+                None,
+                Some("/example/datastore/xpath".to_string()),
+            ),
+            None,
+            Some(Transport::UDPNotif),
+            Some(Encoding::Json),
+            Some(purpose),
+            UpdateTrigger::Periodic {
+                period: CentiSeconds::new(100),
+                anchor_time: None,
+            },
+            None,
+            None,
+            json!({}),
+        )
+    }
+
+    fn create_subscription_terminated(id: SubscriptionId) -> SubscriptionTerminated {
+        SubscriptionTerminated::new(id, "some-termination-reason".to_string(), json!({}))
+    }
+
+    fn create_actor() -> YangPushEnrichmentActor {
+        YangPushEnrichmentActor {
+            cmd_rx: mpsc::channel(10).1,
+            udp_notif_rx: async_channel::bounded(10).1,
+            enriched_tx: async_channel::bounded(10).0,
+            labels: HashMap::new(),
+            default_labels: (0, HashMap::new()),
+            subscriptions: HashMap::new(),
+            manifest: fetch_sysinfo_manifest(),
+            stats: YangPushEnrichmentStats::new(opentelemetry::global::meter("my-meter")),
+        }
+    }
+
+    #[test]
+    fn test_cache_and_get_subscription() {
+        let mut actor = create_actor();
+        let peer: SocketAddr = "127.0.0.1:12345".parse().unwrap();
+
+        // Create a SubscriptionStartedModified message and cache it
+        let subscription_started =
+            create_subscription_started_modified(1, "example-purpose".to_string());
+        let result = actor.cache_subscription(peer, &subscription_started);
+        assert!(result.is_ok());
+
+        // Check get_subscription method
+        let get_result = actor.get_subscription(peer, &1);
+        assert!(get_result.is_ok());
+        assert_eq!(result.clone().unwrap(), get_result.unwrap());
+
+        // Check if the subscription is cached correctly
+        let peer_subscription = result.unwrap();
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .id,
+            Some(1)
+        );
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .filter_spec
+                .datastore,
+            Some("example-datastore-name".to_string())
+        );
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .filter_spec
+                .xpath_filter,
+            Some("/example/datastore/xpath".to_string())
+        );
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .transport,
+            Some(Transport::UDPNotif)
+        );
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .encoding,
+            Some(Encoding::Json)
+        );
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .purpose,
+            Some("example-purpose".to_string())
+        );
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .update_trigger,
+            UpdateTrigger::Periodic {
+                period: CentiSeconds::new(100),
+                anchor_time: None
+            }
+        );
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .module_version,
+            Vec::new() // default
+        );
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .yang_library_content_id,
+            None
+        );
+
+        // Modify the subscription and check if it updates the cache
+        let subscription_modified =
+            create_subscription_started_modified(1, "updated-purpose".to_string());
+        let peer_subscription = actor
+            .cache_subscription(peer, &subscription_modified)
+            .unwrap();
+        assert_eq!(
+            peer_subscription
+                .yang_push_subscription
+                .as_ref()
+                .unwrap()
+                .purpose,
+            Some("updated-purpose".to_string())
+        );
+    }
+
+    #[test]
+    fn test_delete_subscription() {
+        let mut actor = create_actor();
+        let peer: SocketAddr = "127.0.0.1:12345".parse().unwrap();
+
+        // Create a SubscriptionStartedModified message and cache it
+        let subscription_started = create_subscription_started_modified(1, "".to_string());
+        actor
+            .cache_subscription(peer, &subscription_started)
+            .unwrap();
+
+        // Ensure the subscription is cached before deletion
+        let peer_subscriptions = actor.subscriptions.get(&peer);
+        assert!(peer_subscriptions.is_some() && peer_subscriptions.unwrap().contains_key(&1));
+
+        let terminated = create_subscription_terminated(1);
+        let result = actor.delete_subscription(peer, &terminated);
+        assert!(result.is_ok());
+
+        let peer_subscriptions = actor.subscriptions.get(&peer);
+        assert!(peer_subscriptions.is_none() || !peer_subscriptions.unwrap().contains_key(&1));
+    }
+
+    #[test]
+    fn test_get_subscription_cache_miss() {
+        let mut actor = create_actor();
+        let peer: SocketAddr = "127.0.0.1:12345".parse().unwrap();
+        let subscription_id_1 = create_subscription_started_modified(1, "".to_string());
+        let subscription_id_23 = create_subscription_started_modified(23, "".to_string());
+        actor.cache_subscription(peer, &subscription_id_1).unwrap();
+        actor.cache_subscription(peer, &subscription_id_23).unwrap();
+
+        assert_eq!(actor.subscriptions.len(), 1);
+        assert!(actor.subscriptions.contains_key(&peer));
+        assert!(actor.subscriptions[&peer].contains_key(&1));
+        assert!(actor.subscriptions[&peer].contains_key(&23));
+        assert_eq!(actor.subscriptions[&peer].len(), 2);
+
+        let get_result = actor.get_subscription(peer, &12);
+        assert!(get_result.is_ok());
+
+        let peer_subscription = get_result.unwrap();
+        assert_eq!(peer_subscription, TelemetryMessageMetadata::default());
+    }
+
+    #[test]
+    fn test_process_payload_envelope_without_content() {
+        let mut actor = create_actor();
+        let peer: SocketAddr = "127.0.0.1:12345".parse().unwrap();
+
+        // Create a UdpNotifPayload without content
+        let payload = json!({
+                    "ietf-yp-notification:envelope": {
+                        "event-time": "2025-03-04T07:11:33.252679191+00:00",
+                        "hostname": "some-router",
+                        "sequence-number": 5,
+                      }
+        })
+        .to_string()
+        .into_bytes();
+
+        let packet = UdpNotifPacket::new(
+            MediaType::YangDataJson,
+            1,
+            1,
+            HashMap::new(),
+            Bytes::from(payload),
+        );
+
+        // Attempt to decode the packet (should succeed)
+        let decoded: UdpNotifPacketDecoded = (&packet).try_into().unwrap();
+
+        let result = actor.process_payload(peer, decoded.payload());
+        assert!(result.is_err());
+        assert_eq!(
+            result.unwrap_err(),
+            YangPushEnrichmentActorError::NotificationWithoutContent
+        );
     }
 }

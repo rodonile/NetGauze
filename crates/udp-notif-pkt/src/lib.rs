@@ -492,4 +492,72 @@ mod tests {
             panic!("Expected JsonError");
         }
     }
+
+    #[test]
+    fn test_udp_notif_packet_decoded_empty_content() {
+        let payload = json!({
+                    "ietf-yp-notification:envelope": {
+                        "event-time": "2025-03-04T07:11:33.252679191+00:00",
+                        "hostname": "some-router",
+                        "sequence-number": 5,
+                        "contents": {},
+                      }
+        })
+        .to_string()
+        .into_bytes();
+
+        let packet = UdpNotifPacket::new(
+            MediaType::YangDataJson,
+            1,
+            1,
+            HashMap::new(),
+            Bytes::from(payload),
+        );
+
+        // Attempt to decode the packet (will throw an error since there
+        // isn't any of the defined NotificationVariant)
+        let result = UdpNotifPacketDecoded::try_from(&packet);
+
+        assert!(result.is_err());
+        if let Err(UdpNotifPayloadConversionError::JsonError(json_error)) = result {
+            println!("Expected JsonError: {:?}", json_error);
+        } else {
+            panic!("Expected JsonError");
+        }
+    }
+
+    #[test]
+    fn test_udp_notif_packet_decoded_no_content() {
+        let payload = json!({
+                    "ietf-yp-notification:envelope": {
+                        "event-time": "2025-03-04T07:11:33.252679191+00:00",
+                        "hostname": "some-router",
+                        "sequence-number": 5,
+                      }
+        })
+        .to_string()
+        .into_bytes();
+
+        let packet = UdpNotifPacket::new(
+            MediaType::YangDataJson,
+            1,
+            1,
+            HashMap::new(),
+            Bytes::from(payload),
+        );
+
+        // Attempt to decode the packet (should succeed)
+        let decoded: UdpNotifPacketDecoded = (&packet).try_into().unwrap();
+
+        // Check hostname and sequence number
+        match decoded.payload() {
+            UdpNotifPayload::NotificationEnvelope(envelope) => {
+                assert_eq!(envelope.hostname().unwrap(), "some-router");
+                assert_eq!(envelope.sequence_number().unwrap(), 5);
+            }
+            _ => {
+                panic!("Expected UdpNotifPayload::NotificationEnvelope");
+            }
+        }
+    }
 }
