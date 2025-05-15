@@ -25,7 +25,7 @@ use serde_json::Value;
 use std::{collections::HashMap, convert::TryFrom};
 use strum_macros::Display;
 
-use yang::notification::{Notification, NotificationEnvelope};
+use yang::notification::{NotificationEnvelope, NotificationLegacy};
 
 const UDP_NOTIF_VERSION: u8 = 1;
 
@@ -213,7 +213,7 @@ pub enum UdpNotifPayload {
     NotificationEnvelope(NotificationEnvelope),
 
     #[serde(rename = "ietf-notification:notification")]
-    Notification(Notification), // deprecated version
+    NotificationLegacy(NotificationLegacy), // deprecated
 }
 
 #[derive(Debug, Display)]
@@ -272,10 +272,96 @@ mod tests {
     use core::panic;
     use serde_json::json;
     use std::collections::HashMap;
-    use yang::notification::{Encoding, NotificationVariant};
+    use yang::notification::{Encoding, NotificationVariant, UpdateTrigger};
 
     #[test]
-    fn test_udp_notif_packet_decoded_known_payload_json_sub_started() {
+    fn test_udp_notif_packet_decoded_envelope_sub_started() {
+        let payload = json!({
+            "ietf-yp-notification:envelope": {
+                "contents": {
+                    "ietf-subscribed-notifications:subscription-started": {
+                        "encoding": "encode-json",
+                        "id": 30,
+                        "ietf-yang-push-revision:module-version": [
+                            { "module-name": "openconfig-interfaces", "revision": "" }
+                        ],
+                        "ietf-yang-push:datastore": "operational",
+                        "ietf-yang-push:datastore-xpath-filter": "openconfig-interfaces:interfaces",
+                        "ietf-yang-push:on-change": { "sync-on-start": true },
+                    }
+                },
+                "event-time": "2025-04-17T15:20:14.840Z",
+                "hostname": "ipf-zbl1327-r-daisy-91",
+                "sequence-number": 0
+            }
+        })
+        .to_string()
+        .into_bytes();
+
+        let packet = UdpNotifPacket::new(
+            MediaType::YangDataJson,
+            1234,
+            5678,
+            HashMap::new(),
+            Bytes::from(payload),
+        );
+
+        let decoded: UdpNotifPacketDecoded = (&packet).try_into().unwrap();
+
+        // Test UdpNotifPacketDecoded getters
+        assert_eq!(decoded.media_type(), MediaType::YangDataJson);
+        assert_eq!(decoded.publisher_id(), 1234);
+        assert_eq!(decoded.message_id(), 5678);
+
+        // Check that the payload is a NotificationEnvelope with a SubscriptionStarted
+        // notification
+        match decoded.payload() {
+            UdpNotifPayload::NotificationEnvelope(envelope) => {
+                assert_eq!(envelope.hostname().unwrap(), "ipf-zbl1327-r-daisy-91");
+                assert_eq!(envelope.sequence_number().unwrap(), 0);
+
+                if let Some(notif_variant) = envelope.contents() {
+                    match notif_variant {
+                        NotificationVariant::SubscriptionStarted(subscription_started) => {
+                            assert_eq!(subscription_started.id(), 30);
+                            assert_eq!(subscription_started.encoding().unwrap(), &Encoding::Json);
+                            assert_eq!(
+                                subscription_started.target().datastore().unwrap(),
+                                "operational"
+                            );
+                            assert_eq!(
+                                subscription_started
+                                    .target()
+                                    .datastore_xpath_filter()
+                                    .unwrap(),
+                                "openconfig-interfaces:interfaces"
+                            );
+                            if let UpdateTrigger::OnChange {
+                                sync_on_start: Some(sync_on_start),
+                                ..
+                            } = subscription_started.update_trigger()
+                            {
+                                assert!(*sync_on_start);
+                            } else {
+                                panic!("Expected UpdateTrigger::OnChange with sync_on_start set to true");
+                            }
+                        }
+                        _ => {
+                            panic!("Expected NotificationVariant::SubscriptionStarted");
+                        }
+                    }
+                } else {
+                    panic!("Expected contents in NotificationEnvelope");
+                }
+            }
+            _ => {
+                panic!("Expected UdpNotifPayload::NotificationEnvelope");
+            }
+        }
+    }
+
+    #[test]
+    fn test_udp_notif_packet_decoded_legacy_sub_started() {
         let payload = json!({
             "ietf-notification:notification": {
                 "eventTime": "2025-05-12T12:00:00Z",
@@ -304,15 +390,10 @@ mod tests {
 
         let decoded: UdpNotifPacketDecoded = (&packet).try_into().unwrap();
 
-        // Test UdpNotifPacketDecoded getters
-        assert_eq!(decoded.media_type(), MediaType::YangDataJson);
-        assert_eq!(decoded.publisher_id(), 1234);
-        assert_eq!(decoded.message_id(), 5678);
-
-        // Check that the payload is a NotificationEnvelope with a SubscriptionStarted
-        // notification
+        // Check that the payload is a Legacy Notification Wrapper with a
+        // SubscriptionStarted notification
         match decoded.payload() {
-            UdpNotifPayload::Notification(notification) => {
+            UdpNotifPayload::NotificationLegacy(notification) => {
                 if let Some(notif_variant) = notification.notification() {
                     match notif_variant {
                         NotificationVariant::SubscriptionStarted(subscription_started) => {
@@ -330,7 +411,7 @@ mod tests {
                 }
             }
             _ => {
-                panic!("Expected UdpNotifPayload::Notification");
+                panic!("Expected UdpNotifPayload::NotificationLegacy");
             }
         }
     }

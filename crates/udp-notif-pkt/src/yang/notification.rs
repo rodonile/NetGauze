@@ -27,7 +27,7 @@
 //! ## Key components:
 //! - **NotificationEnvelope**: Extensible wrapper for Yang-Push notification
 //!   messages with metadata like hostname and sequence number.
-//! - **Notification**: Legacy notification wrapper (deprecated).
+//! - **NotificationLegacy**: Legacy notification wrapper (deprecated).
 //! - **NotificationVariant**: Enumerates specific notification types (e.g.,
 //!   subscription started/modified/terminated, YANG push updates, etc.).
 //!
@@ -77,7 +77,7 @@ impl NotificationEnvelope {
 /// Legacy Yang-Push Notification Wrapper
 /// This is deprecated: use NotificationEnvelope instead
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct Notification {
+pub struct NotificationLegacy {
     #[serde(rename = "ietf-notification-sequencing:sysName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     sys_name: Option<String>,
@@ -89,7 +89,7 @@ pub struct Notification {
     extra_fields: Value,
 }
 
-impl Notification {
+impl NotificationLegacy {
     pub fn sys_name(&self) -> Option<&String> {
         self.sys_name.as_ref()
     }
@@ -114,7 +114,7 @@ pub enum NotificationVariant {
     YangPushUpdate(YangPushUpdate),
 
     #[serde(rename = "ietf-yang-push:push-change-update")]
-    YangPushChangeUpdate(Value),
+    YangPushChangeUpdate(YangPushChangeUpdate),
 }
 
 /// Subscription Started and Modified Message
@@ -203,10 +203,10 @@ impl SubscriptionTerminated {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
 pub struct YangPushUpdate {
     id: SubscriptionId,
 
-    #[serde(rename = "datastore-contents")]
     datastore_contents: Value,
 
     #[serde(flatten)]
@@ -214,6 +214,23 @@ pub struct YangPushUpdate {
 }
 
 impl YangPushUpdate {
+    pub fn id(&self) -> SubscriptionId {
+        self.id
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "kebab-case")]
+pub struct YangPushChangeUpdate {
+    id: SubscriptionId,
+
+    datastore_changes: Value,
+
+    #[serde(flatten)]
+    extra_fields: Value,
+}
+
+impl YangPushChangeUpdate {
     pub fn id(&self) -> SubscriptionId {
         self.id
     }
@@ -519,7 +536,7 @@ mod tests {
         };
 
         // Create a Notification instance
-        let notification = Notification {
+        let notification = NotificationLegacy {
             sys_name: Some("example-node".to_string()),
             notification: Some(NotificationVariant::SubscriptionStarted(
                 sub_started.clone(),
@@ -531,7 +548,7 @@ mod tests {
         let serialized = serde_json::to_string(&notification).expect("Serialization failed");
 
         // Deserialize the JSON back to a Notification
-        let deserialized: Notification =
+        let deserialized: NotificationLegacy =
             serde_json::from_str(&serialized).expect("Deserialization failed");
 
         // Assert that the deserialized Notification matches the original
@@ -623,7 +640,7 @@ mod tests {
         assert_eq!(sub_started.yang_library_content_id(), Some("content-id"));
 
         // Create a Notification instance
-        let notification = Notification {
+        let notification = NotificationLegacy {
             sys_name: Some("example-node".to_string()),
             notification: Some(NotificationVariant::SubscriptionStarted(
                 sub_started.clone(),
@@ -668,7 +685,7 @@ mod tests {
         };
 
         // Create a Notification instance
-        let notification = Notification {
+        let notification = NotificationLegacy {
             sys_name: Some("example-node".to_string()),
             notification: Some(NotificationVariant::SubscriptionTerminated(
                 sub_terminated.clone(),
@@ -680,7 +697,7 @@ mod tests {
         let serialized = serde_json::to_string(&notification).expect("Serialization failed");
 
         // Deserialize the JSON back to a Notification
-        let deserialized: Notification =
+        let deserialized: NotificationLegacy =
             serde_json::from_str(&serialized).expect("Deserialization failed");
 
         // Assert that the deserialized Notification matches the original
@@ -755,7 +772,7 @@ mod tests {
         };
 
         // Create a Notification instance
-        let notification = Notification {
+        let notification = NotificationLegacy {
             sys_name: Some("example-node".to_string()),
             notification: Some(NotificationVariant::YangPushUpdate(
                 yang_push_update.clone(),
@@ -767,7 +784,7 @@ mod tests {
         let serialized = serde_json::to_string(&notification).expect("Serialization failed");
 
         // Deserialize the JSON back to a Notification
-        let deserialized: Notification =
+        let deserialized: NotificationLegacy =
             serde_json::from_str(&serialized).expect("Deserialization failed");
 
         // Assert that the deserialized Notification matches the original
