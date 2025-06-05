@@ -52,8 +52,8 @@ pub struct NotificationEnvelope {
     #[serde(skip_serializing_if = "Option::is_none")]
     sequence_number: Option<u32>,
 
-    // alias for supporting deprecated 'notification-contents'
-    // instead of 'contents' (> draft-ietf-netconf-notif-envelope-01)
+    /// Alias for supporting deprecated 'notification-contents'
+    /// instead of 'contents' (> draft-ietf-netconf-notif-envelope-01)
     #[serde(alias = "notification-contents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     contents: Option<NotificationVariant>,
@@ -63,8 +63,8 @@ pub struct NotificationEnvelope {
 }
 
 impl NotificationEnvelope {
-    pub fn hostname(&self) -> Option<&String> {
-        self.hostname.as_ref()
+    pub fn hostname(&self) -> Option<&str> {
+        self.hostname.as_deref()
     }
     pub fn sequence_number(&self) -> Option<u32> {
         self.sequence_number
@@ -90,8 +90,8 @@ pub struct NotificationLegacy {
 }
 
 impl NotificationLegacy {
-    pub fn sys_name(&self) -> Option<&String> {
-        self.sys_name.as_ref()
+    pub fn sys_name(&self) -> Option<&str> {
+        self.sys_name.as_deref()
     }
     pub fn notification(&self) -> Option<&NotificationVariant> {
         self.notification.as_ref()
@@ -154,33 +154,6 @@ pub struct SubscriptionStartedModified {
 }
 
 impl SubscriptionStartedModified {
-    pub fn id(&self) -> SubscriptionId {
-        self.id
-    }
-    pub fn target(&self) -> &Target {
-        &self.target
-    }
-    pub fn stop_time(&self) -> Option<&DateTime<Utc>> {
-        self.stop_time.as_ref()
-    }
-    pub fn transport(&self) -> Option<&Transport> {
-        self.transport.as_ref()
-    }
-    pub fn encoding(&self) -> Option<&Encoding> {
-        self.encoding.as_ref()
-    }
-    pub fn purpose(&self) -> Option<&String> {
-        self.purpose.as_ref()
-    }
-    pub fn update_trigger(&self) -> &UpdateTrigger {
-        &self.update_trigger
-    }
-    pub fn module_version(&self) -> Option<&Vec<YangPushModuleVersion>> {
-        self.module_version.as_ref()
-    }
-    pub fn yang_library_content_id(&self) -> Option<&str> {
-        self.yang_library_content_id.as_deref()
-    }
     #[allow(clippy::too_many_arguments)]
     pub fn new(
         id: SubscriptionId,
@@ -207,6 +180,33 @@ impl SubscriptionStartedModified {
             extra_fields,
         }
     }
+    pub fn id(&self) -> SubscriptionId {
+        self.id
+    }
+    pub fn target(&self) -> &Target {
+        &self.target
+    }
+    pub fn stop_time(&self) -> Option<&DateTime<Utc>> {
+        self.stop_time.as_ref()
+    }
+    pub fn transport(&self) -> Option<&Transport> {
+        self.transport.as_ref()
+    }
+    pub fn encoding(&self) -> Option<&Encoding> {
+        self.encoding.as_ref()
+    }
+    pub fn purpose(&self) -> Option<&str> {
+        self.purpose.as_deref()
+    }
+    pub fn update_trigger(&self) -> &UpdateTrigger {
+        &self.update_trigger
+    }
+    pub fn module_version(&self) -> Option<&Vec<YangPushModuleVersion>> {
+        self.module_version.as_ref()
+    }
+    pub fn yang_library_content_id(&self) -> Option<&str> {
+        self.yang_library_content_id.as_deref()
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -220,18 +220,18 @@ pub struct SubscriptionTerminated {
 }
 
 impl SubscriptionTerminated {
-    pub fn id(&self) -> SubscriptionId {
-        self.id
-    }
-    pub fn reason(&self) -> &str {
-        &self.reason
-    }
     pub fn new(id: SubscriptionId, reason: String, extra_fields: Value) -> Self {
         Self {
             id,
             reason,
             extra_fields,
         }
+    }
+    pub fn id(&self) -> SubscriptionId {
+        self.id
+    }
+    pub fn reason(&self) -> &str {
+        &self.reason
     }
 }
 
@@ -247,15 +247,15 @@ pub struct YangPushUpdate {
 }
 
 impl YangPushUpdate {
-    pub fn id(&self) -> SubscriptionId {
-        self.id
-    }
     pub fn new(id: SubscriptionId, datastore_contents: Value, extra_fields: Value) -> Self {
         Self {
             id,
             datastore_contents,
             extra_fields,
         }
+    }
+    pub fn id(&self) -> SubscriptionId {
+        self.id
     }
 }
 
@@ -271,15 +271,15 @@ pub struct YangPushChangeUpdate {
 }
 
 impl YangPushChangeUpdate {
-    pub fn id(&self) -> SubscriptionId {
-        self.id
-    }
     pub fn new(id: SubscriptionId, datastore_changes: Value, extra_fields: Value) -> Self {
         Self {
             id,
             datastore_changes,
             extra_fields,
         }
+    }
+    pub fn id(&self) -> SubscriptionId {
+        self.id
     }
 }
 
@@ -315,6 +315,25 @@ pub struct Target {
 }
 
 impl Target {
+    pub fn new(
+        stream: Option<String>,
+        stream_subtree_filter: Option<Value>,
+        stream_xpath_filter: Option<String>,
+        replay_start_time: Option<DateTime<Utc>>,
+        datastore: Option<String>,
+        datastore_subtree_filter: Option<Value>,
+        datastore_xpath_filter: Option<String>,
+    ) -> Self {
+        Self {
+            stream,
+            stream_subtree_filter,
+            stream_xpath_filter,
+            replay_start_time,
+            datastore,
+            datastore_subtree_filter,
+            datastore_xpath_filter,
+        }
+    }
     pub fn stream(&self) -> Option<&str> {
         self.stream.as_deref()
     }
@@ -335,25 +354,6 @@ impl Target {
     }
     pub fn datastore_xpath_filter(&self) -> Option<&str> {
         self.datastore_xpath_filter.as_deref()
-    }
-    pub fn new(
-        stream: Option<String>,
-        stream_subtree_filter: Option<Value>,
-        stream_xpath_filter: Option<String>,
-        replay_start_time: Option<DateTime<Utc>>,
-        datastore: Option<String>,
-        datastore_subtree_filter: Option<Value>,
-        datastore_xpath_filter: Option<String>,
-    ) -> Self {
-        Self {
-            stream,
-            stream_subtree_filter,
-            stream_xpath_filter,
-            replay_start_time,
-            datastore,
-            datastore_subtree_filter,
-            datastore_xpath_filter,
-        }
     }
 }
 
@@ -704,7 +704,7 @@ mod tests {
         );
         assert_eq!(sub_started.transport(), Some(&Transport::UDPNotif));
         assert_eq!(sub_started.encoding(), Some(&Encoding::Json));
-        assert_eq!(sub_started.purpose(), Some(&"test-purpose".to_string()));
+        assert_eq!(sub_started.purpose(), Some("test-purpose"));
         assert_eq!(sub_started.yang_library_content_id(), Some("content-id"));
 
         // Create a Notification instance
@@ -717,7 +717,7 @@ mod tests {
         };
 
         // Notification getters
-        assert_eq!(notification.sys_name(), Some(&"example-node".to_string()));
+        assert_eq!(notification.sys_name(), Some("example-node"));
         assert!(matches!(
             notification.notification(),
             Some(NotificationVariant::SubscriptionStarted(_))
@@ -732,10 +732,7 @@ mod tests {
         };
 
         // NotificationEnvelope getters
-        assert_eq!(
-            notification_envelope.hostname(),
-            Some(&"example-host".to_string())
-        );
+        assert_eq!(notification_envelope.hostname(), Some("example-host"));
         assert_eq!(notification_envelope.sequence_number(), Some(12345));
         assert!(matches!(
             notification_envelope.contents(),

@@ -29,9 +29,10 @@
 //!   actor and subscribing to enriched messages.
 //! - `YangPushEnrichmentStats` - Metrics for tracking the performance and
 //!   behavior of the enrichment process.
-use crate::telemetry::{
-    DataCollectionMetadata, FilterSpec, Label, LabelValue, Manifest, Message, SessionProtocol,
-    TelemetryMessage, TelemetryMessageMetadata, YangPushSubscriptionMetadata,
+use crate::yang_push::telemetry::{
+    DataCollectionMetadata, FilterSpec, Label, LabelValue, Manifest, SessionProtocol,
+    TelemetryMessage, TelemetryMessageMetadata, TelemetryMessageWrapper,
+    YangPushSubscriptionMetadata,
 };
 use netgauze_udp_notif_pkt::{
     yang::notification::{
@@ -159,19 +160,19 @@ fn fetch_sysinfo_manifest() -> Manifest {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    Manifest {
-        name: Some(format!(
+    Manifest::new(
+        Some(format!(
             "{}@{}",
             build::PROJECT_NAME,
             System::host_name().unwrap_or_else(|| "unknown".to_string())
         )),
-        vendor: Some("NetGauze".to_string()),
-        vendor_pen: None,
-        software_version: Some(format!("{} ({})", build::PKG_VERSION, build::SHORT_COMMIT)),
-        software_flavor: Some(build::BUILD_RUST_CHANNEL.to_string()),
-        os_version: System::os_version(),
-        os_type: System::name(),
-    }
+        Some("NetGauze".to_string()),
+        None,
+        Some(format!("{} ({})", build::PKG_VERSION, build::SHORT_COMMIT)),
+        Some(build::BUILD_RUST_CHANNEL.to_string()),
+        System::os_version(),
+        System::name(),
+    )
 }
 
 /// Actor responsible for enriching Yang Push notifications.
@@ -179,7 +180,7 @@ fn fetch_sysinfo_manifest() -> Manifest {
 struct YangPushEnrichmentActor {
     cmd_rx: mpsc::Receiver<YangPushEnrichmentActorCommand>,
     udp_notif_rx: async_channel::Receiver<Arc<(SocketAddr, UdpNotifPacket)>>,
-    enriched_tx: async_channel::Sender<TelemetryMessage>,
+    enriched_tx: async_channel::Sender<TelemetryMessageWrapper>,
     labels: HashMap<IpAddr, (u32, HashMap<String, String>)>,
     default_labels: (u32, HashMap<String, String>),
     subscriptions: HashMap<SocketAddr, SubscriptionsCache>,
@@ -191,7 +192,7 @@ impl YangPushEnrichmentActor {
     fn new(
         cmd_rx: mpsc::Receiver<YangPushEnrichmentActorCommand>,
         udp_notif_rx: async_channel::Receiver<Arc<(SocketAddr, UdpNotifPacket)>>,
-        enriched_tx: async_channel::Sender<TelemetryMessage>,
+        enriched_tx: async_channel::Sender<TelemetryMessageWrapper>,
         stats: YangPushEnrichmentStats,
     ) -> Self {
         let default_labels = (
@@ -236,27 +237,22 @@ impl YangPushEnrichmentActor {
             .cloned()
             .or_else(|| sub.target().stream_subtree_filter().cloned());
 
-        let subscription_metadata = YangPushSubscriptionMetadata {
-            id: Some(sub.id()),
-            filter_spec: FilterSpec {
-                stream,
-                datastore,
-                xpath_filter,
-                subtree_filter,
-            },
-            stop_time: sub.stop_time().cloned(),
-            transport: sub.transport().cloned(),
-            encoding: sub.encoding().cloned(),
-            purpose: sub.purpose().cloned(),
-            update_trigger: sub.update_trigger().clone().into(),
-            module_version: sub.module_version().cloned().unwrap_or_default(),
-            yang_library_content_id: sub.yang_library_content_id().map(|id| id.to_string()),
-        };
+        let filter_spec = FilterSpec::new(stream, datastore, xpath_filter, subtree_filter);
 
-        let telemetry_message_metadata = TelemetryMessageMetadata {
-            event_time: None,
-            yang_push_subscription: Some(subscription_metadata),
-        };
+        let subscription_metadata = YangPushSubscriptionMetadata::new(
+            Some(sub.id()),
+            filter_spec,
+            sub.stop_time().cloned(),
+            sub.transport().cloned(),
+            sub.encoding().cloned(),
+            sub.purpose().map(|id| id.to_string()),
+            sub.update_trigger().clone().into(),
+            sub.module_version().cloned().unwrap_or_default(),
+            sub.yang_library_content_id().map(|id| id.to_string()),
+        );
+
+        let telemetry_message_metadata =
+            TelemetryMessageMetadata::new(None, Some(subscription_metadata));
 
         // Insert the subscription metadata into the cache
         let peer_subscriptions = self.subscriptions.entry(peer).or_default();
@@ -333,89 +329,92 @@ impl YangPushEnrichmentActor {
         Ok(telemetry_message_metadata)
     }
 
+    /// Processes Notification and returns the relevant TelemetryMessageMetadata
+    fn process_notification(
+        &mut self,
+        peer: SocketAddr,
+        notification: Option<&NotificationVariant>,
+    ) -> Result<TelemetryMessageMetadata, YangPushEnrichmentActorError> {
+        match notification {
+            Some(NotificationVariant::SubscriptionStarted(sub_started)) => {
+                debug!(
+                    "Received Subscription Started Message (peer: {}, id={})",
+                    peer,
+                    sub_started.id()
+                );
+                self.cache_subscription(peer, sub_started)
+            }
+            Some(NotificationVariant::SubscriptionModified(sub_modified)) => {
+                debug!(
+                    "Received Subscription Modified Message (peer: {}, id={})",
+                    peer,
+                    sub_modified.id()
+                );
+                self.cache_subscription(peer, sub_modified)
+            }
+            Some(NotificationVariant::SubscriptionTerminated(sub_terminated)) => {
+                debug!(
+                    "Received Subscription Terminated Message (peer: {}, id={})",
+                    peer,
+                    sub_terminated.id()
+                );
+                self.delete_subscription(peer, sub_terminated)
+            }
+            Some(NotificationVariant::YangPushUpdate(push_update)) => {
+                debug!(
+                    "Received Yang Push Update Message (peer: {}, id={})",
+                    peer,
+                    push_update.id()
+                );
+                self.get_subscription(peer, &push_update.id())
+            }
+            Some(NotificationVariant::YangPushChangeUpdate(push_change_update)) => {
+                debug!(
+                    "Received Yang Push Change Update Message (peer: {}, id={})",
+                    peer,
+                    push_change_update.id()
+                );
+                self.get_subscription(peer, &push_change_update.id())
+            }
+            None => {
+                warn!(
+                    "Received Notification Message (peer: {}) without content",
+                    peer
+                );
+                Err(YangPushEnrichmentActorError::NotificationWithoutContent)
+            }
+        }
+    }
+
     /// Processes UDP-Notif Payload and produces a TelemetryMessage object.
     fn process_payload(
         &mut self,
         peer: SocketAddr,
         payload: &UdpNotifPayload,
-    ) -> Result<TelemetryMessage, YangPushEnrichmentActorError> {
+    ) -> Result<TelemetryMessageWrapper, YangPushEnrichmentActorError> {
         let timestamp = Utc::now();
 
         // Get sonata labels from the cache
         let (_, labels) = self.labels.get(&peer.ip()).unwrap_or(&self.default_labels);
         let labels: Vec<Label> = labels
             .iter()
-            .map(|(key, value)| Label {
-                name: key.clone(),
-                value: Some(LabelValue::StringValue {
-                    string_value: value.clone(),
-                }),
+            .map(|(key, value)| {
+                Label::new(
+                    key.clone(),
+                    Some(LabelValue::StringValue {
+                        string_value: value.clone(),
+                    }),
+                )
             })
             .collect();
 
-        // Closure to handle processing the NotificationVariants
-        let mut process_notif_variant = |notification_variant: Option<&NotificationVariant>| -> Result<
-            TelemetryMessageMetadata,
-            YangPushEnrichmentActorError,
-        > {
-            match notification_variant {
-                Some(NotificationVariant::SubscriptionStarted(sub_started)) => {
-                    debug!(
-                        "Received Subscription Started Message (peer: {}, id={})",
-                        peer,
-                        sub_started.id()
-                    );
-                    self.cache_subscription(peer, sub_started)
-                }
-                Some(NotificationVariant::SubscriptionModified(sub_modified)) => {
-                    debug!(
-                        "Received Subscription Modified Message (peer: {}, id={})",
-                        peer,
-                        sub_modified.id()
-                    );
-                    self.cache_subscription(peer, sub_modified)
-                }
-                Some(NotificationVariant::SubscriptionTerminated(sub_terminated)) => {
-                    debug!(
-                        "Received Subscription Terminated Message (peer: {}, id={})",
-                        peer,
-                        sub_terminated.id()
-                    );
-                    self.delete_subscription(peer, sub_terminated)
-                }
-                Some(NotificationVariant::YangPushUpdate(push_update)) => {
-                    debug!(
-                        "Received Yang Push Update Message (peer: {}, id={})",
-                        peer,
-                        push_update.id()
-                    );
-                    self.get_subscription(peer, &push_update.id())
-                }
-                Some(NotificationVariant::YangPushChangeUpdate(push_change_update)) => {
-                    debug!(
-                        "Received Yang Push Change Update Message (peer: {}, id={})",
-                        peer,
-                        push_change_update.id()
-                    );
-                    self.get_subscription(peer, &push_change_update.id())
-                }
-                None => {
-                    warn!(
-                        "Received Notification Message (peer: {}) without content",
-                        peer
-                    );
-                    Err(YangPushEnrichmentActorError::NotificationWithoutContent)
-                }
-            }
-        };
-
-        // Match on the wrapper and call the closure to process the notification content
+        // Match on the wrapper and process the notification content
         let telemetry_message_metadata = match payload {
             UdpNotifPayload::NotificationLegacy(legacy) => {
-                process_notif_variant(legacy.notification())?
+                self.process_notification(peer, legacy.notification())?
             }
             UdpNotifPayload::NotificationEnvelope(envelope) => {
-                process_notif_variant(envelope.contents())?
+                self.process_notification(peer, envelope.contents())?
             }
         };
 
@@ -426,23 +425,15 @@ impl YangPushEnrichmentActor {
         })?;
 
         // Populate metadata and payload in a new TelemetryMessage
-        Ok(TelemetryMessage {
-            message: Message {
-                timestamp,
-                session_protocol: SessionProtocol::YangPush, // only option at the moment
-                network_node_manifest: Manifest::default(),
-                data_collection_manifest: self.manifest.clone(),
-                telemetry_message_metadata,
-                data_collection_metadata: DataCollectionMetadata {
-                    remote_address: peer.ip(),
-                    remote_port: Some(peer.port()),
-                    local_address: None,
-                    local_port: None,
-                    labels,
-                },
-                payload: Some(json_payload),
-            },
-        })
+        Ok(TelemetryMessageWrapper::new(TelemetryMessage::new(
+            timestamp,
+            SessionProtocol::YangPush, // only option at the moment
+            Manifest::default(),
+            self.manifest.clone(),
+            telemetry_message_metadata,
+            DataCollectionMetadata::new(peer.ip(), Some(peer.port()), None, None, labels),
+            Some(json_payload),
+        )))
     }
 
     /// Main loop for the actor: handling commands and incoming notification
@@ -536,7 +527,7 @@ impl std::error::Error for YangPushEnrichmentActorHandleError {}
 #[derive(Debug, Clone)]
 pub struct YangPushEnrichmentActorHandle {
     cmd_send: mpsc::Sender<YangPushEnrichmentActorCommand>,
-    enriched_rx: async_channel::Receiver<TelemetryMessage>,
+    enriched_rx: async_channel::Receiver<TelemetryMessageWrapper>,
 }
 
 impl YangPushEnrichmentActorHandle {
@@ -567,7 +558,7 @@ impl YangPushEnrichmentActorHandle {
             .map_err(|_| YangPushEnrichmentActorHandleError::SendError)
     }
 
-    pub fn subscribe(&self) -> async_channel::Receiver<TelemetryMessage> {
+    pub fn subscribe(&self) -> async_channel::Receiver<TelemetryMessageWrapper> {
         self.enriched_rx.clone()
     }
 }
@@ -648,61 +639,54 @@ mod tests {
         // Check if the subscription is cached correctly
         let peer_subscription = result.unwrap();
         assert_eq!(
-            peer_subscription
-                .yang_push_subscription
-                .as_ref()
-                .unwrap()
-                .id,
+            peer_subscription.yang_push_subscription().unwrap().id(),
             Some(1)
         );
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .filter_spec
-                .datastore,
-            Some("example-datastore-name".to_string())
+                .filter_spec()
+                .datastore(),
+            Some("example-datastore-name")
         );
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .filter_spec
-                .xpath_filter,
-            Some("/example/datastore/xpath".to_string())
+                .filter_spec()
+                .xpath_filter(),
+            Some("/example/datastore/xpath")
         );
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .transport,
+                .transport()
+                .cloned(),
             Some(Transport::UDPNotif)
         );
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .encoding,
+                .encoding()
+                .cloned(),
             Some(Encoding::Json)
         );
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .purpose,
-            Some("example-purpose".to_string())
+                .purpose(),
+            Some("example-purpose")
         );
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .update_trigger,
+                .update_trigger()
+                .clone(),
             UpdateTrigger::Periodic {
                 period: Some(CentiSeconds::new(100)),
                 anchor_time: None
@@ -711,18 +695,16 @@ mod tests {
         );
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .module_version,
+                .module_version(),
             Vec::new() // default
         );
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .yang_library_content_id,
+                .yang_library_content_id(),
             None
         );
 
@@ -734,11 +716,10 @@ mod tests {
             .unwrap();
         assert_eq!(
             peer_subscription
-                .yang_push_subscription
-                .as_ref()
+                .yang_push_subscription()
                 .unwrap()
-                .purpose,
-            Some("updated-purpose".to_string())
+                .purpose(),
+            Some("updated-purpose")
         );
     }
 

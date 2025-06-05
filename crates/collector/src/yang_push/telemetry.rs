@@ -17,7 +17,7 @@
 //!
 //! This module defines the structure and serialization logic for telemetry
 //! messages as specified in:
-//! - [Telemetry Message](https://datatracker.ietf.org/doc/html/draft-netana-nmop-message-broker-telemetry-message-00).
+//! - [Telemetry Message](https://datatracker.ietf.org/doc/html/draft-netana-nmop-message-broker-telemetry-message).
 //!
 //! Key components include:
 //! - **TelemetryMessage**: The main structure representing a telemetry message.
@@ -25,8 +25,8 @@
 //!   YANG Push, NETCONF).
 //! - **Manifest**: Metadata about the network node or data collection system.
 //! - **TelemetryMessageMetadata**: Metadata specific to the telemetry
-//!   notification, with YANG Push subscription details. subscription, such as
-//!   filters, transport, and encoding.
+//!   notification, with YANG Push subscription details such as filters,
+//!   transport, and encoding.
 //! - **DataCollectionMetadata**: Metadata about the data collection, including
 //!   remote addresses and labels.
 use chrono::{DateTime, Utc};
@@ -40,23 +40,75 @@ use netgauze_udp_notif_pkt::yang::notification::{
 
 /// Telemetry Message Wrapper
 #[derive(Debug, Serialize, Deserialize, Eq, PartialEq)]
-pub struct TelemetryMessage {
+pub struct TelemetryMessageWrapper {
     #[serde(rename = "ietf-telemetry-message:message")]
-    pub message: Message,
+    message: TelemetryMessage,
 }
 
-/// Telemetry Message Content
+impl TelemetryMessageWrapper {
+    pub fn new(message: TelemetryMessage) -> Self {
+        Self { message }
+    }
+    pub fn message(&self) -> &TelemetryMessage {
+        &self.message
+    }
+}
+
+/// Telemetry Message
 #[derive(Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
-pub struct Message {
-    pub timestamp: chrono::DateTime<Utc>,
-    pub session_protocol: SessionProtocol,
-    pub network_node_manifest: Manifest,
-    pub data_collection_manifest: Manifest,
-    pub telemetry_message_metadata: TelemetryMessageMetadata,
-    pub data_collection_metadata: DataCollectionMetadata,
+pub struct TelemetryMessage {
+    timestamp: DateTime<Utc>,
+    session_protocol: SessionProtocol,
+    network_node_manifest: Manifest,
+    data_collection_manifest: Manifest,
+    telemetry_message_metadata: TelemetryMessageMetadata,
+    data_collection_metadata: DataCollectionMetadata,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payload: Option<Value>,
+    payload: Option<Value>,
+}
+
+impl TelemetryMessage {
+    pub fn new(
+        timestamp: DateTime<Utc>,
+        session_protocol: SessionProtocol,
+        network_node_manifest: Manifest,
+        data_collection_manifest: Manifest,
+        telemetry_message_metadata: TelemetryMessageMetadata,
+        data_collection_metadata: DataCollectionMetadata,
+        payload: Option<Value>,
+    ) -> Self {
+        Self {
+            timestamp,
+            session_protocol,
+            network_node_manifest,
+            data_collection_manifest,
+            telemetry_message_metadata,
+            data_collection_metadata,
+            payload,
+        }
+    }
+    pub fn timestamp(&self) -> DateTime<Utc> {
+        self.timestamp
+    }
+    pub fn session_protocol(&self) -> &SessionProtocol {
+        &self.session_protocol
+    }
+    pub fn network_node_manifest(&self) -> &Manifest {
+        &self.network_node_manifest
+    }
+    pub fn data_collection_manifest(&self) -> &Manifest {
+        &self.data_collection_manifest
+    }
+    pub fn telemetry_message_metadata(&self) -> &TelemetryMessageMetadata {
+        &self.telemetry_message_metadata
+    }
+    pub fn data_collection_metadata(&self) -> &DataCollectionMetadata {
+        &self.data_collection_metadata
+    }
+    pub fn payload(&self) -> Option<&Value> {
+        self.payload.as_ref()
+    }
 }
 
 /// Telemetry Session Protocol Type
@@ -82,25 +134,47 @@ pub enum SessionProtocol {
 #[serde(rename_all = "kebab-case")]
 pub struct Manifest {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    name: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vendor: Option<String>,
+    vendor: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vendor_pen: Option<u32>,
+    vendor_pen: Option<u32>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub software_version: Option<String>,
+    software_version: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub software_flavor: Option<String>,
+    software_flavor: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub os_version: Option<String>,
+    os_version: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub os_type: Option<String>,
+    os_type: Option<String>,
+}
+
+impl Manifest {
+    pub fn new(
+        name: Option<String>,
+        vendor: Option<String>,
+        vendor_pen: Option<u32>,
+        software_version: Option<String>,
+        software_flavor: Option<String>,
+        os_version: Option<String>,
+        os_type: Option<String>,
+    ) -> Self {
+        Self {
+            name,
+            vendor,
+            vendor_pen,
+            software_version,
+            software_flavor,
+            os_version,
+            os_type,
+        }
+    }
 }
 
 /// Telemetry Notification Metadata
@@ -108,57 +182,157 @@ pub struct Manifest {
 pub struct TelemetryMessageMetadata {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "event-time")]
-    pub event_time: Option<DateTime<Utc>>,
+    event_time: Option<DateTime<Utc>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "ietf-yang-push-telemetry-message:yang-push-subscription")]
-    pub yang_push_subscription: Option<YangPushSubscriptionMetadata>,
+    yang_push_subscription: Option<YangPushSubscriptionMetadata>,
+}
+
+impl TelemetryMessageMetadata {
+    pub fn new(
+        event_time: Option<DateTime<Utc>>,
+        yang_push_subscription: Option<YangPushSubscriptionMetadata>,
+    ) -> Self {
+        Self {
+            event_time,
+            yang_push_subscription,
+        }
+    }
+    pub fn event_time(&self) -> Option<DateTime<Utc>> {
+        self.event_time
+    }
+    pub fn yang_push_subscription(&self) -> Option<&YangPushSubscriptionMetadata> {
+        self.yang_push_subscription.as_ref()
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct YangPushSubscriptionMetadata {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<SubscriptionId>,
+    id: Option<SubscriptionId>,
 
     #[serde(flatten)]
-    pub filter_spec: FilterSpec,
+    filter_spec: FilterSpec,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stop_time: Option<DateTime<Utc>>,
+    stop_time: Option<DateTime<Utc>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transport: Option<Transport>,
+    transport: Option<Transport>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encoding: Option<Encoding>,
+    encoding: Option<Encoding>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub purpose: Option<String>,
+    purpose: Option<String>,
 
     #[serde(flatten)]
-    pub update_trigger: UpdateTrigger,
+    update_trigger: UpdateTrigger,
 
-    pub module_version: Vec<YangPushModuleVersion>,
+    module_version: Vec<YangPushModuleVersion>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub yang_library_content_id: Option<String>,
+    yang_library_content_id: Option<String>,
+}
+
+impl YangPushSubscriptionMetadata {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        id: Option<SubscriptionId>,
+        filter_spec: FilterSpec,
+        stop_time: Option<DateTime<Utc>>,
+        transport: Option<Transport>,
+        encoding: Option<Encoding>,
+        purpose: Option<String>,
+        update_trigger: UpdateTrigger,
+        module_version: Vec<YangPushModuleVersion>,
+        yang_library_content_id: Option<String>,
+    ) -> Self {
+        Self {
+            id,
+            filter_spec,
+            stop_time,
+            transport,
+            encoding,
+            purpose,
+            update_trigger,
+            module_version,
+            yang_library_content_id,
+        }
+    }
+    pub fn id(&self) -> Option<SubscriptionId> {
+        self.id
+    }
+    pub fn filter_spec(&self) -> &FilterSpec {
+        &self.filter_spec
+    }
+    pub fn stop_time(&self) -> Option<DateTime<Utc>> {
+        self.stop_time
+    }
+    pub fn transport(&self) -> Option<&Transport> {
+        self.transport.as_ref()
+    }
+    pub fn encoding(&self) -> Option<&Encoding> {
+        self.encoding.as_ref()
+    }
+    pub fn purpose(&self) -> Option<&str> {
+        self.purpose.as_deref()
+    }
+    pub fn update_trigger(&self) -> &UpdateTrigger {
+        &self.update_trigger
+    }
+    pub fn module_version(&self) -> &[YangPushModuleVersion] {
+        &self.module_version
+    }
+    pub fn yang_library_content_id(&self) -> Option<&str> {
+        self.yang_library_content_id.as_deref()
+    }
 }
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct FilterSpec {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream: Option<String>,
+    stream: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub datastore: Option<String>,
+    datastore: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub xpath_filter: Option<String>,
+    xpath_filter: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub subtree_filter: Option<Value>,
+    subtree_filter: Option<Value>,
+}
+
+impl FilterSpec {
+    pub fn new(
+        stream: Option<String>,
+        datastore: Option<String>,
+        xpath_filter: Option<String>,
+        subtree_filter: Option<Value>,
+    ) -> Self {
+        Self {
+            stream,
+            datastore,
+            xpath_filter,
+            subtree_filter,
+        }
+    }
+    pub fn stream(&self) -> Option<&str> {
+        self.stream.as_deref()
+    }
+    pub fn datastore(&self) -> Option<&str> {
+        self.datastore.as_deref()
+    }
+    pub fn xpath_filter(&self) -> Option<&str> {
+        self.xpath_filter.as_deref()
+    }
+    pub fn subtree_filter(&self) -> Option<&Value> {
+        self.subtree_filter.as_ref()
+    }
 }
 
 /// Update Trigger for Yang Push Subscription
@@ -214,26 +388,62 @@ impl From<netgauze_udp_notif_pkt::yang::notification::UpdateTrigger> for UpdateT
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct DataCollectionMetadata {
-    pub remote_address: IpAddr,
+    remote_address: IpAddr,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub remote_port: Option<u16>,
+    remote_port: Option<u16>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub local_address: Option<IpAddr>,
+    local_address: Option<IpAddr>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub local_port: Option<u16>,
+    local_port: Option<u16>,
 
-    pub labels: Vec<Label>,
+    labels: Vec<Label>,
+}
+
+impl DataCollectionMetadata {
+    pub fn new(
+        remote_address: IpAddr,
+        remote_port: Option<u16>,
+        local_address: Option<IpAddr>,
+        local_port: Option<u16>,
+        labels: Vec<Label>,
+    ) -> Self {
+        Self {
+            remote_address,
+            remote_port,
+            local_address,
+            local_port,
+            labels,
+        }
+    }
+    pub fn remote_address(&self) -> IpAddr {
+        self.remote_address
+    }
+    pub fn remote_port(&self) -> Option<u16> {
+        self.remote_port
+    }
+    pub fn local_address(&self) -> Option<IpAddr> {
+        self.local_address
+    }
+    pub fn local_port(&self) -> Option<u16> {
+        self.local_port
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 pub struct Label {
-    pub name: String,
+    name: String,
 
     #[serde(flatten)]
-    pub value: Option<LabelValue>,
+    value: Option<LabelValue>,
+}
+
+impl Label {
+    pub fn new(name: String, value: Option<LabelValue>) -> Self {
+        Self { name, value }
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
@@ -259,8 +469,8 @@ mod tests {
 
     #[test]
     fn test_telemetry_message_serde() {
-        let original_message = TelemetryMessage {
-            message: Message {
+        let original_message = TelemetryMessageWrapper {
+            message: TelemetryMessage {
                 timestamp: Utc.timestamp_millis_opt(0).unwrap(),
                 session_protocol: SessionProtocol::YangPush,
                 network_node_manifest: Manifest {
@@ -349,7 +559,7 @@ mod tests {
         );
 
         // Deserialize the JSON string back to a TelemetryMessage
-        let deserialized: TelemetryMessage =
+        let deserialized: TelemetryMessageWrapper =
             serde_json::from_str(&serialized).expect("Failed to deserialize");
 
         // Assert that the original and deserialized messages are equal
