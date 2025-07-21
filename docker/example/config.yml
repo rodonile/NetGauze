@@ -1,0 +1,72 @@
+runtime:
+  # Total number of OS threads used allocated for NetGauze.
+  # If not specified, the number of threads will equal the number of CPU cores.
+  threads: 4
+
+logging:
+  level: info
+
+telemetry:
+  url: http://localhost:4317/v1/metrics
+  exporter_timeout: 3000
+  reader_interval: 60000
+  reader_timeout: 3000
+
+# flow:
+#   subscriber_timeout: 100
+#   template_cache_purge_timeout: 360
+#   listeners:
+#     - address: "[::]:9991"
+#       workers: 2
+
+#   publishers:
+#     group1:
+#       buffer_size: 1000
+#       endpoints:
+#         full: !FlowKafkaAvro
+#           topic: flow
+#           schema_registry_url: http://localhost:8088
+#           producer_config:
+#             bootstrap.servers: localhost:29092
+#             message.timeout.ms: "60000"
+#             queue.buffering.max.messages: "1000"
+#           writer_id: writer1
+#           avro_converter:
+#             fields:
+#               octets:
+#                 select: !Single
+#                   ie: octetDeltaCount
+#                   index: 0
+#               packets:
+#                 select: !Coalesce
+#                   ies:
+#                     - ie: packetDeltaCount
+#                       index: 1
+#                     - ie: packetDeltaCount
+#                       index: 0
+#                 default: !String '1000'
+#                 transform: String
+#               custom_primitives.flow_direction:
+#                 select: !Single
+#                   ie: !VMWare flowDirection
+#                   index: 0
+#                 transform: !Rename
+#                   ingress: i
+#                   egress: e
+
+udp_notif:
+  subscriber_timeout: 100
+  listeners:
+    - address: "[::]:10000"
+      workers: 2
+  publishers:
+    group1:
+      buffer_size: 1000
+      endpoints:
+        full: !KafkaJson
+          topic: udp-notif-json
+          producer_config:
+            bootstrap.servers: localhost:29092
+            message.timeout.ms: "60000"
+            queue.buffering.max.messages: "1000"
+          writer_id: writer1

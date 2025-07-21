@@ -1,0 +1,18 @@
+services:
+  netgauze-collector:
+    build: ..
+    container_name: netgauze
+    image: netgauze-collector:latest
+    command: ["/app/config.yml"]
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+      - ./logs:/logs
+    ports:
+      - "9991:9991"
+      - "9992:9991"
+      - "179:179"
+      - "1790:1790"
+      - "1791:1790"
+      - "10000:10000"
+      - "10003:10000"
+    restart: unless-stopped
