@@ -26,7 +26,8 @@ fn init_tracing() {
     // is working in the future that should be configured automatically based on
     // configuration options
     let subscriber = tracing_subscriber::FmtSubscriber::builder()
-        .with_max_level(tracing::Level::TRACE)
+        .with_max_level(tracing::Level::INFO)
+        .with_writer(std::io::stderr)
         .finish();
     tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
 }
@@ -34,9 +35,16 @@ fn init_tracing() {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
     init_tracing();
-    let local_socket = SocketAddr::from(([0, 0, 0, 0], 33000));
+    let local_socket = SocketAddr::from(([0, 0, 0, 0], 1790));
     let print_svc = ServiceBuilder::new().service(service_fn(|x: BmpRequest| async move {
-        println!("Received: {}", serde_json::to_string(&x).unwrap());
+        match x {
+            Ok(bmp) => {
+                println!("{}", serde_json::to_string(&bmp).unwrap());
+            }
+            Err(err) => {
+                tracing::error!("BMP decode error: {:?}", err);
+            }
+        }
         Ok::<Option<BmpServerResponse>, Infallible>(None)
     }));
     let pipeline = ServiceBuilder::new()

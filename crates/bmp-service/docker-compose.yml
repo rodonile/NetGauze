@@ -1,0 +1,11 @@
+services:
+  netgauze-bmp-service:
+    build: ..
+    container_name: netgauze-bmp
+    image: netgauze-bmp-service:latest
+    volumes:
+      - ./logs:/logs
+    ports:
+      - "1790:1790"
+      - "1791:1790"
+    restart: unless-stopped
