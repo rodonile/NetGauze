@@ -13,7 +13,7 @@ telemetry:
 udp_notif:
   subscriber_timeout: 100
   listeners:
-    - address: 0.0.0.0:10000
+    - address: "[::]:10000"
       workers: 2
 
   publishers:

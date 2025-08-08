@@ -1,0 +1,122 @@
+{
+  "IPFIX": {
+    "export_time": "2025-08-04T08:10:54.963717192Z",
+    "observation_domain_id": 0,
+    "sequence_number": 4862,
+    "sets": [
+      {
+        "Data": {
+          "id": 65535,
+          "records": [
+            {
+              "fields": [
+                {
+                  "sourceIPv4Address": "11.0.2.6"
+                },
+                {
+                  "destinationIPv4Address": "11.0.2.2"
+                },
+                {
+                  "protocolIdentifier": "TCP"
+                },
+                {
+                  "sourceTransportPort": 49082
+                },
+                {
+                  "destinationTransportPort": 8443
+                },
+                {
+                  "flowDirection": "egress"
+                },
+                {
+                  "layer2SegmentId": 72057594037995559
+                },
+                {
+                  "VMWare": {
+                    "virtualObsID": "46243969-3ed9-4ece-b5c6-192f4bd1d151\u0000\u0000\u0000"
+                  }
+                },
+                {
+                  "octetDeltaCount": 37250
+                },
+                {
+                  "packetDeltaCount": 500
+                },
+                {
+                  "tcpControlBits": {
+                    "ACK": true,
+                    "CWR": false,
+                    "ECE": false,
+                    "FIN": false,
+                    "PSH": true,
+                    "RST": false,
+                    "SYN": false,
+                    "URG": false
+                  }
+                },
+                {
+                  "maximumTTL": 64
+                },
+                {
+                  "originalFlowsPresent": 2
+                },
+                {
+                  "minExportSeconds": "2024-06-25T14:22:20Z"
+                },
+                {
+                  "maxExportSeconds": "2024-06-25T14:22:53Z"
+                },
+                {
+                  "collectionTimeMilliseconds": "2025-08-04T08:10:54.921867232Z"
+                },
+                {
+                  "NetGauze": {
+                    "windowStart": "2024-06-25T14:22:00Z"
+                  }
+                },
+                {
+                  "NetGauze": {
+                    "windowEnd": "2024-06-25T14:23:00Z"
+                  }
+                },
+                {
+                  "originalExporterIPv6Address": "::ffff:192.168.100.2"
+                },
+                {
+                  "NetGauze": {
+                    "originalExporterTransportPort": 37286
+                  }
+                },
+                {
+                  "originalObservationDomainId": 5
+                },
+                {
+                  "NetGauze": {
+                    "originalTemplateId": 256
+                  }
+                },
+                {
+                  "NetGauze": {
+                    "nodeId": "unknown"
+                  }
+                },
+                {
+                  "NetGauze": {
+                    "platformId": "unknown"
+                  }
+                },
+                {
+                  "NetGauze": {
+                    "dataCollectionManifestName": "taarole8_rocky_json_group"
+                  }
+                }
+              ],
+              "scope_fields": []
+            }
+          ]
+        }
+      }
+    ],
+    "version": 10
+  }
+}

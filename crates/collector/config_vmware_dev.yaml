@@ -1,0 +1,373 @@
+runtime:
+  # Total number of OS threads used allocated for NetGauze.
+  # If not specified, the number of threads will equal the number of CPU cores.
+  threads: 16
+
+logging:
+  level: debug
+
+telemetry:
+  url: http://localhost:4317/v1/metrics
+  exporter_timeout: 2000
+  reader_interval: 10000
+  reader_timeout: 2000
+
+flow:
+  subscriber_timeout: 100
+  template_cache_purge_timeout: 360
+  listeners:
+    - address: "[::]:9992"
+      workers: 1
+    # - address: 0.0.0.0:9991
+    #   interface: trex1
+    #   workers: 2
+
+  # Multiple publishers can be defined.
+  # A packet is copied for each publisher group, and load-balancing is defined between endpoints in the same group.
+  publishers:
+    #########################################################
+    # Raw JSON publisher
+    #########################################################
+    raw-json-output:
+      endpoints:
+        main: !KafkaJson
+          topic: netgauze-flowraw-json
+          producer_config:
+            bootstrap.servers: localhost:49092
+          writer_id: taarole8_rocky_rawjson_group
+    #########################################################
+    # Aggregation + JSON output publisher
+    #########################################################
+    agg-json-output:
+      buffer_size: 100000
+      aggregation:
+        workers: 1
+        window_duration:
+          secs: 60
+          nanos: 0 # check or remove nanos if not working
+        lateness:
+          secs: 10
+          nanos: 0
+        transform:
+          # Key Fields
+          sourceIPv4Address: Key
+          destinationIPv4Address: Key
+          sourceIPv6Address: Key
+          destinationIPv6Address: Key
+          protocolIdentifier: Key
+          sourceTransportPort: Key
+          destinationTransportPort: Key
+          flowDirection: Key
+          sourceMacAddress: Key
+          destinationMacAddress: Key
+          layer2SegmentId: Key
+          icmpTypeIPv4: Key
+          !VMWare tenantSourceIPv4: Key
+          !VMWare tenantDestIPv4: Key
+          !VMWare tenantSourcePort: Key
+          !VMWare tenantDestPort: Key
+          !VMWare tenantProtocol: Key
+          !VMWare virtualObsID: Key
+          !VMWare vmUuid:
+            0: Key
+            # 1: Add
+          # Group-by Fields
+          octetDeltaCount: Add
+          packetDeltaCount: Add
+          deltaFlowCount: Add
+          tcpControlBits: BoolMapOr
+          maximumTTL: Max
+      sonata_enrichment:
+        topic: sonata
+        consumer_config:
+          # bootstrap.servers: "b-1.cosmos-kafka.723cyb.c5.kafka.eu-central-1.amazonaws.com:9096,b-2.cosmos-kafka.723cyb.c5.kafka.eu-central-1.amazonaws.com:9096"
+          # security.protocol: "sasl_ssl"
+          # sasl.mechanism: "SCRAM-SHA-512"
+          # sasl.username: "ietf-lab"
+          # sasl.password: "m^vy8*F9*Q7z4jPLvek"
+          bootstrap.servers: localhost:49092
+          group.id: taarole8-rocky8
+          enable.auto.commit: "false"
+          auto.offset.reset: earliest
+      endpoints:
+        main: !FlowKafkaJson
+          topic: netgauze-flowagg-json
+          producer_config:
+            bootstrap.servers: localhost:49092
+          writer_id: taarole8_rocky_json_group
+    #########################################################
+    # Aggregation + converter + avro output publisher
+    #########################################################
+    agg-avro-output:
+      buffer_size: 100000
+      aggregation:
+        workers: 1
+        window_duration:
+          secs: 60
+          nanos: 0 # check or remove nanos if not working
+        lateness:
+          secs: 10
+          nanos: 0
+        transform:
+          # Key Fields
+          sourceIPv4Address: Key
+          destinationIPv4Address: Key
+          sourceIPv6Address: Key
+          destinationIPv6Address: Key
+          protocolIdentifier: Key
+          sourceTransportPort: Key
+          destinationTransportPort: Key
+          flowDirection: Key
+          sourceMacAddress: Key
+          destinationMacAddress: Key
+          layer2SegmentId: Key
+          icmpTypeIPv4: Key
+          !VMWare tenantSourceIPv4: Key
+          !VMWare tenantDestIPv4: Key
+          !VMWare tenantSourcePort: Key
+          !VMWare tenantDestPort: Key
+          !VMWare tenantProtocol: Key
+          !VMWare virtualObsID: Key
+          !VMWare vmUuid:
+            0: Key
+            # 1: Add
+          # Group-by Fields
+          octetDeltaCount: Add
+          packetDeltaCount: Add
+          deltaFlowCount: Add
+          tcpControlBits: BoolMapOr
+          maximumTTL: Max
+      sonata_enrichment:
+        topic: sonata
+        consumer_config:
+          # bootstrap.servers: "b-1.cosmos-kafka.723cyb.c5.kafka.eu-central-1.amazonaws.com:9096,b-2.cosmos-kafka.723cyb.c5.kafka.eu-central-1.amazonaws.com:9096"
+          # security.protocol: "sasl_ssl"
+          # sasl.mechanism: "SCRAM-SHA-512"
+          # sasl.username: "ietf-lab"
+          # sasl.password: "m^vy8*F9*Q7z4jPLvek"
+          bootstrap.servers: localhost:49092
+          group.id: taarole8-rocky8
+          enable.auto.commit: "false"
+          auto.offset.reset: earliest
+      endpoints:
+        # json: !FlowKafkaJson
+        #   topic: netgauze-flowagg-json
+        #   producer_config:
+        #     bootstrap.servers: localhost:49092
+        #     # Prod config
+        #     compression.type: "snappy"
+        #     queue.buffering.max.messages: "800000"
+        #     batch.size: "50000" # HINT: 500000 to increase performance
+        #     batch.num.messages: "1000000"
+        #     linger.ms: "50"
+        #     message.max.bytes: "5242880"
+        #     message.timeout.ms: "60000"
+        #   writer_id: taarole8_rocky
+        full: !FlowKafkaAvro
+          topic: netgauze-flowagg-avro
+          schema_registry_url: http://localhost:48081
+          # topic: "netgauze-perftests"
+          # schema_registry_url: "http://10.250.99.20"
+          # topic: "daisy.dev.vmwareflow-avro-raw"
+          # schema_registry_url: "https://schema-registry.sbd.corproot.net"
+          # topic: "flow-avro-raw"
+          # schema_registry_url: "http://10.110.110.249:8088"
+          producer_config:
+            bootstrap.servers: localhost:49092
+            # bootstrap.servers: "b-1.cosmos-kafka.723cyb.c5.kafka.eu-central-1.amazonaws.com:9096,b-2.cosmos-kafka.723cyb.c5.kafka.eu-central-1.amazonaws.com:9096"
+            # security.protocol: "sasl_ssl"
+            # sasl.mechanism: "SCRAM-SHA-512"
+            # sasl.username: "ietf-lab"
+            # sasl.password: "m^vy8*F9*Q7z4jPLvek"
+            # metadata.broker.list: "kafka.sbd.corproot.net:9093"
+            # bootstrap.servers: "kafka.sbd.corproot.net:9093"
+            # security.protocol: "ssl"
+            # ssl.certificate.location: "/home/taarole8/sbd_ssl/collectors.crt"
+            # ssl.key.location: "/home/taarole8/sbd_ssl/collectors.key"
+            # ssl.ca.location: "/home/taarole8/sbd_ssl/sbd_root_ca.crt"
+            # bootstrap.servers: 10.110.110.249:29092
+            # Prod config
+            compression.type: "snappy"
+            queue.buffering.max.messages: "800000"
+            batch.size: "50000" # HINT: 500000 to increase performance
+            batch.num.messages: "1000000"
+            linger.ms: "50"
+            message.max.bytes: "5242880"
+            message.timeout.ms: "60000"
+          writer_id: taarole8_rocky
+          avro_converter:
+            fields:
+              # Custom Fields
+              ip_src:
+                select: !Coalesce
+                  ies:
+                    - ie: sourceIPv4Address
+                      index: 0
+                    - ie: sourceIPv6Address
+                      index: 0
+                transform: String
+                default: !String ""
+              ip_dst:
+                select: !Coalesce
+                  ies:
+                    - ie: destinationIPv4Address
+                      index: 0
+                    - ie: destinationIPv6Address
+                      index: 0
+                transform: String
+                default: !String ""
+              ip_proto:
+                select: !Single
+                  ie: protocolIdentifier
+                  index: 0
+                transform: LowercaseString
+                default: !String "0"
+              port_src:
+                select: !Single
+                  ie: sourceTransportPort
+                  index: 0
+                default: !U16 0
+              port_dst:
+                select: !Single
+                  ie: destinationTransportPort
+                  index: 0
+                default: !U16 0
+              sampling_direction:
+                select: !Single
+                  ie: flowDirection
+                  index: 0
+                transform: !Rename
+                  ingress: i
+                  egress: e
+                default: !String ""
+              mac_src:
+                select: !Single
+                  ie: sourceMacAddress
+                  index: 0
+                transform: String
+                default: !String "00:00:00:00:00:00"
+              mac_dst:
+                select: !Single
+                  ie: destinationMacAddress
+                  index: 0
+                transform: String
+                default: !String "00:00:00:00:00:00"
+              vxlan:
+                select: !Layer2SegmentId
+                  ie: layer2SegmentId
+                  index: 0
+                  encap_type: !VxLAN
+                default: !U64 0
+              custom_primitives.ipttlmax:
+                select: !Single
+                  ie: maximumTTL
+                  index: 0
+                transform: String
+                default: !String ""
+              custom_primitives.icmptypeipv4:
+                select: !Single
+                  ie: icmpTypeIPv4
+                  index: 0
+                transform: String
+                default: !String "0"
+              custom_primitives.tenantsourceipv4:
+                select: !Single
+                  ie: !VMWare tenantSourceIPv4
+                  index: 0
+                transform: String
+                default: !String "0.0.0.0"
+              custom_primitives.tenantdestipv4:
+                select: !Single
+                  ie: !VMWare tenantDestIPv4
+                  index: 0
+                transform: String
+                default: !String "0.0.0.0"
+              custom_primitives.tenantsourceport:
+                select: !Single
+                  ie: !VMWare tenantSourcePort
+                  index: 0
+                transform: String
+                default: !String "0"
+              custom_primitives.tenantdestport:
+                select: !Single
+                  ie: !VMWare tenantDestPort
+                  index: 0
+                transform: String
+                default: !String "0"
+              custom_primitives.tenantprotocol:
+                select: !Single
+                  ie: !VMWare tenantProtocol
+                  index: 0
+                transform: LowercaseString
+                default: !String "0"
+              custom_primitives.virtualobsid:
+                select: !Single
+                  ie: !VMWare virtualObsID
+                  index: 0
+                transform: TrimmedString
+                default: !String ""
+              custom_primitives.vmuuid:
+                select: !Single
+                  ie: !VMWare vmUuid
+                  index: 0
+                transform: String
+                default: !String ""
+              bytes:
+                select: !Single
+                  ie: octetDeltaCount
+                  index: 0
+              packets:
+                select: !Single
+                  ie: packetDeltaCount
+                  index: 0
+              flows:
+                select: !Single
+                  ie: deltaFlowCount
+                  index: 0
+              tcp_flags:
+                select: !Single
+                  ie: tcpControlBits
+                  index: 0
+                transform: StringArray
+                default: !StringArray []
+              # Internal Fields
+              peer_ip_src:
+                select: !Coalesce
+                  ies:
+                    - ie: originalExporterIPv4Address
+                      index: 0
+                    - ie: originalExporterIPv6Address
+                      index: 0
+                transform: String
+                default: !String ""
+              stamp_inserted:
+                select: !Single
+                  ie: !NetGauze windowStart
+                  index: 0
+                transform: TimestampMillisString
+              stamp_updated:
+                select: !Single
+                  ie: !NetGauze windowEnd
+                  index: 0
+                transform: TimestampMillisString
+              writer_id:
+                select: !Single
+                  ie: !NetGauze dataCollectionManifestName
+                  index: 0
+                transform: String
+                default: !String ""
+              label:
+                select: !Multi
+                  ies:
+                    - ie: !NetGauze nodeId
+                      index: 0
+                    - ie: !NetGauze platformId
+                      index: 0
+                transform: !StringMapAgg
+                  !NetGauze nodeId:
+                    key_rename: nkey
+                  !NetGauze platformId:
+                    key_rename: pkey
+                    # val_rename:
+                    #   unknown: testing_val_rename
+                default: !StringMap {}

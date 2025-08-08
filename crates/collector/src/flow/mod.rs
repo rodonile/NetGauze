@@ -16,7 +16,8 @@
 pub mod aggregation;
 pub mod config;
 pub mod enrichment;
-pub mod sonata;
+pub mod handlers;
+pub mod sonata_enrichment;
 
 use apache_avro::types::{Value as AvroValue, ValueKind as AvroValueKind};
 use netgauze_flow_pkt::{

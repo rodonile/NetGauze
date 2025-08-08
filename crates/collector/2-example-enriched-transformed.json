@@ -1,0 +1,42 @@
+{
+  "bytes": {
+    "long": 34500
+  },
+  "custom_primitives": {
+    "icmptypeipv4": "0",
+    "ipttlmax": "62",
+    "tenantdestipv4": "11.0.7.2",
+    "tenantdestport": "45258",
+    "tenantprotocol": "tcp",
+    "tenantsourceipv4": "100.104.66.38",
+    "tenantsourceport": "4222",
+    "virtualobsid": "22b7f02d-24f3-49ed-8edd-607c65c7d0d6",
+    "vmuuid": ""
+  },
+  "flows": null,
+  "ip_dst": "10.144.255.28",
+  "ip_proto": "udp",
+  "ip_src": "10.144.231.76",
+  "label": {
+    "nkey": "unknown",
+    "pkey": "unknown"
+  },
+  "mac_dst": "00:00:00:00:00:00",
+  "mac_src": "00:00:00:00:00:00",
+  "packets": {
+    "long": 250
+  },
+  "peer_ip_src": "::ffff:192.168.100.2",
+  "port_dst": 6081,
+  "port_src": 34927,
+  "sampling_direction": "i",
+  "stamp_inserted": {
+    "string": "1719325320"
+  },
+  "stamp_updated": {
+    "string": "1719325380"
+  },
+  "tcp_flags": [],
+  "vxlan": 72722,
+  "writer_id": "taarole8_rocky"
+}

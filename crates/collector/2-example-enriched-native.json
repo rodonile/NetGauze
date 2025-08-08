@@ -1,0 +1,147 @@
+{
+  "IPFIX": {
+    "export_time": "2025-08-04T08:10:54.963788173Z",
+    "observation_domain_id": 0,
+    "sequence_number": 4864,
+    "sets": [
+      {
+        "Data": {
+          "id": 65535,
+          "records": [
+            {
+              "fields": [
+                {
+                  "sourceIPv4Address": "10.144.231.76"
+                },
+                {
+                  "destinationIPv4Address": "10.144.255.28"
+                },
+                {
+                  "protocolIdentifier": "UDP"
+                },
+                {
+                  "sourceTransportPort": 34927
+                },
+                {
+                  "destinationTransportPort": 6081
+                },
+                {
+                  "flowDirection": "ingress"
+                },
+                {
+                  "layer2SegmentId": 72057594038000658
+                },
+                {
+                  "VMWare": {
+                    "tenantSourceIPv4": "100.104.66.38"
+                  }
+                },
+                {
+                  "VMWare": {
+                    "tenantDestIPv4": "11.0.7.2"
+                  }
+                },
+                {
+                  "VMWare": {
+                    "tenantSourcePort": 4222
+                  }
+                },
+                {
+                  "VMWare": {
+                    "tenantDestPort": 45258
+                  }
+                },
+                {
+                  "VMWare": {
+                    "tenantProtocol": "TCP"
+                  }
+                },
+                {
+                  "VMWare": {
+                    "virtualObsID": "22b7f02d-24f3-49ed-8edd-607c65c7d0d6\u0000\u0000\u0000"
+                  }
+                },
+                {
+                  "octetDeltaCount": 34500
+                },
+                {
+                  "packetDeltaCount": 250
+                },
+                {
+                  "tcpControlBits": {
+                    "ACK": false,
+                    "CWR": false,
+                    "ECE": false,
+                    "FIN": false,
+                    "PSH": false,
+                    "RST": false,
+                    "SYN": false,
+                    "URG": false
+                  }
+                },
+                {
+                  "maximumTTL": 62
+                },
+                {
+                  "originalFlowsPresent": 1
+                },
+                {
+                  "minExportSeconds": "2024-06-25T14:22:59Z"
+                },
+                {
+                  "maxExportSeconds": "2024-06-25T14:22:59Z"
+                },
+                {
+                  "collectionTimeMilliseconds": "2025-08-04T08:10:54.938035621Z"
+                },
+                {
+                  "NetGauze": {
+                    "windowStart": "2024-06-25T14:22:00Z"
+                  }
+                },
+                {
+                  "NetGauze": {
+                    "windowEnd": "2024-06-25T14:23:00Z"
+                  }
+                },
+                {
+                  "originalExporterIPv6Address": "::ffff:192.168.100.2"
+                },
+                {
+                  "NetGauze": {
+                    "originalExporterTransportPort": 37286
+                  }
+                },
+                {
+                  "originalObservationDomainId": 5
+                },
+                {
+                  "NetGauze": {
+                    "originalTemplateId": 257
+                  }
+                },
+                {
+                  "NetGauze": {
+                    "nodeId": "unknown"
+                  }
+                },
+                {
+                  "NetGauze": {
+                    "platformId": "unknown"
+                  }
+                },
+                {
+                  "NetGauze": {
+                    "dataCollectionManifestName": "taarole8_rocky_json_group"
+                  }
+                }
+              ],
+              "scope_fields": []
+            }
+          ]
+        }
+      }
+    ],
+    "version": 10
+  }
+}

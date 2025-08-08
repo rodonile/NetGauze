@@ -76,6 +76,8 @@ shadow-rs = { workspace = true, features = ["default", "metadata", "build"] }
 smallvec = { workspace = true }
 rustc-hash = { workspace = true }
 
+quick-xml = { version = "0.38", features = ["serialize"] }
+
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
 tikv-jemallocator = { version = "0.6", features = [
     "unprefixed_malloc_on_supported_platforms",
