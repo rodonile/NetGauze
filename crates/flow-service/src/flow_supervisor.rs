@@ -350,6 +350,9 @@ impl FlowCollectorsSupervisorActorHandle {
             .map_err(|_| FlowCollectorsSupervisorActorHandleError::ReceiveError)
     }
 
+    // TODO: also implement a subscriber for only option data e.g.
+    // subscribe_option_data ...
+
     pub async fn subscribe(
         &self,
         buffer_size: usize,

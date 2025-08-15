@@ -206,6 +206,7 @@ pub struct PublisherConfig {
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+// TODO: Print JSON and print Avro publisher endpoints
 pub enum PublisherEndpoint {
     /// HTTP publisher endpoint
     Http(HttpPublisherEndpoint),

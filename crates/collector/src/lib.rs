@@ -16,8 +16,10 @@
 use crate::{
     config::{FlowConfig, PublisherEndpoint, UdpNotifConfig},
     flow::{
-        aggregation::AggregationActorHandle, enrichment::FlowEnrichmentActorHandle,
+        aggregation::AggregationActorHandle,
+        enrichment::{EnrichmentActorHandle, FlowOptionsActorHandle},
         sonata::SonataActorHandle,
+        sonata_enrichment::SonataEnrichmentActorHandle,
     },
     publishers::{
         http::{HttpPublisherActorHandle, Message},
@@ -49,8 +51,10 @@ pub async fn init_flow_collection(
     let (supervisor_join_handle, supervisor_handle) =
         FlowCollectorsSupervisorActorHandle::new(supervisor_config, meter.clone()).await?;
     let mut http_handles = Vec::new();
-    let mut agg_handles = Vec::new();
     let mut enrichment_handles = Vec::new();
+    let mut agg_handles = Vec::new();
+    let mut flow_options_handles = Vec::new();
+    let mut sonata_enrichment_handles = Vec::new();
     let mut kafka_avro_handles = Vec::new();
     let mut kafka_json_handles = Vec::new();
     let mut sonata_handles = Vec::new();
@@ -97,18 +101,27 @@ pub async fn init_flow_collection(
                     }
                 }
                 PublisherEndpoint::FlowKafkaAvro(config) => {
+                    // TODO: here improve also integrate better config knobs (e.g. enable disable
+                    // certain actors?)
                     for (shard_id, flow_recv) in flow_recvs.iter().enumerate() {
+                        let (enrichment_join, enrichment_handle) = EnrichmentActorHandle::new(
+                            publisher_config.buffer_size,
+                            flow_recv.clone(),
+                            either::Left(meter.clone()),
+                            shard_id,
+                        );
+
                         if let Some(aggregation_config) = publisher_config.aggregation.as_ref() {
                             let (agg_join, agg_handle) = AggregationActorHandle::new(
                                 publisher_config.buffer_size,
                                 aggregation_config.clone(),
-                                flow_recv.clone(),
+                                enrichment_handle.subscribe(),
                                 either::Left(meter.clone()),
                                 shard_id,
                             );
 
-                            let (enrichment_join, enrichment_handle) =
-                                FlowEnrichmentActorHandle::new(
+                            let (sonata_enrichment_join, sonata_enrichment_handle) =
+                                SonataEnrichmentActorHandle::new(
                                     config.writer_id.clone(),
                                     publisher_config.buffer_size,
                                     agg_handle.subscribe(),
@@ -118,23 +131,25 @@ pub async fn init_flow_collection(
                             let (kafka_join, kafka_handle) =
                                 KafkaAvroPublisherActorHandle::from_config(
                                     config.clone(),
-                                    enrichment_handle.subscribe(),
+                                    sonata_enrichment_handle.subscribe(),
                                     either::Left(meter.clone()),
                                 )
                                 .await?;
 
-                            join_set.push(agg_join);
                             join_set.push(enrichment_join);
+                            join_set.push(agg_join);
+                            join_set.push(sonata_enrichment_join);
                             join_set.push(kafka_join);
-                            agg_handles.push(agg_handle);
                             enrichment_handles.push(enrichment_handle);
+                            agg_handles.push(agg_handle);
+                            sonata_enrichment_handles.push(sonata_enrichment_handle);
                             kafka_avro_handles.push(kafka_handle);
                         }
                     }
                     if let Some(kafka_consumer) = publisher_config.sonata_enrichment.as_ref() {
                         let (sonata_join, sonata_handle) = SonataActorHandle::new(
                             kafka_consumer.clone(),
-                            enrichment_handles.clone(),
+                            sonata_enrichment_handles.clone(),
                             either::Left(meter.clone()),
                         )?;
                         join_set.push(sonata_join);
@@ -143,17 +158,24 @@ pub async fn init_flow_collection(
                 }
                 PublisherEndpoint::FlowKafkaJson(config) => {
                     for (shard_id, flow_recv) in flow_recvs.iter().enumerate() {
+                        let (enrichment_join, enrichment_handle) = EnrichmentActorHandle::new(
+                            publisher_config.buffer_size,
+                            flow_recv.clone(),
+                            either::Left(meter.clone()),
+                            shard_id,
+                        );
+
                         if let Some(aggregation_config) = publisher_config.aggregation.as_ref() {
                             let (agg_join, agg_handle) = AggregationActorHandle::new(
                                 publisher_config.buffer_size,
                                 aggregation_config.clone(),
-                                flow_recv.clone(),
+                                enrichment_handle.subscribe(),
                                 either::Left(meter.clone()),
                                 shard_id,
                             );
 
-                            let (enrichment_join, enrichment_handle) =
-                                FlowEnrichmentActorHandle::new(
+                            let (sonata_enrichment_join, sonata_enrichment_handle) =
+                                SonataEnrichmentActorHandle::new(
                                     config.writer_id.clone(),
                                     publisher_config.buffer_size,
                                     agg_handle.subscribe(),
@@ -164,22 +186,38 @@ pub async fn init_flow_collection(
                                 KafkaJsonPublisherActorHandle::from_config(
                                     serialize_flow,
                                     config.clone(),
-                                    enrichment_handle.subscribe(),
+                                    sonata_enrichment_handle.subscribe(),
                                     either::Left(meter.clone()),
                                 )?;
 
-                            join_set.push(agg_join);
                             join_set.push(enrichment_join);
+                            join_set.push(agg_join);
+                            join_set.push(sonata_enrichment_join);
                             join_set.push(kafka_join);
-                            agg_handles.push(agg_handle);
                             enrichment_handles.push(enrichment_handle);
+                            agg_handles.push(agg_handle);
+                            sonata_enrichment_handles.push(sonata_enrichment_handle);
                             kafka_json_handles.push(kafka_handle);
                         }
                     }
+
+                    // TODO: at some point add some condition here (when we add the respective
+                    // config)
+                    let (flow_recv, _) = supervisor_handle
+                        .subscribe(publisher_config.buffer_size)
+                        .await?;
+                    let (flow_options_join, flow_options_handle) = FlowOptionsActorHandle::new(
+                        flow_recv.clone(),
+                        enrichment_handles.clone(),
+                        either::Left(meter.clone()),
+                    );
+                    join_set.push(flow_options_join);
+                    flow_options_handles.push(flow_options_handle);
+
                     if let Some(kafka_consumer) = publisher_config.sonata_enrichment.as_ref() {
                         let (sonata_join, sonata_handle) = SonataActorHandle::new(
                             kafka_consumer.clone(),
-                            enrichment_handles.clone(),
+                            sonata_enrichment_handles.clone(),
                             either::Left(meter.clone()),
                         )?;
                         join_set.push(sonata_join);
@@ -235,7 +273,7 @@ pub async fn init_flow_collection(
             for handle in agg_handles {
                 let _ = handle.shutdown().await;
             }
-            for handle in enrichment_handles {
+            for handle in sonata_enrichment_handles {
                 let _ = handle.shutdown().await;
             }
             for handle in http_handles {
