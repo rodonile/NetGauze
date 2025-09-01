@@ -6,6 +6,24 @@
     <title>Huawei Enterprise IPFIX Information Elements</title>
 
     <record>
+      <name>Fake1</name>
+      <dataType>unsigned16</dataType>
+      <group>scope</group>
+      <dataTypeSemantics>identifier</dataTypeSemantics>
+      <elementId>1</elementId>
+      <applicability>option</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Fake IE to resolve code generation issue that arise when declaring a single
+            octetArray field. (temp workaround)
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-06-27</date>
+    </record>
+
+    <record>
       <name>Unknown232</name>
       <dataType>octetArray</dataType>
       <dataTypeSemantics>default</dataTypeSemantics>
