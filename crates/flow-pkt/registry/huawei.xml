@@ -32,7 +32,71 @@
       <status>current</status>
       <description>
         <paragraph>
-            Unknown 2-byte field.
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+    <record>
+      <name>Unknown701</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>701</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+    <record>
+      <name>Unknown702</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>702</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+    <record>
+      <name>Unknown703</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>703</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+    <record>
+      <name>Unknown704</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>704</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
         </paragraph>
       </description>
       <revision>0</revision>
