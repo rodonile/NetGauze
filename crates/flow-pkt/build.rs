@@ -106,6 +106,22 @@ fn get_nokia_config(registry_path: &Path) -> SourceConfig {
     )
 }
 
+fn get_huawei_config(registry_path: &Path) -> SourceConfig {
+    let nokia_path = registry_path
+        .join("huawei.xml")
+        .into_os_string()
+        .into_string()
+        .expect("Couldn't load huawei registry file");
+    SourceConfig::new(
+        RegistrySource::File(nokia_path),
+        RegistryType::IanaXML,
+        2011,
+        "huawei".to_string(),
+        "Huawei".to_string(),
+        None,
+    )
+}
+
 fn get_netgauze_config(registry_path: &Path) -> SourceConfig {
     let netgauze_path = registry_path
         .join("netgauze.xml")
@@ -190,6 +206,7 @@ fn main() {
         &sub_registry_path,
     );
     let nokia_source = get_nokia_config(&registry_path);
+    let huawei_source = get_huawei_config(&registry_path);
     let netgauze_config = get_netgauze_config(&registry_path);
     let vmware_source = get_vmware_config(
         cfg!(feature = "iana-upstream-build"),
@@ -198,7 +215,7 @@ fn main() {
     );
     let configs = Config::new(
         iana_source,
-        vec![nokia_source, netgauze_config, vmware_source],
+        vec![nokia_source, huawei_source, netgauze_config, vmware_source],
     );
     generate(&out_dir, &configs).unwrap();
 

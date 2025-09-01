@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="ipfix.xsl"?>
+<?xml-model href="ipfix.rng" schematypens="http://relaxng.org/ns/structure/1.0" ?>
+<registry xmlns="http://www.iana.org/assignments" id="ipfix">
+  <registry id="ipfix-information-elements">
+    <title>Huawei Enterprise IPFIX Information Elements</title>
+
+    <record>
+      <name>Unknown232</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>232</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown 2-byte field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+  </registry>
+</registry>
