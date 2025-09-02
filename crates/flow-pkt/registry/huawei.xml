@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="ipfix.xsl"?>
+<?xml-model href="ipfix.rng" schematypens="http://relaxng.org/ns/structure/1.0" ?>
+<registry xmlns="http://www.iana.org/assignments" id="ipfix">
+  <registry id="ipfix-information-elements">
+    <title>Huawei Enterprise IPFIX Information Elements</title>
+
+    <record>
+      <name>Fake1</name>
+      <dataType>unsigned16</dataType>
+      <group>scope</group>
+      <dataTypeSemantics>identifier</dataTypeSemantics>
+      <elementId>1</elementId>
+      <applicability>option</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Fake IE to resolve code generation issue that arise when declaring a single
+            octetArray field. (temp workaround)
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-06-27</date>
+    </record>
+
+    <record>
+      <name>Unknown232</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>232</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+    <record>
+      <name>Unknown701</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>701</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+    <record>
+      <name>Unknown702</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>702</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+    <record>
+      <name>Unknown703</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>703</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+    <record>
+      <name>Unknown704</name>
+      <dataType>octetArray</dataType>
+      <dataTypeSemantics>default</dataTypeSemantics>
+      <elementId>704</elementId>
+      <applicability>data</applicability>
+      <status>current</status>
+      <description>
+        <paragraph>
+            Unknown field.
+        </paragraph>
+      </description>
+      <revision>0</revision>
+      <date>2025-09-01</date>
+    </record>
+
+  </registry>
+</registry>
