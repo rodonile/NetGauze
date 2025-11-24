@@ -12,6 +12,7 @@ BMP Protocol Server.
 """
 keywords = ["bmp", "bgp", "parser", "protocol"]
 categories = ["network-programming", "parsing"]
+build = "build.rs"
 
 [dependencies]
 netgauze-bmp-pkt = { workspace = true, features = ["serde", "codec"] }
@@ -27,9 +28,13 @@ tower = { workspace = true, features = ["full"] }
 tower-service = { workspace = true }
 tracing = { workspace = true }
 serde = { workspace = true }
+shadow-rs = { workspace = true, features = ["default", "metadata", "build"] }
 
 [dev-dependencies]
 tokio-test = { workspace = true }
 rand = { workspace = true }
 tracing-subscriber = { workspace = true }
 serde_json = { workspace = true }
+
+[build-dependencies]
+shadow-rs = { workspace = true, default-features = true }

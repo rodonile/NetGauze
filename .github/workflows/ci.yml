@@ -2,10 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
-  schedule: [ cron: "40 1 * * *" ]
+    branches: ["main"]
+  schedule: [cron: "40 1 * * *"]
   workflow_call:
 
 permissions:
@@ -52,7 +52,7 @@ jobs:
       fail-fast: false
       matrix:
         # TODO: enable msrv checks once NetGauze is more stable
-        rust: [ nightly, beta, stable ]
+        rust: [nightly, beta, stable]
     timeout-minutes: 45
     env:
       TRYBUILD: overwrite
@@ -286,10 +286,10 @@ jobs:
           cat << EOF > crates/collector/config_ci_rpm_test.yaml
           runtime:
             threads: 4
-        
+
           logging:
             level: info
-        
+
           telemetry:
             url: http://localhost:4317/v1/metrics
             exporter_timeout: 3000
@@ -366,6 +366,73 @@ jobs:
       - name: Upload pcap-decoder artifact
         uses: actions/upload-artifact@v4
         with:
-            name: ${{ steps.binary_filename.outputs.name }}
-            path: target/${{ matrix.target }}/release/${{ steps.binary_filename.outputs.name }}
-            retention-days: 30
+          name: ${{ steps.binary_filename.outputs.name }}
+          path: target/${{ matrix.target }}/release/${{ steps.binary_filename.outputs.name }}
+          retention-days: 30
+
+build-print-bmp:
+  runs-on: ${{ matrix.os }}
+  container: ${{ matrix.container }}
+  needs: version
+  name: Build print-bmp example (${{ matrix.dist_and_arch }})
+  strategy:
+    matrix:
+      include:
+        - os: ubuntu-latest
+          target: x86_64-unknown-linux-gnu
+          binary_name: print-bmp
+          strip_command: true
+          dist_and_arch: x86_64-ubuntu_latest # used just for naming the binary
+        - os: ubuntu-latest
+          container: rockylinux/rockylinux:8.10
+          target: x86_64-unknown-linux-gnu
+          binary_name: print-bmp
+          strip_command: true
+          install_deps: |
+            dnf install -y gcc gcc-c++ pcre2-devel perl-core cmake git curl
+            dnf install -y https://github.com/PowerShell/PowerShell/releases/download/v7.5.2/powershell-7.5.2-1.rh.x86_64.rpm
+          dist_and_arch: x86_64-el8_10 # used just for naming the binary
+        - os: windows-latest
+          target: x86_64-pc-windows-msvc
+          binary_name: print-bmp.exe
+          strip_command: false # strip command not available on Windows
+          dist_and_arch: x86_64-windows-latest.exe # used just for naming the binary
+        - os: macos-latest
+          target: x86_64-apple-darwin
+          binary_name: print-bmp
+          strip_command: true
+          dist_and_arch: x86_64-apple-latest # used just for naming the binary
+        - os: macos-latest
+          target: aarch64-apple-darwin
+          binary_name: print-bmp
+          strip_command: true
+          dist_and_arch: aarch64-apple-latest # used just for naming the binary
+  steps:
+    - uses: actions/checkout@v4
+    - name: Install build dependencies
+      if: matrix.install_deps
+      run: ${{ matrix.install_deps }}
+    - name: Install stable Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ matrix.target }}
+    - name: Build print-bmp example
+      run: cargo build --release --target ${{ matrix.target }} --example print-bmp
+    - name: Strip binary (Unix only)
+      if: matrix.strip_command == 'true'
+      run: strip target/${{ matrix.target }}/release/examples/${{ matrix.binary_name }}
+    - name: Create complete binary file name
+      id: binary_filename
+      shell: pwsh # for Windows compatibility, available on all platforms
+      run: |
+        $name = "print-bmp-${{ needs.version.outputs.version }}-${{ needs.version.outputs.release }}-${{ matrix.dist_and_arch }}"
+        "name=$name" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+    - name: Rename binary
+      shell: pwsh # for Windows compatibility, available on all platforms
+      run: Move-Item -Path "target/${{ matrix.target }}/release/examples/${{ matrix.binary_name }}" -Destination "target/${{ matrix.target }}/release/${{ steps.binary_filename.outputs.name }}"
+    - name: Upload print-bmp artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.binary_filename.outputs.name }}
+        path: target/${{ matrix.target }}/release/${{ steps.binary_filename.outputs.name }}
+        retention-days: 30
