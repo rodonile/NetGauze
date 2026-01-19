@@ -383,7 +383,11 @@ impl FieldSelect for CoalesceFieldSelect {
     }
 
     fn avro_type(&self) -> AvroValueKind {
-        let avro_type = self.ies.iter().map(|x| x.ie()).collect::<HashSet<_>>();
+        let avro_type = self
+            .ies
+            .iter()
+            .map(|x| x.ie().data_type())
+            .collect::<HashSet<_>>();
         if avro_type.len() == 1 {
             self.ies[0].avro_type()
         } else {
