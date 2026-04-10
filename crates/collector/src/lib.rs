@@ -49,6 +49,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use tracing::{debug, info, warn};
 
+pub mod bmp;
 pub mod config;
 pub mod flow;
 pub mod inputs;
@@ -64,7 +65,7 @@ pub async fn init_flow_collection(
     let (supervisor_join_handle, supervisor_handle) =
         FlowCollectorsSupervisorActorHandle::new(supervisor_config, meter.clone()).await?;
     let mut http_handles = Vec::new();
-    let mut enrichment_handles = Vec::new();
+    let mut enrichment_handles = Vec::new(); // TODO: FIX: this is leaking handles between publishers...
     let mut renormalization_handles = Vec::new();
     let mut agg_handles = Vec::new();
     let mut flow_options_input_handles = Vec::new();
@@ -325,15 +326,79 @@ pub async fn init_flow_collection(
                     }
                 }
                 PublisherEndpoint::KafkaJson(config) => {
-                    for flow_recv in &flow_recvs {
-                        let (join_handle, handle) = KafkaJsonPublisherActorHandle::from_config(
-                            serialize_flow_req,
-                            config.clone(),
+                    for (shard_id, flow_recv) in flow_recvs.iter().enumerate() {
+                        let (enrichment_join, enrichment_handle) = FlowEnrichmentActorHandle::new(
+                            publisher_config.buffer_size,
                             flow_recv.clone(),
                             either::Left(meter.clone()),
+                            shard_id,
+                            config.writer_id.clone(),
+                        );
+
+                        let (join_handle, handle) = KafkaJsonPublisherActorHandle::from_config(
+                            serialize_flow_req_2,
+                            config.clone(),
+                            enrichment_handle.subscribe(),
+                            either::Left(meter.clone()),
                         )?;
+
+                        join_set.push(enrichment_join);
                         join_set.push(join_handle);
+                        enrichment_handles.push(enrichment_handle);
                         kafka_json_handles.push(handle);
+                    }
+
+                    let (flow_recv, _) = supervisor_handle
+                        .subscribe(publisher_config.buffer_size)
+                        .await?;
+
+                    if let Some(enrichment_config) = publisher_config.enrichment.as_ref() {
+                        if let Some(flow_options_config) = enrichment_config
+                            .inputs
+                            .as_ref()
+                            .and_then(|i| i.flow_options.as_ref())
+                        {
+                            let (flow_options_join, flow_options_handle) =
+                                FlowOptionsActorHandle::from_config(
+                                    flow_options_config,
+                                    flow_recv.clone(),
+                                    enrichment_handles.clone(),
+                                    either::Left(meter.clone()),
+                                );
+                            join_set.push(flow_options_join);
+                            flow_options_input_handles.push(flow_options_handle);
+                        }
+
+                        if let Some(files_config) = enrichment_config
+                            .inputs
+                            .as_ref()
+                            .and_then(|i| i.files.as_ref())
+                        {
+                            let (files_join, files_handle) = FilesActorHandle::from_config(
+                                files_config.clone(),
+                                enrichment_handles.clone(),
+                                either::Left(meter.clone()),
+                            );
+                            join_set.push(files_join);
+                            files_input_handles.push(files_handle);
+                        }
+
+                        if let Some(kafka_config) = enrichment_config
+                            .inputs
+                            .as_ref()
+                            .and_then(|i| i.kafka.as_ref())
+                        {
+                            for consumer_config in &kafka_config.consumers {
+                                let (join_handle, actor_handle) =
+                                    KafkaConsumerActorHandle::from_config(
+                                        consumer_config,
+                                        enrichment_handles.clone(),
+                                        either::Left(meter.clone()),
+                                    )?;
+                                join_set.push(join_handle);
+                                kafka_input_handles.push(actor_handle);
+                            }
+                        }
                     }
                 }
                 PublisherEndpoint::TelemetryKafkaJson(_) => {
@@ -344,6 +409,11 @@ pub async fn init_flow_collection(
                 PublisherEndpoint::TelemetryKafkaYang(_) => {
                     return Err(anyhow::anyhow!(
                         "Telemetry KafkaYang publisher not supported for Flow"
+                    ));
+                }
+                PublisherEndpoint::BmpKafkaAvro(_) => {
+                    return Err(anyhow::anyhow!(
+                        "BMP KafkaAvro publisher not supported for Flow"
                     ));
                 }
             }
@@ -418,6 +488,13 @@ pub async fn init_flow_collection(
     ret
 }
 
+// TODO: think about integrating the periodical getconnectedpeers e.g. every
+// once in a while at info level logged? TODO: add various inputs enrichment
+// (sonata and pmacct maps) --> only needed for pmacct schema and final
+//       YANG/JSON format (bmp-telemetry-message)
+//       --> we need KafkaAvro, KafkaYANG producers (generic ones for non
+// dynamic schemas [flow is an exception,           where we dynamically
+// construct the schema...])
 pub async fn init_bmp_collection(
     bmp_config: BmpConfig,
     meter: opentelemetry::metrics::Meter,
@@ -428,6 +505,7 @@ pub async fn init_bmp_collection(
 
     let mut join_set = FuturesUnordered::new();
     let mut kafka_json_handles = Vec::new();
+    let mut kafka_avro_handles = Vec::new();
 
     for (group_name, publisher_config) in bmp_config.publishers {
         info!("Starting publishers group '{group_name}'");
@@ -461,9 +539,27 @@ pub async fn init_bmp_collection(
                         kafka_json_handles.push(handle);
                     }
                 }
+                PublisherEndpoint::BmpKafkaAvro(config) => {
+                    for bmp_recv in &bmp_recvs {
+                        // TODO: part of the workaround for bmp/config.rs to discuss
+                        // pass writer_id to the converter
+                        let mut config = config.clone();
+                        config.avro_converter.writer_id = config.writer_id.clone();
+
+                        let (kafka_join, kafka_handle) =
+                            KafkaAvroPublisherActorHandle::from_config(
+                                config.clone(),
+                                bmp_recv.clone(),
+                                either::Left(meter.clone()),
+                            )
+                            .await?;
+                        join_set.push(kafka_join);
+                        kafka_avro_handles.push(kafka_handle);
+                    }
+                }
                 _ => {
                     return Err(anyhow::anyhow!(
-                        "Only KafkaJson publisher is currently supported for BMP"
+                        "Only KafkaJson and BmpKafkaAvro publishers are currently supported for BMP"
                     ));
                 }
             }
@@ -476,6 +572,9 @@ pub async fn init_bmp_collection(
             for handle in kafka_json_handles {
                 let _ = handle.shutdown().await;
             }
+            for handle in kafka_avro_handles {
+                let _ = handle.shutdown().await;
+            }
             match supervisor_ret {
                 Ok(_) => Ok(()),
                 Err(err) => Err(anyhow::anyhow!(err)),
@@ -485,6 +584,9 @@ pub async fn init_bmp_collection(
             warn!("BMP publisher exited, shutting down BMP collection and publishers");
             let _ = tokio::time::timeout(std::time::Duration::from_secs(1), supervisor_handle.shutdown()).await;
             for handle in kafka_json_handles {
+                let _ = handle.shutdown().await;
+            }
+            for handle in kafka_avro_handles {
                 let _ = handle.shutdown().await;
             }
             match join_ret {
@@ -721,6 +823,11 @@ pub async fn init_udp_notif_collection(
                         }
                     }
                 }
+                PublisherEndpoint::BmpKafkaAvro(_) => {
+                    return Err(anyhow::anyhow!(
+                        "Bmp KafkaAvro publisher not supported for UDP Notif"
+                    ));
+                }
             }
         }
     }
@@ -899,6 +1006,17 @@ fn serialize_flow_req(
     _writer_id: String,
 ) -> Result<(Option<serde_json::Value>, serde_json::Value), FlowSerializationError> {
     let (peer, msg) = input.as_ref();
+    let value = serde_json::to_value(msg)?;
+    let key = serde_json::Value::String(peer.ip().to_string());
+    Ok((Some(key), value))
+}
+
+// TODO: change name wrt. the one above here
+fn serialize_flow_req_2(
+    input: FlowRequest,
+    _writer_id: String,
+) -> Result<(Option<serde_json::Value>, serde_json::Value), FlowSerializationError> {
+    let (peer, msg) = input;
     let value = serde_json::to_value(msg)?;
     let key = serde_json::Value::String(peer.ip().to_string());
     Ok((Some(key), value))

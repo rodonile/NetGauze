@@ -1,0 +1,642 @@
+runtime:
+  threads: 24
+
+logging:
+  level: info
+  ansi: true
+
+telemetry:
+  url: http://localhost:4317/v1/metrics
+  id: vmware_flow
+  exporter_timeout: 2000
+  reader_interval: 10000
+  reader_timeout: 2000
+
+flow:
+  subscriber_timeout: 100
+  template_cache_purge_timeout: 360
+  listeners:
+    - address: "[::]:9992"
+      workers: 1
+
+  # Multiple publishers can be defined.
+  # A packet is copied for each publisher group, and load-balancing is defined between endpoints in the same group.
+  publishers:
+    #########################################################
+    # Raw JSON publisher
+    #########################################################
+    # raw-json-publisher:
+    #   enrichment:
+    #     inputs:
+    #       flow_options: # TODO: solve leaking of inputs from other publishers!
+    #         weight: 16
+    #   endpoints:
+    #     main: !KafkaJson
+    #       topic: netgauze-flow-raw-json
+    #       producer_config:
+    #         bootstrap.servers: localhost:49092
+    #       writer_id: taarole8_rocky_rawjson_group
+
+    # TODO: fix the invalid transformations (giving error could not get avro bytes caused by value not match schema)
+    #       by not allowing any invalid transformation in the config...
+
+    # TODO: remove from aggr what we in the end not use (keep those in another file for the future...)
+    #      --> for now for the migration we need 1-to-1 matching of the pmacct schema and defaults
+
+    #########################################################
+    # Aggregation + converter + avro output publisher
+    #########################################################
+    agg-avro-publisher:
+      shards: 1
+      buffer_size: 10000
+      enrichment:
+        inputs:
+          flow_options:
+            weight: 16
+          # files:
+          #   poll_interval_seconds: 30 # default
+          #   paths:
+          #     - path: assets/inputs/files/flow2rd-mini-test.map
+          #       format: !PmacctMaps
+          #         id: mplsVpnRouteDistinguisher
+          #     - path: assets/inputs/files/sampling-nfacctd-bxp.map
+          #       format: !PmacctMaps
+          #         id: samplerRandomInterval
+          #         weight: 200
+          #     - path: assets/inputs/files/json-ops.jsonl
+          #       format: !FlowUpserts
+          #     - path: assets/inputs/files/cache-dump.jsonl
+          #       format: !FlowUpserts
+          #     - path: assets/inputs/files/vmware-node-platform-upserts.jsonl
+          #       format: !FlowUpserts
+          #     - path: assets/inputs/files/vmware-iface-upserts.jsonl
+          #       format: !FlowUpserts
+          # kafka:
+          #   consumers:
+          #     - topic: sonata
+          #       message_format: !Sonata
+          #       weight: 64 # default: 64
+          #       consumer_config:
+          #         bootstrap.servers: localhost:49092
+          #         group.id: taarole8-rocky8-avro
+          #         enable.auto.commit: "false"
+          #         auto.offset.reset: earliest
+          #     - topic: json-ops-test
+          #       message_format: !FlowEnrichmentOps
+          #       consumer_config:
+          #         bootstrap.servers: localhost:49092
+          #         group.id: taarole8-rocky8-avro
+          #         enable.auto.commit: "false"
+          #         auto.offset.reset: earliest
+          #     - topic: daisy.dev.cosmos-sonata-nodes-json
+          #       message_format: !Sonata
+          #       consumer_config:
+          #         metadata.broker.list: "kafka.sbd.corproot.net:9093"
+          #         security.protocol: "ssl"
+          #         ssl.certificate.location: "/home/taarole8/sbd_ssl/collectors.crt"
+          #         ssl.key.location: "/home/taarole8/sbd_ssl/collectors.key"
+          #         ssl.ca.location: "/home/taarole8/sbd_ssl/sbd_root_ca.crt"
+          #         group.id: daisy.dev.taarole8-rocky8
+          #         enable.auto.commit: "false"
+          #         auto.offset.reset: earliest
+      aggregation:
+        window_duration:
+          secs: 60
+          nanos: 0
+        lateness:
+          secs: 10
+          nanos: 0
+        transform:
+          # Layer 2
+          sourceMacAddress: Key
+          destinationMacAddress: Key
+          ethernetType: Key
+          ingressInterface: Key
+          !NetGauze ingressInterfaceName: Key
+          !NetGauze ingressInterfaceDescription: Key
+          egressInterface: Key
+          !NetGauze egressInterfaceName: Key
+          !NetGauze egressInterfaceDescription: Key
+          layer2SegmentId: Key
+          vlanId: Key
+          postVlanId: Key
+          dot1qVlanId: Key
+          dot1qPriority: Key
+          postDot1qVlanId: Key
+          dot1qCustomerVlanId: Key
+          dot1qCustomerPriority: Key
+          postDot1qCustomerVlanId: Key
+
+          # GPON Fields (temporary)
+          # ingressGponGemPortId: Key
+          # egressGponGemPortId: Key
+
+          # Layer 3
+          sourceIPv4Address: Key
+          sourceIPv4PrefixLength: Key
+          destinationIPv4Address: Key
+          destinationIPv4PrefixLength: Key
+          sourceIPv6Address: Key
+          sourceIPv6PrefixLength: Key
+          destinationIPv6Address: Key
+          destinationIPv6PrefixLength: Key
+          protocolIdentifier: Key
+          ipClassOfService: Key
+          flowLabelIPv6: Key
+          ipv6ExtensionHeadersFull: BoolMapOr # check
+          minimumTTL: Min
+          maximumTTL: Max
+
+          # Layer 4
+          sourceTransportPort: Key
+          destinationTransportPort: Key
+          tcpSourcePort: Key # check
+          tcpDestinationPort: Key # check
+          udpSourcePort: Key # check
+          udpDestinationPort: Key # check
+          tcpControlBits: BoolMapOr
+          icmpTypeIPv4: Key
+          icmpTypeIPv6: Key
+
+          # VRFs/VPN
+          ingressVRFID: Key
+          !NetGauze ingressVRFname: Key
+          !NetGauze ingressMplsVpnRouteDistinguisher: Key
+          egressVRFID: Key
+          !NetGauze egressVRFname: Key
+          !NetGauze egressMplsVpnRouteDistinguisher: Key
+
+          # BGP
+          bgpDestinationAsNumber: Key
+          bgpNextHopIPv4Address: Key
+          bgpNextHopIPv6Address: Key
+          bgpSourceAsNumber: Key
+
+          # MPLS (TODO: check which ones we need)
+          mplsTopLabelType: Key
+          mplsTopLabelIPv4Address: Key
+          mplsTopLabelIPv6Address: Key
+          mplsTopLabelPrefixLength: Key
+          mplsTopLabelTTL: Key
+          mplsTopLabelExp: Key
+          mplsTopLabelStackSection: Key
+          mplsLabelStackLength: Key
+          mplsLabelStackDepth: Key
+          mplsLabelStackSection: Key
+          mplsLabelStackSection2: Key
+          mplsLabelStackSection3: Key
+          mplsLabelStackSection4: Key
+          mplsLabelStackSection5: Key
+
+          # SRv6 (TODO: check which ones we need to retain)
+          srhFlagsIPv6: Key
+          srhTagIPv6: Key
+          srhSegmentIPv6: Key
+          srhActiveSegmentIPv6: Key
+          srhSegmentIPv6BasicList: Key
+          srhSegmentIPv6ListSection: Key
+          srhSegmentsIPv6Left: Key
+          srhIPv6Section: Key
+          srhIPv6ActiveSegmentType: Key
+          srhSegmentIPv6LocatorLength: Key
+          srhSegmentIPv6EndpointBehavior: Key
+
+          # Router Metadata (TODO: check which ones we need to retain)
+          forwardingStatus: Key
+          flowDirection: Key
+          samplerId: Key
+          samplerName: Key
+          selectorId: Key
+          selectorName: Key
+          selectorAlgorithm: Key
+          samplingSize: Key
+          samplingPopulation: Key
+          samplingPacketSpace: Key
+          samplingPacketInterval: Key
+          samplerRandomInterval: Key
+
+          # Data Collection Metadata
+          !NetGauze dataCollectionManifestName: Key
+          !NetGauze nodeId: Key
+          !NetGauze platformId: Key
+
+          # Counters
+          octetDeltaCount: Add
+          packetDeltaCount: Add
+          deltaFlowCount: Add
+
+      endpoints:
+        flow-full: !FlowKafkaAvro
+          topic: "netgauze-flow-avro"
+          schema_registry_url: http://localhost:48081
+          # topic: "netgauze-flow-avro"
+          # schema_registry_url: "http://10.250.99.20"
+          # topic: "daisy.ietf.flow-avro-raw"
+          # schema_registry_url: "https://schema-registry.sbd.corproot.net"
+          producer_config:
+            bootstrap.servers: localhost:49092
+            # bootstrap.servers: "b-1.cosmos-kafka.723cyb.c5.kafka.eu-central-1.amazonaws.com:9096,b-2.cosmos-kafka.723cyb.c5.kafka.eu-central-1.amazonaws.com:9096"
+            # security.protocol: "sasl_ssl"
+            # sasl.mechanism: "SCRAM-SHA-512"
+            # sasl.username: "ietf-lab"
+            # sasl.password: "m^vy8*F9*Q7z4jPLvek"
+            # metadata.broker.list: "kafka.sbd.corproot.net:9093"
+            # bootstrap.servers: "kafka.sbd.corproot.net:9093"
+            # security.protocol: "ssl"
+            # ssl.certificate.location: "/home/taarole8/sbd_ssl/collectors.crt"
+            # ssl.key.location: "/home/taarole8/sbd_ssl/collectors.key"
+            # ssl.ca.location: "/home/taarole8/sbd_ssl/sbd_root_ca.crt"
+            # bootstrap.servers: 10.110.110.249:29092
+            # Prod config
+            compression.type: "snappy"
+            queue.buffering.max.messages: "800000"
+            batch.size: "50000"
+            batch.num.messages: "1000000"
+            linger.ms: "50"
+            message.max.bytes: "5242880"
+            message.timeout.ms: "60000"
+          writer_id: taarole8_rocky_vmware_flow_avro
+          avro_converter:
+            fields:
+              # Layer 2
+              mac_src:
+                select: !Single
+                  ie: sourceMacAddress
+                  index: 0
+                transform: String
+                default: !String "00:00:00:00:00:00"
+              mac_dst:
+                select: !Single
+                  ie: destinationMacAddress
+                  index: 0
+                transform: String
+                default: !String "00:00:00:00:00:00"
+              etype:
+                select: !Single
+                  ie: ethernetType
+                  index: 0
+                default: !U16 0
+              in_iface:
+                select: !Single
+                  ie: ingressInterface
+                  index: 0
+              in_iface_name:
+                select: !Coalesce
+                  ies:
+                    - ie: !NetGauze ingressInterfaceName
+                      index: 0
+                    - ie: !NetGauze ingressInterfaceDescription
+                      index: 0
+                  transform: String
+              out_iface:
+                select: !Single
+                  ie: egressInterface
+                  index: 0
+              out_iface_name:
+                select: !Coalesce
+                  ies:
+                    - ie: !NetGauze egressInterfaceName
+                      index: 0
+                    - ie: !NetGauze egressInterfaceDescription
+                      index: 0
+                  transform: String
+              vxlan:
+                select: !Layer2SegmentId
+                  ie: layer2SegmentId
+                  index: 0
+                  encap_type: !VxLAN
+                default: !U64 0
+              in_vlan:
+                select: !Single
+                  ie: vlanId # check pmacct code
+                  index: 0
+                default: !U16 0
+              custom_primitives.dot1qcvlanid:
+                select: !Single
+                  ie: dot1qCustomerVlanId # check pmacct code
+                  index: 0
+                transform: !String
+                default: !String "0"
+              cos:
+                select: !Single
+                  ie: dot1qPriority # check pmacct code
+                  index: 0
+                default: !U8 0
+
+              # GPON fields (temporary Huawei workaround)
+              # ingressGponGemPortId:
+              #   select: !Single
+              #     ie: ingressGponGemPortId
+              #     index: 0
+              # egressGponGemPortId:
+              #   select: !Single
+              #     ie: egressGponGemPortId
+              #     index: 0
+
+              # Layer 3
+              # TODO: net_src, net_dst transformation (get net from ip+mask)
+              ip_src:
+                select: !Coalesce
+                  ies:
+                    - ie: sourceIPv4Address
+                      index: 0
+                    - ie: sourceIPv6Address
+                      index: 0
+                transform: String
+                default: !String ""
+              mask_src:
+                select: !Coalesce
+                  ies:
+                    - ie: sourceIPv4PrefixLength
+                      index: 0
+                    - ie: sourceIPv6PrefixLength
+                      index: 0
+                transform: String
+              ip_dst:
+                select: !Coalesce
+                  ies:
+                    - ie: destinationIPv4Address
+                      index: 0
+                    - ie: destinationIPv6Address
+                      index: 0
+                transform: String
+                default: !String ""
+              mask_dst:
+                select: !Coalesce
+                  ies:
+                    - ie: destinationIPv4PrefixLength
+                      index: 0
+                    - ie: destinationIPv6PrefixLength
+                      index: 0
+                transform: String
+              ip_proto:
+                select: !Single
+                  ie: protocolIdentifier
+                  index: 0
+                transform: LowercaseString
+                default: !String "0"
+              tos:
+                select: !Single
+                  ie: ipClassOfService
+                  index: 0
+                default: !U8 0
+              custom_primitives.ipttlmin:
+                select: !Single
+                  ie: minimumTTL
+                  index: 0
+                transform: String
+                default: !String ""
+              custom_primitives.ipttlmax:
+                select: !Single
+                  ie: maximumTTL
+                  index: 0
+                transform: String
+                default: !String ""
+
+              # Layer 4
+              port_src:
+                select: !Single
+                  ie: sourceTransportPort # check pmacct code
+                  index: 0
+                default: !U16 0
+              port_dst:
+                select: !Single
+                  ie: destinationTransportPort # check pmacct
+                  index: 0
+                default: !U16 0
+              tcp_flags:
+                select: !Single
+                  ie: tcpControlBits
+                  index: 0
+                transform: StringArray
+                default: !StringArray []
+              custom_primitives.icmptypeipv4:
+                select: !Single
+                  ie: icmpTypeIPv4
+                  index: 0
+                transform: String
+                default: !String "0"
+              custom_primitives.icmptypeipv6:
+                select: !Single
+                  ie: icmpTypeIPv6
+                  index: 0
+                transform: String
+                default: !String "0"
+
+              # VRFs/VPN
+              custom_primitives.vrf_id_ingress:
+                select: !Single
+                  ie: ingressVRFID
+                  index: 0
+                transform: String
+                default: !String ""
+
+              ingress_vrf_name:
+                select: !Single
+                  ie: !NetGauze ingressVRFname
+                  index: 0
+
+              custom_primitives.vrf_id_egress:
+                select: !Single
+                  ie: egressVRFID
+                  index: 0
+                transform: String
+                default: !String ""
+
+              egress_vrf_name:
+                select: !Single
+                  ie: !NetGauze egressVRFname
+                  index: 0
+
+              # MPLS
+              custom_primitives.mpls_tl_ipv4_address:
+                select: !Single
+                  ie: mplsTopLabelIPv4Address
+                  index: 0
+                transform: String
+                default: !String "0.0.0.0"
+              custom_primitives.mpls_tl_prefix_length:
+                select: !Single
+                  ie: mplsTopLabelPrefixLength
+                  index: 0
+                transform: String
+                default: !String "0"
+              custom_primitives.mpls_tl_type:
+                select: !Single
+                  ie: mplsTopLabelType
+                  index: 0
+                transform: String
+                default: !String "0"
+              mpls_label_stack:
+                select: !Multi
+                  ies:
+                    - ie: mplsLabelStackSection
+                      index: 0
+                    - ie: mplsLabelStackSection2
+                      index: 0
+                    - ie: mplsLabelStackSection3
+                      index: 0
+                    - ie: mplsLabelStackSection4
+                      index: 0
+                    - ie: mplsLabelStackSection5
+                      index: 0
+                transform: !MplsIndex
+                default: !StringArray []
+
+              # SRv6
+              custom_primitives.srhflagsipv6:
+                select: !Single
+                  ie: srhFlagsIPv6
+                  index: 0
+                transform: String
+                default: !String "0"
+              custom_primitives.srhtagipv6:
+                select: !Single
+                  ie: srhTagIPv6
+                  index: 0
+                transform: String
+                default: !String "0"
+              custom_primitives.srhactivesegmentipv6:
+                select: !Single
+                  ie: srhActiveSegmentIPv6
+                  index: 0
+                transform: String
+                default: !String "::"
+              custom_primitives.srhipv6activesegmenttype:
+                select: !Single
+                  ie: srhIPv6ActiveSegmentType
+                  index: 0
+                transform: String
+                default: !String "0"
+              custom_primitives.srhsegmentipv6sleft:
+                select: !Single
+                  ie: srhSegmentsIPv6Left
+                  index: 0
+                transform: String
+                default: !String "0"
+
+              # NAT
+              post_nat_ip_src:
+                select: !Coalesce
+                  ies:
+                    - ie: postNATSourceIPv4Address
+                      index: 0
+                    - ie: postNATSourceIPv6Address
+                      index: 0
+                transform: String
+                default: !String ""
+              post_nat_port_src:
+                select: !Single
+                  ie: postNAPTSourceTransportPort
+                  index: 0
+                default: !U16 0
+              post_nat_ip_dst:
+                select: !Coalesce
+                  ies:
+                    - ie: postNATDestinationIPv4Address
+                      index: 0
+                    - ie: postNATDestinationIPv6Address
+                      index: 0
+                transform: String
+                default: !String ""
+              post_nat_port_dst:
+                select: !Single
+                  ie: postNAPTDestinationTransportPort
+                  index: 0
+                default: !U16 0
+              nat_event:
+                select: !Single
+                  ie: natEvent
+                  index: 0
+                default: !U8 0
+
+              # Router Metadata
+              sampling_rate:
+                select: !Single
+                  ie: samplerRandomInterval
+                  index: 0
+              sampling_direction:
+                select: !Single
+                  ie: flowDirection
+                  index: 0
+                transform: !Rename
+                  ingress: i
+                  egress: e
+                default: !String ""
+              fwd_status:
+                select: !Single
+                  ie: forwardingStatus
+                  index: 0
+                transform: String
+                default: !String "Unknown Unclassified"
+
+              my_string_array:
+                select: !Multi
+                  ies:
+                    - ie: sourceIPv4Address
+                    - ie: destinationIPv4Address
+                transform: StringArrayAgg
+                default: !StringArray []
+
+              my_string_array_2:
+                select: !Multi
+                  ies:
+                    - ie: ignoredLayer2FrameTotalCount
+                    - ie: layer2FrameTotalCount
+                transform: StringArrayAgg
+
+              # Data Collection Metadata
+              writer_id:
+                select: !Single
+                  ie: !NetGauze dataCollectionManifestName
+                  index: 0
+                transform: String
+                default: !String ""
+              label:
+                select: !Multi
+                  ies:
+                    - ie: !NetGauze nodeId
+                      index: 0
+                    - ie: !NetGauze platformId
+                      index: 0
+                transform: !StringMapAgg
+                  !NetGauze nodeId:
+                    key_rename: nkey
+                  !NetGauze platformId:
+                    key_rename: pkey
+                default: !StringMap { nkey: unknown, pkey: unknown }
+
+              # Aggregation Metadata
+              peer_ip_src:
+                select: !Coalesce
+                  ies:
+                    - ie: originalExporterIPv4Address
+                      index: 0
+                    - ie: originalExporterIPv6Address
+                      index: 0
+                transform: String
+                default: !String ""
+              stamp_inserted:
+                select: !Single
+                  ie: !NetGauze windowStart
+                  index: 0
+                transform: TimestampMillisString
+              stamp_updated:
+                select: !Single
+                  ie: !NetGauze windowEnd
+                  index: 0
+                transform: TimestampMillisString
+
+              # Counters
+              bytes:
+                select: !Single
+                  ie: octetDeltaCount
+                  index: 0
+              packets:
+                select: !Single
+                  ie: packetDeltaCount
+                  index: 0
+              flows:
+                select: !Single
+                  ie: deltaFlowCount
+                  index: 0

@@ -184,7 +184,7 @@ impl AvroConverter<(IpAddr, FlowInfo), FlowAvroConverterError> for FlowOutputCon
     // At the moment we only have a single record per FlowInfo -> pre-allocate 1
     type AvroValues = SmallVec<[AvroValue; 1]>;
     fn get_avro_values(
-        &self,
+        &mut self,
         input: (IpAddr, FlowInfo),
     ) -> Result<Self::AvroValues, FlowAvroConverterError> {
         match input.1 {

@@ -42,7 +42,7 @@ pub trait AvroConverter<T, E: std::error::Error> {
     fn get_key(&self, input: &T) -> Option<JsonValue>;
 
     type AvroValues: IntoIterator<Item = AvroValue> + Send;
-    fn get_avro_values(&self, input: T) -> Result<Self::AvroValues, E>;
+    fn get_avro_values(&mut self, input: T) -> Result<Self::AvroValues, E>;
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

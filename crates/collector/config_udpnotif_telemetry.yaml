@@ -1,4 +1,3 @@
-
 runtime:
   threads: 4
 
@@ -18,25 +17,46 @@ udp_notif:
   listeners:
     - address: "[::]:10000"
       workers: 2
-
-  cache_location: /tmp/netgauze-udpnotif-telemetry-cache
+    # - address: "[::]:10100"
+    - address: "0.0.0.0:10100"
+      workers: 2
 
   netconf:
-    username: someusername
-    private_key_path: /paht/to/private-key
+    username: daisy1
+    private_key_path: /home/taarole8/.ssh/id_rsa-dev-env
     port: 830
+    # username: dsy-taarole8
+    # private_key_path: /home/taarole8/.ssh/id_rsa_netconf-ietf-lab
+    # port: 830
+
+  # cache_location: /home/taarole8/tmp/netgauze-udpnotif-telemetry-cache
+  # cache_location: /tmp/test_cache
+  cache_location: kafka-yang-producer-cache
 
   publishers:
     group1:
       buffer_size: 1000
       enrichment:
         inputs:
-          files:
-            poll_interval_seconds: 10
-            paths:
-              - path: assets/inputs/files/yang-push-upserts.jsonl
-                format: !YangPushUpserts
+          # files:
+          #   poll_interval_seconds: 10
+          #   paths:
+          #     - path: assets/inputs/files/yang-push-upserts.jsonl
+          #       format: !YangPushUpserts
           kafka:
+            # consumers:
+            # - topic: daisy.dev.cosmos-sonata-nodes-json
+            #   message_format: !Sonata
+            #   weight: 64
+            #   consumer_config:
+            #     metadata.broker.list: "kafka.sbd.corproot.net:9093"
+            #     security.protocol: "ssl"
+            #     ssl.certificate.location: "/home/taarole8/sbd_ssl/collectors.crt"
+            #     ssl.key.location: "/home/taarole8/sbd_ssl/collectors.key"
+            #     ssl.ca.location: "/home/taarole8/sbd_ssl/sbd_root_ca.crt"
+            #     group.id: daisy.dev.taarole8-testing
+            #     enable.auto.commit: "false"
+            #     auto.offset.reset: earliest
             consumers:
               - topic: sonata
                 message_format: !Sonata
@@ -46,11 +66,7 @@ udp_notif:
                   group.id: taarole8-rocky8-avro
                   enable.auto.commit: "false"
                   auto.offset.reset: earliest
-      custom_yang_schemas:
-#        "::/0":
-#          content_id: ietf-telemetry-message-FANO-19-SUB-53
-#          yang_library_path: assets/yang/ietf-telemetry-message-FANO-19-SUB-53/extended-schemas/yanglib.xml
-#          dir: assets/yang/ietf-telemetry-message-FANO-19-SUB-53/extended-schemas
+      custom_yang_schemas: # any overrides, empty for now
       endpoints:
         # json-endpoint: !TelemetryKafkaJson
         #   topic: telemetry-message-json
@@ -61,14 +77,17 @@ udp_notif:
         #   writer_id: coll-netgauze-telemetry-json
         yang-endpoint: !TelemetryKafkaYang
           topic: telemetry-message-yang
-          schema_registry_url: http://localhost:48081
+          # schema_registry_url: http://localhost:48081
+          # schema_registry_url: https://schema-registry.stage.odp-int.corproot.net
+          # schema_registry_url: "http://10.250.99.20"
+          schema_registry_url: "https://schema-registry-sc.olt.stage.sbd.corproot.net" # integration SBD
           producer_config:
             bootstrap.servers: localhost:49092
             message.timeout.ms: "60000"
             queue.buffering.max.messages: "1000"
           writer_id: coll-netgauze-telemetry-yang
           yang_converter:
-            subject_prefix: daisy.dev
+            subject_prefix: daisy.dev.
             root_schema_name: ietf-telemetry-message
             default_yang_lib_ref:
               content_id: ietf-telemetry-message-full
